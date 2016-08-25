@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">HM</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_home">home</string>
+
+    <string name="openDrawer">Open Drawer</string>
+    <string name="closeDrawer">Close Drawer</string>
+
+    <string name="search_hint">search</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

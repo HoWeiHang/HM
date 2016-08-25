@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_item_all_songs"
+            android:checked="true"
+            android:icon="@drawable/ic_list"
+            android:title="全部歌曲" />
+        <item
+            android:id="@+id/nav_item_album"
+            android:icon="@drawable/ic_album"
+            android:title="專輯" />
+        <item
+            android:id="@+id/nav_item_artist"
+            android:icon="@drawable/ic_person"
+            android:title="演出者" />
+        <item
+            android:id="@+id/nav_item_folder"
+            android:icon="@drawable/ic_folder"
+            android:title="資料夾" />
+        <item
+            android:id="@+id/nav_item_playlist"
+            android:icon="@drawable/ic_music"
+            android:title="我的播放清單" />
+        <item
+            android:checkable="false"
+            android:enabled="false"
+            android:title="" />
+    </group>
+    <group android:id="@+id/nav_footer">
+        <item
+            android:id="@+id/nav_item_youtube"
+            android:title=""
+            app:actionLayout="@layout/menu_item_youtube_layout" />
+        <item
+            android:id="@+id/nav_item_setting"
+            android:title=""
+            app:actionLayout="@layout/menu_item_setting_layout" />
+    </group>
+
+</menu>

@@ -1,0 +1,28 @@
+<resources>
+
+        <!-- Base application theme. -->
+        <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+                <item name="colorPrimary">@color/colorPrimary</item>
+                <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+                <item name="colorAccent">@color/colorAccent</item>
+                <item name="colorControlNormal">#fff</item>
+                <item name="android:textColorPrimary">#fff</item>
+                <item name="android:textColor">#000</item>
+                <item name="android:itemBackground">#fff</item>
+                <item name="android:windowActionBar">false</item>
+                <item name="android:windowActionModeOverlay">true</item>
+                <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+                <item name="android:statusBarColor">@android:color/transparent</item>
+                <item name="actionOverflowMenuStyle">@style/OverflowMenuStyle</item>
+        </style>
+
+        <style name="OverflowMenuStyle" parent="Widget.AppCompat.Light.PopupMenu.Overflow">
+                <item name="overlapAnchor">false</item>
+        </style>
+
+        <style name="MyApp.PopupMenu" parent="Theme.AppCompat.Light">
+                <item name="colorControlNormal">#fff</item>
+                <item name="android:textColorSecondary">#187817</item>
+        </style>
+
+</resources>
