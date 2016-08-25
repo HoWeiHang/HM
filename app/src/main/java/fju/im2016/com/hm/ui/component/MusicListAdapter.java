@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -41,14 +43,22 @@ public class MusicListAdapter extends BaseAdapter {
             LayoutInflater inflater = (LayoutInflater) parent.getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.music_list_adapter_layout, null);
             holder = new ViewHolder();
-            holder.text = (TextView) convertView.findViewById(R.id.text);
+            holder.adapter_songName = (TextView) convertView.findViewById(R.id.adapter_songName);
+            holder.adapter_artist = (TextView) convertView.findViewById(R.id.adapter_artist);
+            holder.adapter_albumImage = (ImageView) convertView.findViewById(R.id.adapter_albumImage);
+            holder.adapter_btnSetting = (ImageButton) convertView.findViewById(R.id.adapter_btnSetting);
+            holder.adapter_btnSetting.setFocusable(false);
+            holder.adapter_btnSetting.setFocusableInTouchMode(false);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
         final Song song = this.songs.get(position);
-        holder.text.setText(song.getName());
+        holder.adapter_songName.setText(song.getName());
+        holder.adapter_artist.setText(song.getArtist());
+        holder.adapter_albumImage.setImageResource(R.drawable.album);
+        holder.adapter_btnSetting.setImageResource(R.drawable.overflow);
 //        convertView.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -58,6 +68,8 @@ public class MusicListAdapter extends BaseAdapter {
     }
 
     private class ViewHolder{
-        TextView text;
+        TextView adapter_songName, adapter_artist;
+        ImageView adapter_albumImage;
+        ImageButton adapter_btnSetting;
     }
 }
