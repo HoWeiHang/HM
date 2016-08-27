@@ -78,6 +78,8 @@ public class PlayerPresenterImpl implements PlayerPresenter {
         this.player.setOnCompletionListener(new OnCompletionListener() {
             @Override
             public void onComplete() {
+//                RepeatEnum e = repeatEnum;
+//                boolean a = player.isRepeat();
                 if (repeatEnum == RepeatEnum.repeatOn) {
                     repeaOn.onRrepeat();
                 } else if (repeatEnum == RepeatEnum.repeatOff) {
@@ -152,6 +154,36 @@ public class PlayerPresenterImpl implements PlayerPresenter {
     @Override
     public void setRepeatEnum(RepeatEnum repeatEnum) {
         this.repeatEnum = repeatEnum;
+    }
+
+    @Override
+    public RepeatEnum getRepeatEnum() {
+        return  this.repeatEnum;
+    }
+
+    @Override
+    public void establishSongIndexArray() {
+        this.songManager.establishSongIndexArray();
+    }
+
+    @Override
+    public void setBaseIndex() {
+        this.songManager.setBaseIndex();
+    }
+
+    @Override
+    public void resetIndexRef() {
+        this.songManager.resetIndexRef();
+    }
+
+    @Override
+    public void resetLastIndexValue() {
+        this.songManager.resetLastIndexValue();
+    }
+
+    @Override
+    public void clear() {
+        this.songManager.clear();
     }
 
     @Override

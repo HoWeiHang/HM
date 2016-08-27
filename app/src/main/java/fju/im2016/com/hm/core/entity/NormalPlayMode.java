@@ -27,6 +27,14 @@ public class NormalPlayMode implements PlayMode {
     }
 
     @Override
+    public void clear() {
+    }
+
+    @Override
+    public void resetIndexRef() {
+    }
+
+    @Override
     public void resetLastIndexValue() {
 
     }

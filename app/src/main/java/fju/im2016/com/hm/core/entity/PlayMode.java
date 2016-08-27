@@ -13,6 +13,8 @@ public interface PlayMode {
     void setBaseIndex(int baseIndex);
     void establishSongIndexArray();
     int getLastIndexValue();
+    void clear();
+    void resetIndexRef();
     void resetLastIndexValue();
     void setRandom(boolean random);
 }

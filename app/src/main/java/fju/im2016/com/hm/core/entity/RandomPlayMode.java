@@ -49,10 +49,6 @@ public class RandomPlayMode implements PlayMode{
         return this.songIndexStack.isEmpty();
     }
 
-    private void clear() {
-        this.songIndexStack.clear();
-    }
-
     private void loopForLastIndex() {
         for(int i = 0; i < this.songIndexArray.length; i++) {
             this.lastIndexValue = songIndexArray[i];
@@ -68,7 +64,13 @@ public class RandomPlayMode implements PlayMode{
         }
     }
 
-    private void resetIndexRef() {
+    @Override
+    public void clear() {
+        this.songIndexStack.clear();
+    }
+
+    @Override
+    public void resetIndexRef() {
         this.indexRef = 0;
     }
 

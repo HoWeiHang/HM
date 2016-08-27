@@ -28,6 +28,18 @@ public interface PlayerPresenter {
 
     void setRepeatEnum(RepeatEnum repeatEnum);
 
+    RepeatEnum getRepeatEnum();
+
+    void establishSongIndexArray();
+
+    void setBaseIndex();
+
+    void resetIndexRef();
+
+    void resetLastIndexValue();
+
+    void clear();
+
     void updateView();
 
     void updateTimeText(int currentPosition);

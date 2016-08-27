@@ -89,6 +89,12 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
     public void onClick(SongManager songManager) {
         this.playerPresenter.setPause(false);
         this.iniPlayer(songManager);
+        this.playerPresenter.setBaseIndex();
+        this.playerPresenter.establishSongIndexArray();
+        this.playerPresenter.resetIndexRef();
+        this.playerPresenter.resetLastIndexValue();
+        this.playerPresenter.clear();
+        setRepeatOnce();
     }
 
     private void iniPlayer(SongManager songManager) {
@@ -590,6 +596,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
             public void onClick(View view) {
                 try {
                     playerPresenter.last();
+                    setRepeatOnce();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -604,6 +611,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
             public void onClick(View view) {
                 try {
                     playerPresenter.last();
+                    setRepeatOnce();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -618,6 +626,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
             public void onClick(View view) {
                 try {
                     playerPresenter.next();
+                    setRepeatOnce();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -632,11 +641,18 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
             public void onClick(View view) {
                 try {
                     playerPresenter.next();
+                    setRepeatOnce();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         });
+    }
+
+    private void setRepeatOnce() {
+        if (playerPresenter.getRepeatEnum() == RepeatEnum.repeatOnce) {
+            playerPresenter.setRepeat(true);
+        }
     }
 
     private void iniButtonRe() {

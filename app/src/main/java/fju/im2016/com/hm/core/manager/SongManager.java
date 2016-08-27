@@ -68,8 +68,24 @@ public class SongManager {
         this.playMode.setRandom(random);
     }
 
+    public void resetIndexRef() {
+        this.playMode.resetIndexRef();
+    }
+
     public void resetLastIndexValue() {
         this.playMode.resetLastIndexValue();
+    }
+
+    public void setBaseIndex() {
+        this.playMode.setBaseIndex(this.playMode.getCurrentSongIndex());
+    }
+
+    public void establishSongIndexArray() {
+        this.playMode.establishSongIndexArray();
+    }
+
+    public void clear() {
+        this.playMode.clear();
     }
 
     public void switchPlayMode() {
