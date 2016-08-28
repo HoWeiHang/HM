@@ -47,6 +47,10 @@ public class AdapterMenuSelectedListener implements View.OnClickListener {
                     case R.id.adapter_menu_delete:
 //                        Uri uri = MediaStore.Audio.Media.getContentUriForPath(getFile().getAbsolutePath());
 //                        context.getContentResolver().delete(uri, MediaStore.MediaColumns.DATA + "=\"" + getFile().getAbsolutePath() + "\"", null);
+//                        context.getContentResolver().delete(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, MediaStore.Audio.Media._ID + "=\'" +
+//                                song.getId().toString() + "\'", null);
+//                        File file = new File(song.getPath());
+//                        file.delete();
                         return true;
 
                     case R.id.adapter_menu_addPalyList:
