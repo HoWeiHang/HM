@@ -64,7 +64,7 @@ public class MusicListAdapter extends BaseAdapter {
         holder.adapter_btnSetting.setImageResource(R.drawable.overflow);
 
 
-        holder.adapter_btnSetting.setOnClickListener(new AdapterMenuSelectedListener(this.context));
+        holder.adapter_btnSetting.setOnClickListener(new AdapterMenuSelectedListener(this.context, song));
 
 
         return convertView;
