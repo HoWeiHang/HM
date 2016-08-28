@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/adapter_menu_setRingTone"
+        android:id="@+id/adapter_menu_setRingtone"
         android:title="設定鈴聲"/>
     <item
         android:id="@+id/adapter_menu_delete"

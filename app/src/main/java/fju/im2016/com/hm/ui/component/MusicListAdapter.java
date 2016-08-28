@@ -40,7 +40,7 @@ public class MusicListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) parent.getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
@@ -64,13 +64,19 @@ public class MusicListAdapter extends BaseAdapter {
         holder.adapter_btnSetting.setImageResource(R.drawable.overflow);
 
 
-        holder.adapter_btnSetting.setOnClickListener(new AdapterMenuSelectedListener(this.context, song));
+        holder.adapter_btnSetting.setOnClickListener(new AdapterMenuSelectedListener(this.context, song, new OnDeleteCallBack() {
+            @Override
+            public void onDelete() {
+                songs.remove(position);
+                notifyDataSetChanged();
+            }
+        }));
 
 
         return convertView;
     }
 
-    private class ViewHolder{
+    private class ViewHolder {
         TextView adapter_songName, adapter_artist;
         ImageView adapter_albumImage;
         ImageButton adapter_btnSetting;

@@ -16,6 +16,7 @@ import fju.im2016.com.hm.R;
 import fju.im2016.com.hm.core.entity.Song;
 
 public class AdapterMenuSelectedListener implements View.OnClickListener {
+    private OnDeleteCallBack onDeleteCallBack;
     private Context context;
     private Song song;
     private String newAddress, newFilename;
@@ -23,34 +24,36 @@ public class AdapterMenuSelectedListener implements View.OnClickListener {
     private char[] charArray;
     private File file;
 
-    public AdapterMenuSelectedListener(Context context, Song song) {
+    public AdapterMenuSelectedListener(Context context, Song song, OnDeleteCallBack onDeleteCallBack) {
         this.context = context;
         this.song = song;
+        this.onDeleteCallBack = onDeleteCallBack;
     }
 
     @Override
     public void onClick(View view) {
-        newAddress = "";
-        newFilename = "";
-        charArray = String.valueOf(song.getPath()).toCharArray();
-        getCountAddress();
-        setFile(getNewAddress(), getNewFilename());
         // This is an android.support.v7.widget.PopupMenu;
         PopupMenu popupMenu = new PopupMenu(context, view) {
             @Override
             public boolean onMenuItemSelected(MenuBuilder menu, MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.adapter_menu_setRingTone:
+                    case R.id.adapter_menu_setRingtone:
+                        newAddress = "";
+                        newFilename = "";
+                        charArray = String.valueOf(song.getPath()).toCharArray();
+                        getCountAddress();
+                        setFile(getNewAddress(), getNewFilename());
                         setRingtones();
                         return true;
 
                     case R.id.adapter_menu_delete:
-//                        Uri uri = MediaStore.Audio.Media.getContentUriForPath(getFile().getAbsolutePath());
-//                        context.getContentResolver().delete(uri, MediaStore.MediaColumns.DATA + "=\"" + getFile().getAbsolutePath() + "\"", null);
-//                        context.getContentResolver().delete(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, MediaStore.Audio.Media._ID + "=\'" +
-//                                song.getId().toString() + "\'", null);
-//                        File file = new File(song.getPath());
-//                        file.delete();
+                        context.getContentResolver().delete(
+                                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                                MediaStore.Audio.Media._ID + "=\'" + song.getId().toString() + "\'",
+                                null);
+                        new File(song.getPath()).delete();
+                        onDeleteCallBack.onDelete();
+//                        MusicListAdapter.getInstance().notifyDataSetChanged();
                         return true;
 
                     case R.id.adapter_menu_addPalyList:
@@ -84,7 +87,7 @@ public class AdapterMenuSelectedListener implements View.OnClickListener {
     }
 
     private String getNewFilename() {
-        for (int i = this.countAddress + 1; i < this.charArray.length; i ++){
+        for (int i = this.countAddress + 1; i < this.charArray.length; i++) {
             this.newFilename += this.charArray[i];
         }
         return this.newFilename;
@@ -115,4 +118,8 @@ public class AdapterMenuSelectedListener implements View.OnClickListener {
 
         RingtoneManager.setActualDefaultRingtoneUri(this.context.getApplicationContext(), RingtoneManager.TYPE_RINGTONE, newUri);
     }
+}
+
+interface OnDeleteCallBack {
+    void onDelete();
 }
