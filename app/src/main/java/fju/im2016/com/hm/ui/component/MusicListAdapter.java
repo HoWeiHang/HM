@@ -1,6 +1,7 @@
 package fju.im2016.com.hm.ui.component;
 
 import android.app.Activity;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +17,11 @@ import fju.im2016.com.hm.core.entity.Song;
 
 public class MusicListAdapter extends BaseAdapter {
     private List<Song> songs;
+    private Context context;
 
-    public MusicListAdapter(List<Song> songs) {
+    public MusicListAdapter(List<Song> songs, Context context) {
         this.songs = songs;
+        this.context = context;
     }
 
     @Override
@@ -59,11 +62,11 @@ public class MusicListAdapter extends BaseAdapter {
         holder.adapter_artist.setText(song.getArtist());
         holder.adapter_albumImage.setImageResource(R.drawable.album);
         holder.adapter_btnSetting.setImageResource(R.drawable.overflow);
-//        convertView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//            }
-//        });
+
+
+        holder.adapter_btnSetting.setOnClickListener(new AdapterMenuSelectedListener(this.context));
+
+
         return convertView;
     }
 

@@ -33,7 +33,7 @@ import fju.im2016.com.hm.ui.main.MainActivity;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PlayerFragment extends Fragment implements ListView.OnItemClickListener, ListView.OnCreateContextMenuListener{
+public class PlayerFragment extends Fragment implements ListView.OnItemClickListener{
 
     private ListView lstMusic;
     List<String> songName = new ArrayList<>();
@@ -82,14 +82,13 @@ public class PlayerFragment extends Fragment implements ListView.OnItemClickList
 //        ArrayAdapter<String> adaSong = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, songName);
 //        this.lstMusic.setAdapter(adaSong);
 
-        MusicListAdapter adapter = new MusicListAdapter(this.songManager.getSongs());
+        MusicListAdapter adapter = new MusicListAdapter(this.songManager.getSongs(), this.getContext());
         this.lstMusic.setAdapter(adapter);
 
         if (ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
         }
         lstMusic.setOnItemClickListener(this);
-        lstMusic.setOnCreateContextMenuListener(this);
     }
 
     private void getInformation(Cursor c) {
@@ -138,28 +137,6 @@ public class PlayerFragment extends Fragment implements ListView.OnItemClickList
 //        }
 //    }
 
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo menuInfo;
-        menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        cListItem = menuInfo.position;
-        switch (item.getItemId()) {
-            case 0:
-                /*    Toast.makeText(MainActivity.this, String.valueOf(songName.get(cListItem)), Toast.LENGTH_LONG).show();
-                    File file = new File(songPath.get(cListItem));
-                    file.delete();
-                    break;*/
-            case 1:
-                /*    Toast.makeText(MainActivity.this,String.valueOf(songPath.get(cListItem)), Toast.LENGTH_LONG).show();
-                    String path = "file://" + songPath.get(cListItem);
-                    Uri uri = Uri.parse(path);
-                    RingtoneManager.setActualDefaultRingtoneUri(MainActivity.this, RingtoneManager.TYPE_RINGTONE, uri);
-                    break;*/
-            default:
-        }
-        return super.onContextItemSelected(item);
-
-    }
-
     @Override
     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
         cListItem = position;
@@ -168,14 +145,6 @@ public class PlayerFragment extends Fragment implements ListView.OnItemClickList
 //        Intent intent = new Intent();
 //        intent.setClass(getActivity(), MainActivity.class);
 //        startActivity(intent);
-    }
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        // TODO Auto-generated method stub
-        //添加菜单项
-        menu.add("刪除歌曲");
-        menu.add("設定鈴聲");
     }
 
     public interface OnItemClickCallBack {

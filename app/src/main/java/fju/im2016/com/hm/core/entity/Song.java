@@ -1,7 +1,6 @@
 package fju.im2016.com.hm.core.entity;
 
-public class
-        Song {
+public class Song {
     private String id, name, path, artist, album, albumId;
     private double length;
 
