@@ -15,8 +15,23 @@
         android:title="@string/action_home"
         app:showAsAction="ifRoom|withText"/>
     <item
-        android:id="@+id/action_settings"
-        android:title="@string/action_settings"
+        android:id="@+id/action_setRingtone"
+        android:title="設定鈴聲"
+        app:showAsAction="never"
+        />
+    <item
+        android:id="@+id/action_sleepClock"
+        android:title="睡眠定時"
+        app:showAsAction="never"
+        />
+    <item
+        android:id="@+id/action_addToPalyLists"
+        android:title="加入播放清單"
+        app:showAsAction="never"
+        />
+    <item
+        android:id="@+id/action_moreInfo"
+        android:title="更多內容"
         android:orderInCategory="100"
         app:showAsAction="never"
         />

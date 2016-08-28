@@ -236,7 +236,10 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
                         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, Gravity.LEFT);
                         hideOption(R.id.action_search);
                         hideOption(R.id.action_home);
-                        showOption(R.id.action_settings);
+                        showOption(R.id.action_setRingtone);
+                        showOption(R.id.action_sleepClock);
+                        showOption(R.id.action_addToPalyLists);
+                        showOption(R.id.action_moreInfo);
                         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#778e8e8e")));
                     } else if (newState == SlidingUpPanelLayout.PanelState.COLLAPSED)
                     {
@@ -265,7 +268,10 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
                         actionBarDrawerToggle.syncState();
                         showOption(R.id.action_search);
                         showOption(R.id.action_home);
-                        hideOption(R.id.action_settings);
+                        hideOption(R.id.action_setRingtone);
+                        hideOption(R.id.action_sleepClock);
+                        hideOption(R.id.action_addToPalyLists);
+                        hideOption(R.id.action_moreInfo);
                         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#8e8e8e")));
                     } else if (newState == SlidingUpPanelLayout.PanelState.ANCHORED)
                     {
@@ -380,7 +386,10 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
 
         showOption(R.id.action_search);
         showOption(R.id.action_home);
-        hideOption(R.id.action_settings);
+        hideOption(R.id.action_setRingtone);
+        hideOption(R.id.action_sleepClock);
+        hideOption(R.id.action_addToPalyLists);
+        hideOption(R.id.action_moreInfo);
 
         // Associate searchable configuration with the SearchView
         SearchManager searchManager =
@@ -423,24 +432,28 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         switch (item.getItemId()) {
-//            case R.id.action_settings:
-//                // User chose the "Settings" item, show the app settings UI...
-//                return true;
+            case R.id.action_search:
+                return true;
 
             case R.id.action_home:
-                // User chose the "Favorite" action, mark the current item
-                // as a favorite...
+                return true;
+
+            case R.id.action_setRingtone:
+                return true;
+
+            case R.id.action_sleepClock:
+                return true;
+
+            case R.id.action_addToPalyLists:
+                return true;
+
+            case R.id.action_moreInfo:
                 return true;
 
             default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
-
         }
 
     }
