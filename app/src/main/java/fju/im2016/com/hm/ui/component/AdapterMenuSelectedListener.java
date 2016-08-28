@@ -20,7 +20,8 @@ public class AdapterMenuSelectedListener implements View.OnClickListener {
     private Song song;
     private String newAddress, newFilename;
     private int countAddress;
-    private char[] c;
+    private char[] charArray;
+    private File file;
 
     public AdapterMenuSelectedListener(Context context, Song song) {
         this.context = context;
@@ -29,22 +30,23 @@ public class AdapterMenuSelectedListener implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
+        newAddress = "";
+        newFilename = "";
+        charArray = String.valueOf(song.getPath()).toCharArray();
+        getCountAddress();
+        setFile(getNewAddress(), getNewFilename());
         // This is an android.support.v7.widget.PopupMenu;
         PopupMenu popupMenu = new PopupMenu(context, view) {
             @Override
             public boolean onMenuItemSelected(MenuBuilder menu, MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.adapter_menu_setRingTone:
-                        newAddress = "";
-                        newFilename = "";
-                        c = String.valueOf(song.getPath()).toCharArray();
-                        getCountAddress();
-                        getNewAddress();
-                        getNewFilename();
                         setRingtones();
                         return true;
 
                     case R.id.adapter_menu_delete:
+//                        Uri uri = MediaStore.Audio.Media.getContentUriForPath(getFile().getAbsolutePath());
+//                        context.getContentResolver().delete(uri, MediaStore.MediaColumns.DATA + "=\"" + getFile().getAbsolutePath() + "\"", null);
                         return true;
 
                     case R.id.adapter_menu_addPalyList:
@@ -62,8 +64,8 @@ public class AdapterMenuSelectedListener implements View.OnClickListener {
     }
 
     private int getCountAddress() {
-        for (int i = 0; i < this.c.length; i++) {
-            if (this.c[i] == '/') {
+        for (int i = 0; i < this.charArray.length; i++) {
+            if (this.charArray[i] == '/') {
                 this.countAddress = i;
             }
         }
@@ -72,23 +74,29 @@ public class AdapterMenuSelectedListener implements View.OnClickListener {
 
     private String getNewAddress() {
         for (int i = 0; i <= this.countAddress; i++) {
-            this.newAddress += this.c[i];
+            this.newAddress += this.charArray[i];
         }
         return this.newAddress;
     }
 
     private String getNewFilename() {
-        for (int i = this.countAddress + 1; i < this.c.length; i ++){
-            this.newFilename += this.c[i];
+        for (int i = this.countAddress + 1; i < this.charArray.length; i ++){
+            this.newFilename += this.charArray[i];
         }
         return this.newFilename;
     }
 
-    private void setRingtones() {
-        File file = new File(this.newAddress, this.newFilename);
+    private File getFile() {
+        return this.file;
+    }
 
+    private void setFile(String address, String filename) {
+        this.file = new File(address, filename);
+    }
+
+    private void setRingtones() {
         ContentValues values = new ContentValues();
-        values.put(MediaStore.MediaColumns.DATA, file.getAbsolutePath());
+        values.put(MediaStore.MediaColumns.DATA, this.getFile().getAbsolutePath());
         values.put(MediaStore.MediaColumns.TITLE, this.newFilename);
         values.put(MediaStore.MediaColumns.MIME_TYPE, "audio/*");
 
@@ -97,8 +105,8 @@ public class AdapterMenuSelectedListener implements View.OnClickListener {
         values.put(MediaStore.Audio.Media.IS_ALARM, false);
         values.put(MediaStore.Audio.Media.IS_MUSIC, false);
 
-        Uri uri = MediaStore.Audio.Media.getContentUriForPath(file.getAbsolutePath());
-        this.context.getContentResolver().delete(uri, MediaStore.MediaColumns.DATA + "=\"" + file.getAbsolutePath() + "\"", null);
+        Uri uri = MediaStore.Audio.Media.getContentUriForPath(this.getFile().getAbsolutePath());
+        this.context.getContentResolver().delete(uri, MediaStore.MediaColumns.DATA + "=\"" + this.getFile().getAbsolutePath() + "\"", null);
         Uri newUri = this.context.getApplicationContext().getContentResolver().insert(uri, values);
 
         RingtoneManager.setActualDefaultRingtoneUri(this.context.getApplicationContext(), RingtoneManager.TYPE_RINGTONE, newUri);
