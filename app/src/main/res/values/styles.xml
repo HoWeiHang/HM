@@ -22,6 +22,10 @@
         <item name="searchViewStyle">@style/MySearchView</item>
     </style>
 
+    <style name="myDialog" parent="android:style/Theme.Holo.Light.Dialog">
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
     <style name="MySearchView" parent="Widget.AppCompat.Light.SearchView">
         <item name="searchHintIcon">@drawable/ic_search</item>
     </style>

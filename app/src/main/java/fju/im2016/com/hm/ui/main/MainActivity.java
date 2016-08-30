@@ -2,6 +2,7 @@ package fju.im2016.com.hm.ui.main;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
@@ -18,6 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -46,6 +48,7 @@ import fju.im2016.com.hm.presenter.player.PlayerPresenter;
 import fju.im2016.com.hm.presenter.player.PlayerPresenterImpl;
 import fju.im2016.com.hm.ui.player.PlayerFragment;
 import fju.im2016.com.hm.ui.player.PlayerView;
+import fju.im2016.com.hm.ui.sleepclock.SleepClockActivity;
 
 
 public class MainActivity extends AppCompatActivity implements PlayerView, PlayerFragment.OnItemClickCallBack{
@@ -65,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
     private boolean hidePanel = false;
     private boolean isExpanded = false;
     private boolean isCollapsed = false;
+    private static final int ACTIVITY_SLEEP = 1;
     private static final String NAV_ITEM_ID = "nav_index";
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private NavigationView navView;
@@ -444,7 +448,10 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
                 return true;
 
             case R.id.action_sleepClock:
+                Intent intent = new Intent(MainActivity.this, SleepClockActivity.class);
+                startActivityForResult(intent, ACTIVITY_SLEEP);
                 return true;
+
 
             case R.id.action_addToPalyLists:
                 return true;
@@ -456,6 +463,18 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
                 return super.onOptionsItemSelected(item);
         }
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCodes, Intent data) {
+        super.onActivityResult(requestCode, resultCodes, data);
+        if (requestCode == ACTIVITY_SLEEP) {
+            if (resultCodes == RESULT_OK) {
+                this.playerPresenter.pause();
+                this.updateBtnPlayImage();
+                this.updatePanelPlayImage();
+            }
+        }
     }
 
     private void navigateTo(MenuItem menuItem) {

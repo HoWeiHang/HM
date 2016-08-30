@@ -7,4 +7,5 @@
     <color name="tb.item.background">#81b5c8</color>
     <color name="black">#000000</color>
     <color name="colorToolbar">#778e8e8e</color>
+    <color name="dialog">#439ADF</color>
 </resources>
