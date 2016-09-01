@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TableLayout
+        android:id="@+id/youtubeTableLayout"
+        android:background="#D50000"
+        android:layout_width="match_parent"
+        android:gravity="center_vertical"
+        android:layout_height="55dp">
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_marginLeft="-10dp">
+
+            <ImageButton android:id="@+id/fv_favorite"
+                android:background="@null"
+                android:layout_weight="2"
+                android:layout_column="5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="17.5dp"
+                android:paddingBottom="17.5dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/y_heart_ck"/>
+            <ImageButton android:id="@+id/fv_index"
+                android:background="@null"
+                android:layout_weight="2"
+                android:layout_column="5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="17.5dp"
+                android:paddingBottom="17.5dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/y_home"/>
+
+        </TableRow>
+
+    </TableLayout>
+
+    <view xmlns:android="http://schemas.android.com/apk/res/android"
+        class="fju.im2016.com.hm.ui.youtube.FavoriteActivity$ActionBarPaddedFrameLayout"
+        android:id="@+id/view_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <fragment
+                class="fju.im2016.com.hm.ui.youtube.FavoriteActivity$VideoFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:name="com.google.android.youtube.player.YouTubePlayerFragment"
+                android:id="@+id/fragment"
+                android:layout_gravity="center_horizontal" />
+
+        </LinearLayout>
+    </view>
+
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/listView" />
+</LinearLayout>

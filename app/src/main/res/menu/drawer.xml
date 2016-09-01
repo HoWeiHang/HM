@@ -16,13 +16,13 @@
             android:icon="@drawable/ic_person"
             android:title="演出者" />
         <item
-            android:id="@+id/nav_item_folder"
-            android:icon="@drawable/ic_folder"
-            android:title="資料夾" />
-        <item
             android:id="@+id/nav_item_playlist"
             android:icon="@drawable/ic_music"
             android:title="我的播放清單" />
+        <item
+            android:checkable="false"
+            android:enabled="false"
+            android:title="" />
         <item
             android:checkable="false"
             android:enabled="false"

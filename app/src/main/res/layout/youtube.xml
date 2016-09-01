@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/youtube"
+    tools:context="fju.im2016.com.hm.ui.youtube.YoutubeActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <TableLayout
+            android:id="@+id/youtubeTableLayout"
+            android:background="#D50000"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:gravity="center_vertical">
+
+
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_marginLeft="5dp">
+
+                <ImageButton android:id="@+id/favorite"
+                    android:layout_weight="2"
+                    android:layout_column="5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="17.5dp"
+                    android:paddingBottom="17.5dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/y_heart"
+                    android:background="@null"/>
+                <ImageButton android:id="@+id/index"
+                    android:layout_weight="2"
+                    android:layout_column="5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="-10dp"
+                    android:paddingTop="17.5dp"
+                    android:paddingBottom="17.5dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/y_home"
+                    android:background="@null"/>
+                <ImageButton android:id="@+id/add_favorite"
+                    android:layout_weight="2"
+                    android:layout_column="5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_plus"
+                    android:background="@null"/>
+            </TableRow>
+
+        </TableLayout>
+
+
+
+
+        <WebView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/webView"
+            android:layout_below="@+id/toolbar"
+
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_favorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/y_heart_ck"
+        app:backgroundTint="#D50000"
+        app:borderWidth="1dp"
+        app:fabSize="normal"
+        app:elevation="6dp"
+        app:pressedTranslationZ="10dp"
+        android:layout_alignBottom="@+id/fab_home"
+        android:layout_toLeftOf="@+id/fab_home"
+        android:layout_toStartOf="@+id/fab_home"
+        android:focusable="false"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_home"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/y_home_ck"
+        android:layout_margin="10dp"
+        app:backgroundTint="#FFC107"
+        app:borderWidth="1dp"
+        app:fabSize="normal"
+        app:elevation="6dp"
+        app:pressedTranslationZ="10dp"
+        android:focusable="false"/>
+</RelativeLayout>

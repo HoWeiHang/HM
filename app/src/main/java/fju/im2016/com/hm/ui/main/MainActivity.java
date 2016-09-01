@@ -38,6 +38,7 @@ import android.widget.Toast;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
 import fju.im2016.com.hm.R;
@@ -52,6 +53,8 @@ import fju.im2016.com.hm.presenter.player.PlayerPresenterImpl;
 import fju.im2016.com.hm.ui.player.PlayerFragment;
 import fju.im2016.com.hm.ui.player.PlayerView;
 import fju.im2016.com.hm.ui.sleepclock.SleepClockActivity;
+import fju.im2016.com.hm.ui.youtube.FavoriteActivity;
+import fju.im2016.com.hm.ui.youtube.YoutubeActivity;
 
 
 public class MainActivity extends AppCompatActivity implements PlayerView, PlayerFragment.OnItemClickCallBack{
@@ -348,14 +351,18 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
                 menuItem.setChecked(true);
                 drawerLayout.closeDrawers();
                 break;
-            case R.id.nav_item_folder:
+            case R.id.nav_item_playlist:
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.flContent, new PlayerFragment());
                 fragmentTransaction.commit();
                 menuItem.setChecked(true);
                 drawerLayout.closeDrawers();
                 break;
-            case R.id.nav_item_playlist:
+            case R.id.nav_item_youtube:
+                Intent it = new Intent(MainActivity.this, YoutubeActivity.class);
+                startActivity(it);
+                break;
+            case R.id.nav_item_setting:
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.flContent, new PlayerFragment());
                 fragmentTransaction.commit();
