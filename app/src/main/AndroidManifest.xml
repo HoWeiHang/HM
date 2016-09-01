@@ -25,6 +25,8 @@
             android:name=".ui.sleepclock.SleepClockActivity"
             android:theme="@style/myDialog">
         </activity>
+
+        <service android:name=".core.service.BroadcastService" />
     </application>
 
 </manifest>

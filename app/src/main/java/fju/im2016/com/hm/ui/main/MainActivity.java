@@ -1,8 +1,10 @@
 package fju.im2016.com.hm.ui.main;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
@@ -44,6 +46,7 @@ import fju.im2016.com.hm.core.entity.Song;
 import fju.im2016.com.hm.core.entity.player.Player;
 import fju.im2016.com.hm.core.manager.SlidingLayoutManager;
 import fju.im2016.com.hm.core.manager.SongManager;
+import fju.im2016.com.hm.core.service.BroadcastService;
 import fju.im2016.com.hm.presenter.player.PlayerPresenter;
 import fju.im2016.com.hm.presenter.player.PlayerPresenterImpl;
 import fju.im2016.com.hm.ui.player.PlayerFragment;
@@ -448,6 +451,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
                 return true;
 
             case R.id.action_sleepClock:
+                registerReceiver(brFinish, new IntentFilter(BroadcastService.FINISH_BR));
                 Intent intent = new Intent(MainActivity.this, SleepClockActivity.class);
                 startActivityForResult(intent, ACTIVITY_SLEEP);
                 return true;
@@ -465,17 +469,15 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
 
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCodes, Intent data) {
-        super.onActivityResult(requestCode, resultCodes, data);
-        if (requestCode == ACTIVITY_SLEEP) {
-            if (resultCodes == RESULT_OK) {
-                this.playerPresenter.pause();
-                this.updateBtnPlayImage();
-                this.updatePanelPlayImage();
-            }
+    private BroadcastReceiver brFinish = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            playerPresenter.pause();
+            updateBtnPlayImage();
+            updatePanelPlayImage();
+            // or whatever method used to update your GUI fields
         }
-    }
+    };
 
     private void navigateTo(MenuItem menuItem) {
 //        contentView.setText(menuItem.getTitle());
