@@ -8,10 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -24,6 +22,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import fju.im2016.com.hm.R;
+import fju.im2016.com.hm.dbhelper.DBHelper;
 
 public class YoutubeActivity extends AppCompatActivity {
     private ArrayList<ListObject> myFavoriteList = new ArrayList<ListObject>();

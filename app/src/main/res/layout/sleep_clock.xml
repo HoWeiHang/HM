@@ -83,7 +83,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="30dp"
-            android:text="00"
+            android:text="0"
             android:gravity="center_horizontal"
             android:layout_margin="6dp"
 
@@ -98,14 +98,6 @@
             android:gravity="center_horizontal"
             android:layout_margin="6dp"
             />
-
-
-        <EditText
-            android:id="@+id/editText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-
     </LinearLayout>
 
     <ImageView
@@ -126,7 +118,7 @@
             android:layout_height="wrap_content"
             style="?android:attr/borderlessButtonStyle"
             android:text="確認"
-            android:textColor="@color/dialog"
+            android:textColor="@color/black"
             android:layout_weight="1"
             />
 
@@ -142,7 +134,7 @@
             android:layout_height="wrap_content"
             style="?android:attr/borderlessButtonStyle"
             android:text="取消"
-            android:textColor="@color/dialog"
+            android:textColor="@color/black"
             android:layout_weight="1"/>
 
 

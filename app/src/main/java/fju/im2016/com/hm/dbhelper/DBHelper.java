@@ -1,10 +1,12 @@
-package fju.im2016.com.hm.ui.youtube;
+package fju.im2016.com.hm.dbhelper;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import fju.im2016.com.hm.ui.youtube.ListObject;
 
 public class DBHelper extends SQLiteOpenHelper{
 

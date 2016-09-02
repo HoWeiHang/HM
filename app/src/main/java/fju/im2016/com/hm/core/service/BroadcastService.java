@@ -16,7 +16,7 @@ public class BroadcastService extends Service {
 
     private final static String TAG = "BroadcastService";
 
-    public static final String COUNTDOWN_BR = "your_package_name.countdown_br";
+    public static final String COUNTDOWN_BR = "fju_im2016_com_hm_core_service_countdown";
     public static final String FINISH_BR = "fju_im2016_com_hm_core_service_finish";
     private Intent bi = new Intent(COUNTDOWN_BR);
     private Intent biFinish = new Intent(FINISH_BR);
@@ -57,6 +57,7 @@ public class BroadcastService extends Service {
             public void onTick(long millisUntilFinished) {
                 Log.i(TAG, "Countdown seconds remaining: " + millisUntilFinished / 1000);
                 bi.putExtra("countdown", millisUntilFinished);
+//                bi.putExtra("StartTime", startTime);
                 sendBroadcast(bi);
             }
         });
