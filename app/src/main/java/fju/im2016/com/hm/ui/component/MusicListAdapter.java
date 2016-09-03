@@ -64,7 +64,7 @@ public class MusicListAdapter extends BaseAdapter {
         holder.adapter_btnSetting.setImageResource(R.drawable.overflow);
 
 
-        holder.adapter_btnSetting.setOnClickListener(new AdapterMenuSelectedListener(this.context, song, new OnDeleteCallBack() {
+        holder.adapter_btnSetting.setOnClickListener(new AdapterMenuListener(this.context, song, new OnDeleteCallBack() {
             @Override
             public void onDelete() {
                 songs.remove(position);

@@ -62,7 +62,6 @@ public class PlayerFragment extends Fragment implements ListView.OnItemClickList
         Context ctx = getContext();
         ContentResolver resolver = ctx.getContentResolver();
         Cursor c = resolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, null, null, null);
-        String dispStr = "";
         c.moveToFirst();
         getInformation(c);
         c.close();

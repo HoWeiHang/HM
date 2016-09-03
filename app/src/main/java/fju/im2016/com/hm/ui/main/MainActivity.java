@@ -52,6 +52,7 @@ import fju.im2016.com.hm.presenter.player.PlayerPresenter;
 import fju.im2016.com.hm.presenter.player.PlayerPresenterImpl;
 import fju.im2016.com.hm.ui.player.PlayerFragment;
 import fju.im2016.com.hm.ui.player.PlayerView;
+import fju.im2016.com.hm.ui.playlist.PlayListFragment;
 import fju.im2016.com.hm.ui.sleepclock.SleepClockActivity;
 import fju.im2016.com.hm.ui.youtube.FavoriteActivity;
 import fju.im2016.com.hm.ui.youtube.YoutubeActivity;
@@ -353,7 +354,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
                 break;
             case R.id.nav_item_playlist:
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.flContent, new PlayerFragment());
+                fragmentTransaction.replace(R.id.flContent, new PlayListFragment());
                 fragmentTransaction.commit();
                 menuItem.setChecked(true);
                 drawerLayout.closeDrawers();
