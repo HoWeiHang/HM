@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -32,8 +33,8 @@ public class AdapterMenuListener implements View.OnClickListener, ListView.OnIte
     private OnDeleteCallBack onDeleteCallBack;
     private Context context;
     private Song song;
-    private String newAddress, newFilename;
-    private int countAddress, choseList;
+    private String newAddress, newFilename, nowInWhichPlayListId;
+    private int countAddress, choseList, position;
     private char[] charArray;
     private File file;
     private SQLiteDatabase db;
@@ -44,17 +45,25 @@ public class AdapterMenuListener implements View.OnClickListener, ListView.OnIte
     private EditText editText;
     private List<SongOfList> songOfLists;
     private boolean songInList = false;
+    private boolean deleteFromMediaStore;
 
-    public AdapterMenuListener(Context context, Song song, OnDeleteCallBack onDeleteCallBack) {
+    public AdapterMenuListener(Context context, Song song, boolean deleteFromMediaStore, int position, String nowInWhichPlayListId, OnDeleteCallBack onDeleteCallBack) {
         this.context = context;
         this.song = song;
+        this.deleteFromMediaStore = deleteFromMediaStore;
+        this.position = position;
+        this.nowInWhichPlayListId = nowInWhichPlayListId;
         this.onDeleteCallBack = onDeleteCallBack;
         this.db = this.context.openOrCreateDatabase("music_database", android.content.Context.MODE_PRIVATE, null);
         this.helper = new DBHelper(this.context.getApplicationContext());
+        this.songOfLists = new ArrayList<SongOfList>();
+        this.playLists = new ArrayList<PlayList>();
+        this.queryPlayList();
     }
 
     @Override
     public void onClick(View view) {
+        Toast.makeText(context, song.toString(), Toast.LENGTH_LONG).show();
         // This is an android.support.v7.widget.PopupMenu;
         PopupMenu popupMenu = new PopupMenu(context, view) {
             @Override
@@ -70,22 +79,24 @@ public class AdapterMenuListener implements View.OnClickListener, ListView.OnIte
                         return true;
 
                     case R.id.adapter_menu_delete:
-                        context.getContentResolver().delete(
-                                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                                MediaStore.Audio.Media._ID + "=\'" + song.getId().toString() + "\'",
-                                null);
-                        new File(song.getPath()).delete();
-                        onDeleteCallBack.onDelete();
-//                        MusicListAdapter.getInstance().notifyDataSetChanged();
+                        if (deleteFromMediaStore) {
+                            context.getContentResolver().delete(
+                                    MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                                    MediaStore.Audio.Media._ID + "=\'" + song.getId().toString() + "\'",
+                                    null);
+                            new File(song.getPath()).delete();
+                            onDeleteCallBack.onDelete();
+                        } else {
+                            querySongOfList(playLists.get(Integer.parseInt(nowInWhichPlayListId)).getId());
+                            helper.delete_song_of_list(Integer.parseInt(songOfLists.get(position).getId()));
+                            onDeleteCallBack.onDelete();
+                        }
                         return true;
 
                     case R.id.adapter_menu_addPalyList:
-                        if (playLists != null)
-                            playLists.clear();
-                        playLists = new ArrayList<PlayList>();
                         AlertDialog.Builder addlistDialog = new AlertDialog.Builder(context);
                         iniChoseListDialog(addlistDialog, LayoutInflater.from(context).inflate(R.layout.add_list_dialog_layout, null));
-                        showPlayList();
+                        initialPlayList();
                         return true;
 
                     default:
@@ -155,7 +166,9 @@ public class AdapterMenuListener implements View.OnClickListener, ListView.OnIte
         return findedId;
     }
 
-    private  void showPlayList() {
+    private void queryPlayList() {
+        if (playLists != null)
+            playLists.clear();
         Cursor clist =db.rawQuery("select * from list", null);
         clist.moveToFirst();
         getCListInformation(clist);
@@ -164,8 +177,15 @@ public class AdapterMenuListener implements View.OnClickListener, ListView.OnIte
         PlayList addPlayList = new PlayList(null, "新增播放清單");
         addPlayList.setColorImg(R.drawable.ic_plus_black);
         this.playLists.add(addPlayList);
+    }
 
-        this.initialPlayList();
+    private void querySongOfList(String querySQL) {
+        if (songOfLists != null)
+            songOfLists.clear();
+        Cursor cSongOfList =db.rawQuery("select * from song_of_list where l_id = " + querySQL, null);
+        cSongOfList.moveToFirst();
+        getSongOfListInformation(cSongOfList);
+        cSongOfList.close();
     }
 
     private void initialPlayList() {
@@ -176,7 +196,6 @@ public class AdapterMenuListener implements View.OnClickListener, ListView.OnIte
     }
 
     private void getSongOfListInformation(Cursor cSongOfList) {
-        this.songOfLists = new ArrayList<SongOfList>();
         for (int i = 0; i < cSongOfList.getCount(); i++) {
             String id = cSongOfList.getString(cSongOfList.getColumnIndex("_id"));
             String songId = cSongOfList.getString(cSongOfList.getColumnIndex("s_id"));
@@ -296,11 +315,7 @@ public class AdapterMenuListener implements View.OnClickListener, ListView.OnIte
         this.songInList = false;
         this.choseList = position;
         if (position != playLists.size() - 1) {
-            Cursor cSongOfList =db.rawQuery("select * from song_of_list where l_id = " + this.playLists.get(position).getId(), null);
-            cSongOfList.moveToFirst();
-            getSongOfListInformation(cSongOfList);
-            cSongOfList.close();
-
+            this.querySongOfList(this.playLists.get(position).getId());
             if (this.checkDuplicated()) {
                 this.showDuplicatedDialog();
             }

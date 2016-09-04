@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,7 @@ public class ListSongFragment extends Fragment implements ListView.OnItemClickLi
     private SQLiteDatabase db;
     private DBHelper helper;
     private ListView lstListSong;
-    private String playListId;
+    private String playListId, nowInWhichPlayListId;
     private List<SongOfList> songOfLists;
     private SongManager songManager;
 
@@ -45,6 +46,7 @@ public class ListSongFragment extends Fragment implements ListView.OnItemClickLi
         this.songManager = new SongManager();
         this.songOfLists = new ArrayList<SongOfList>();
         this.playListId = getArguments().getString("playListId");
+        this.nowInWhichPlayListId = getArguments().getString("nowInWhichPlayListId");
         this.db = this.getActivity().openOrCreateDatabase("music_database", android.content.Context.MODE_PRIVATE, null);
         this.helper = new DBHelper(this.getActivity().getApplicationContext());
 
@@ -64,7 +66,7 @@ public class ListSongFragment extends Fragment implements ListView.OnItemClickLi
     private void initialMusicList() {
         this.lstListSong = (ListView) view.findViewById(R.id.lstMusic);
 
-        MusicListAdapter adapter = new MusicListAdapter(this.songManager.getSongs(), this.getContext());
+        MusicListAdapter adapter = new MusicListAdapter(this.songManager.getSongs(), this.getContext(), false, nowInWhichPlayListId);
         this.lstListSong.setAdapter(adapter);
 
         lstListSong.setOnItemClickListener(this);
@@ -83,9 +85,9 @@ public class ListSongFragment extends Fragment implements ListView.OnItemClickLi
     }
 
     private void getInformation(Cursor c) {
-        for (int i = 0; i < c.getCount(); i++) {
-            for (int j = 0; j < this.songOfLists.size(); j++) {
-                if (c.getString(c.getColumnIndexOrThrow(MediaStore.Audio.Media._ID)).equals(this.songOfLists.get(j).getSongId())) {
+        for (int j = 0; j < this.songOfLists.size(); j++) {
+            for (int i = 0; i < c.getCount(); i++) {
+                if (this.songOfLists.get(j).getSongId().equals(c.getString(c.getColumnIndexOrThrow(MediaStore.Audio.Media._ID)))) {
                     String name = c.getString(c.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE));
                     String path = c.getString(c.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA));
                     String id = c.getString(c.getColumnIndexOrThrow(MediaStore.Audio.Media._ID));
@@ -101,8 +103,9 @@ public class ListSongFragment extends Fragment implements ListView.OnItemClickLi
                     song.setLength(length);
                     this.songManager.addSong(song);
                 }
+                c.moveToNext();
             }
-            c.moveToNext();
+            c.moveToFirst();
         }
     }
 

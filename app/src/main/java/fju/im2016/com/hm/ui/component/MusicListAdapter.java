@@ -18,10 +18,14 @@ import fju.im2016.com.hm.core.entity.Song;
 public class MusicListAdapter extends BaseAdapter {
     private List<Song> songs;
     private Context context;
+    private boolean deleteFromMediaStore;
+    private String nowInWhichPlayListId;
 
-    public MusicListAdapter(List<Song> songs, Context context) {
+    public MusicListAdapter(List<Song> songs, Context context, boolean deleteFromMediaStore, String nowInWhichPlayListId) {
         this.songs = songs;
         this.context = context;
+        this.deleteFromMediaStore = deleteFromMediaStore;
+        this.nowInWhichPlayListId = nowInWhichPlayListId;
     }
 
     @Override
@@ -64,7 +68,7 @@ public class MusicListAdapter extends BaseAdapter {
         holder.adapter_btnSetting.setImageResource(R.drawable.overflow);
 
 
-        holder.adapter_btnSetting.setOnClickListener(new AdapterMenuListener(this.context, song, new OnDeleteCallBack() {
+        holder.adapter_btnSetting.setOnClickListener(new AdapterMenuListener(this.context, song, deleteFromMediaStore, position, nowInWhichPlayListId, new OnDeleteCallBack() {
             @Override
             public void onDelete() {
                 songs.remove(position);

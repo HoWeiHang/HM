@@ -136,6 +136,7 @@ public class PlayListFragment extends Fragment implements ListView.OnItemClickLi
             ListSongFragment listSongFragment = new ListSongFragment();
             Bundle bundle = new Bundle();
             bundle.putString("playListId", playLists.get(position).getId());
+            bundle.putString("nowInWhichPlayListId", String.valueOf(position));
             listSongFragment.setArguments(bundle);
             FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.flContent, listSongFragment);

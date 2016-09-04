@@ -81,7 +81,7 @@ public class PlayerFragment extends Fragment implements ListView.OnItemClickList
 //        ArrayAdapter<String> adaSong = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, songName);
 //        this.lstMusic.setAdapter(adaSong);
 
-        MusicListAdapter adapter = new MusicListAdapter(this.songManager.getSongs(), this.getContext());
+        MusicListAdapter adapter = new MusicListAdapter(this.songManager.getSongs(), this.getContext(), true, null);
         this.lstMusic.setAdapter(adapter);
 
         if (ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
