@@ -52,13 +52,14 @@ import fju.im2016.com.hm.presenter.player.PlayerPresenter;
 import fju.im2016.com.hm.presenter.player.PlayerPresenterImpl;
 import fju.im2016.com.hm.ui.player.PlayerFragment;
 import fju.im2016.com.hm.ui.player.PlayerView;
+import fju.im2016.com.hm.ui.playlist.ListSongFragment;
 import fju.im2016.com.hm.ui.playlist.PlayListFragment;
 import fju.im2016.com.hm.ui.sleepclock.SleepClockActivity;
 import fju.im2016.com.hm.ui.youtube.FavoriteActivity;
 import fju.im2016.com.hm.ui.youtube.YoutubeActivity;
 
 
-public class MainActivity extends AppCompatActivity implements PlayerView, PlayerFragment.OnItemClickCallBack{
+public class MainActivity extends AppCompatActivity implements PlayerView, PlayerFragment.OnItemClickCallBack, ListSongFragment.OnItemClickCallBack{
 
     private TextView albumName, musicName, runTime, fullTime, panelAlbumName, panelSongName;
     private SeekBar seekBar;

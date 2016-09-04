@@ -1,5 +1,6 @@
 package fju.im2016.com.hm.ui.playlist;
 
+import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -33,6 +34,7 @@ public class ListSongFragment extends Fragment implements ListView.OnItemClickLi
     private List<SongOfList> songOfLists;
     private List<Song> tempSongs;
     private SongManager songManager;
+    private OnItemClickCallBack onItemClickCallBack;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState) {
@@ -120,6 +122,21 @@ public class ListSongFragment extends Fragment implements ListView.OnItemClickLi
 
     @Override
     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+        this.songManager.setCurrentSong(position);
+        this.onItemClickCallBack.onClick(this.songManager);
+    }
 
+    public interface OnItemClickCallBack {
+        void onClick(SongManager songManager) ;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            onItemClickCallBack = (OnItemClickCallBack) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement OnArticleSelectedListener");
+        }
     }
 }
