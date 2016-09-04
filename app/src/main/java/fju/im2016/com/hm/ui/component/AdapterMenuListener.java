@@ -17,7 +17,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -63,7 +62,6 @@ public class AdapterMenuListener implements View.OnClickListener, ListView.OnIte
 
     @Override
     public void onClick(View view) {
-        Toast.makeText(context, song.toString(), Toast.LENGTH_LONG).show();
         // This is an android.support.v7.widget.PopupMenu;
         PopupMenu popupMenu = new PopupMenu(context, view) {
             @Override
@@ -109,13 +107,6 @@ public class AdapterMenuListener implements View.OnClickListener, ListView.OnIte
 
         popupMenu.show();
     }
-
-//    private void checkExist() {
-//        Cursor cSongOfList =db.rawQuery("select * from song_of_list where l_id = " + this.playListId, null);
-//        cSongOfList.moveToFirst();
-//        getSongOfListInformation(cSongOfList);
-//        cSongOfList.close();
-//    }
 
     private void iniChoseListDialog(AlertDialog.Builder alertDialog, View view) {
         this.lstPlaylist = (ListView) view.findViewById(R.id.lstPlayList);
@@ -288,7 +279,7 @@ public class AdapterMenuListener implements View.OnClickListener, ListView.OnIte
         RingtoneManager.setActualDefaultRingtoneUri(this.context.getApplicationContext(), RingtoneManager.TYPE_RINGTONE, newUri);
     }
 
-    private boolean checkDuplicated() {
+    private boolean checkExist() {
         for (int i = 0; i < this.songOfLists.size(); i++) {
             if (this.song.getId().equals(this.songOfLists.get(i).getSongId())) {
                 this.songInList = true;
@@ -316,7 +307,7 @@ public class AdapterMenuListener implements View.OnClickListener, ListView.OnIte
         this.choseList = position;
         if (position != playLists.size() - 1) {
             this.querySongOfList(this.playLists.get(position).getId());
-            if (this.checkDuplicated()) {
+            if (this.checkExist()) {
                 this.showDuplicatedDialog();
             }
         } else {
