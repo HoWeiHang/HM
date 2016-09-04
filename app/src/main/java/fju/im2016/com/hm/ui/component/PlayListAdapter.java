@@ -63,7 +63,13 @@ public class PlayListAdapter extends BaseAdapter {
         holder.playlist_adapter_color_img.setImageResource(playList.getColorImg());
         if (this.overFlow) {
             holder.playlist_adapter_btnSetting.setImageResource(R.drawable.overflow);
-            holder.playlist_adapter_btnSetting.setOnClickListener(new PlayListAdapterMenuListener(this.context, playList));
+            holder.playlist_adapter_btnSetting.setOnClickListener(new PlayListAdapterMenuListener(this.context, playList, new PlayListOnDeleteCallBack() {
+                @Override
+                public void onDelete() {
+                    playLists.remove(position);
+                    notifyDataSetChanged();
+                }
+            }));
         }
         if (position == (playLists.size() - 1)) {
             holder.playlist_adapter_btnSetting.setImageResource(R.drawable.konkon);
