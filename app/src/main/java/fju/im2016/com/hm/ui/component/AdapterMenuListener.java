@@ -25,6 +25,7 @@ import java.util.List;
 import fju.im2016.com.hm.R;
 import fju.im2016.com.hm.core.entity.PlayList;
 import fju.im2016.com.hm.core.entity.Song;
+import fju.im2016.com.hm.core.entity.SongOfList;
 import fju.im2016.com.hm.dbhelper.DBHelper;
 
 public class AdapterMenuListener implements View.OnClickListener, ListView.OnItemClickListener {
@@ -32,7 +33,7 @@ public class AdapterMenuListener implements View.OnClickListener, ListView.OnIte
     private Context context;
     private Song song;
     private String newAddress, newFilename;
-    private int countAddress;
+    private int countAddress, choseList;
     private char[] charArray;
     private File file;
     private SQLiteDatabase db;
@@ -41,6 +42,8 @@ public class AdapterMenuListener implements View.OnClickListener, ListView.OnIte
     private PlayListAdapter playListAdapter;
     private ListView lstPlaylist;
     private EditText editText;
+    private List<SongOfList> songOfLists;
+    private boolean songInList = false;
 
     public AdapterMenuListener(Context context, Song song, OnDeleteCallBack onDeleteCallBack) {
         this.context = context;
@@ -96,13 +99,20 @@ public class AdapterMenuListener implements View.OnClickListener, ListView.OnIte
         popupMenu.show();
     }
 
+//    private void checkExist() {
+//        Cursor cSongOfList =db.rawQuery("select * from song_of_list where l_id = " + this.playListId, null);
+//        cSongOfList.moveToFirst();
+//        getSongOfListInformation(cSongOfList);
+//        cSongOfList.close();
+//    }
+
     private void iniChoseListDialog(AlertDialog.Builder alertDialog, View view) {
         this.lstPlaylist = (ListView) view.findViewById(R.id.lstPlayList);
         alertDialog.setView(view);
         alertDialog.setPositiveButton("確認", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                helper.addsong(Integer.parseInt(song.getId()), Integer.parseInt(playLists.get(choseList).getId()));
             }
         });
         alertDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -163,6 +173,20 @@ public class AdapterMenuListener implements View.OnClickListener, ListView.OnIte
         this.lstPlaylist.setAdapter(playListAdapter);
         this.lstPlaylist.setSelector(R.color.nav_item_background);
         this.lstPlaylist.setOnItemClickListener(this);
+    }
+
+    private void getSongOfListInformation(Cursor cSongOfList) {
+        this.songOfLists = new ArrayList<SongOfList>();
+        for (int i = 0; i < cSongOfList.getCount(); i++) {
+            String id = cSongOfList.getString(cSongOfList.getColumnIndex("_id"));
+            String songId = cSongOfList.getString(cSongOfList.getColumnIndex("s_id"));
+            String listId = cSongOfList.getString(cSongOfList.getColumnIndex("l_id"));
+
+            SongOfList songOfList = new SongOfList(id, songId, listId);
+            this.songOfLists.add(songOfList);
+
+            cSongOfList.moveToNext();
+        }
     }
 
     private void getCListInformation(Cursor clist) {
@@ -245,10 +269,41 @@ public class AdapterMenuListener implements View.OnClickListener, ListView.OnIte
         RingtoneManager.setActualDefaultRingtoneUri(this.context.getApplicationContext(), RingtoneManager.TYPE_RINGTONE, newUri);
     }
 
+    private boolean checkDuplicated() {
+        for (int i = 0; i < this.songOfLists.size(); i++) {
+            if (this.song.getId().equals(this.songOfLists.get(i).getSongId())) {
+                this.songInList = true;
+            }
+        }
+        return this.songInList;
+    }
+
+    private void showDuplicatedDialog() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this.context);
+        dialog.setTitle("警告");
+        dialog.setMessage("這首歌有囉!");
+        dialog.setPositiveButton("確認", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+
+            }
+        });
+        dialog.show();
+    }
+
     @Override
     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+        this.songInList = false;
+        this.choseList = position;
         if (position != playLists.size() - 1) {
-            
+            Cursor cSongOfList =db.rawQuery("select * from song_of_list where l_id = " + this.playLists.get(position).getId(), null);
+            cSongOfList.moveToFirst();
+            getSongOfListInformation(cSongOfList);
+            cSongOfList.close();
+
+            if (this.checkDuplicated()) {
+                this.showDuplicatedDialog();
+            }
         } else {
             AlertDialog.Builder addListDialog = new AlertDialog.Builder(this.context);
             this.iniAddListDialog(addListDialog, LayoutInflater.from(this.context).inflate(R.layout.add_list, null));

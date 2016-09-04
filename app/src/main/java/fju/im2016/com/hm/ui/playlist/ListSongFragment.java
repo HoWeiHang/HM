@@ -84,21 +84,23 @@ public class ListSongFragment extends Fragment implements ListView.OnItemClickLi
 
     private void getInformation(Cursor c) {
         for (int i = 0; i < c.getCount(); i++) {
-            if (i < this.songOfLists.size() && c.getString(c.getColumnIndexOrThrow(MediaStore.Audio.Media._ID)).equals(this.songOfLists.get(i).getSongId())) {
-                String name = c.getString(c.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE));
-                String path = c.getString(c.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA));
-                String id = c.getString(c.getColumnIndexOrThrow(MediaStore.Audio.Media._ID));
-                String artist = c.getString(c.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST));
-                String album = c.getString(c.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM));
-                String albumId = c.getString(c.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID));
-                double length = c.getDouble(c.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION));
+            for (int j = 0; j < this.songOfLists.size(); j++) {
+                if (c.getString(c.getColumnIndexOrThrow(MediaStore.Audio.Media._ID)).equals(this.songOfLists.get(j).getSongId())) {
+                    String name = c.getString(c.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE));
+                    String path = c.getString(c.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA));
+                    String id = c.getString(c.getColumnIndexOrThrow(MediaStore.Audio.Media._ID));
+                    String artist = c.getString(c.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST));
+                    String album = c.getString(c.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM));
+                    String albumId = c.getString(c.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID));
+                    double length = c.getDouble(c.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION));
 
-                Song song = new Song(id, name, path);
-                song.setAlbum(album);
-                song.setAlbumId(albumId);
-                song.setArtist(artist);
-                song.setLength(length);
-                this.songManager.addSong(song);
+                    Song song = new Song(id, name, path);
+                    song.setAlbum(album);
+                    song.setAlbumId(albumId);
+                    song.setArtist(artist);
+                    song.setLength(length);
+                    this.songManager.addSong(song);
+                }
             }
             c.moveToNext();
         }
