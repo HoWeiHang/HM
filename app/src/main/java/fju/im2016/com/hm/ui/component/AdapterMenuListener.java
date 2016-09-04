@@ -45,6 +45,7 @@ public class AdapterMenuListener implements View.OnClickListener, ListView.OnIte
     private List<SongOfList> songOfLists;
     private boolean songInList = false;
     private boolean deleteFromMediaStore;
+    private AlertDialog theDialog;
 
     public AdapterMenuListener(Context context, Song song, boolean deleteFromMediaStore, int position, String nowInWhichPlayListId, OnDeleteCallBack onDeleteCallBack) {
         this.context = context;
@@ -94,6 +95,7 @@ public class AdapterMenuListener implements View.OnClickListener, ListView.OnIte
                     case R.id.adapter_menu_addPalyList:
                         AlertDialog.Builder addlistDialog = new AlertDialog.Builder(context);
                         iniChoseListDialog(addlistDialog, LayoutInflater.from(context).inflate(R.layout.add_list_dialog_layout, null));
+                        enableDialog(false);
                         initialPlayList();
                         return true;
 
@@ -106,6 +108,10 @@ public class AdapterMenuListener implements View.OnClickListener, ListView.OnIte
         popupMenu.inflate(R.menu.menu_adapter);
 
         popupMenu.show();
+    }
+
+    private void enableDialog(boolean enabled) {
+        theDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(enabled);
     }
 
     private void iniChoseListDialog(AlertDialog.Builder alertDialog, View view) {
@@ -123,7 +129,8 @@ public class AdapterMenuListener implements View.OnClickListener, ListView.OnIte
 
             }
         });
-        alertDialog.show();
+        theDialog = alertDialog.create();
+        theDialog.show();
     }
 
     private void iniAddListDialog(AlertDialog.Builder alertDialog, View view) {
@@ -309,6 +316,9 @@ public class AdapterMenuListener implements View.OnClickListener, ListView.OnIte
             this.querySongOfList(this.playLists.get(position).getId());
             if (this.checkExist()) {
                 this.showDuplicatedDialog();
+                this.enableDialog(false);
+            } else {
+                this.enableDialog(true);
             }
         } else {
             AlertDialog.Builder addListDialog = new AlertDialog.Builder(this.context);

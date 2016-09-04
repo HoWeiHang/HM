@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
         // ------------------------------------------
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("歌曲列表 - 全部歌曲");
+        toolbar.setTitle("全部歌曲");
         setSupportActionBar(toolbar);
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
