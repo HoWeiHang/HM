@@ -43,6 +43,7 @@ import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
 import fju.im2016.com.hm.R;
+import fju.im2016.com.hm.core.entity.CheckColorList;
 import fju.im2016.com.hm.core.entity.RepeatEnum;
 import fju.im2016.com.hm.core.entity.Song;
 import fju.im2016.com.hm.core.entity.player.Player;
@@ -79,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
 
     private SQLiteDatabase db;
     private DBHelper helper;
+    private CheckColorList checkColorList;
 
     private int navItemId;
     private boolean showPanel = true;
@@ -104,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
         this.playerPresenter.pause();
         this.updateBtnPlayImage();
         this.updatePanelPlayImage();
+        this.checkColorList();
     }
 
     @Override
@@ -116,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
         this.playerPresenter.resetLastIndexValue();
         this.playerPresenter.clear();
         setRepeatOnce();
+        this.checkColorList();
     }
 
     private void iniPlayer(SongManager songManager) {
@@ -149,6 +153,8 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
         this.iniButtonYellow();
         this.iniButtonGreen();
         this.iniButtonBlue();
+
+        this.checkColorList = new CheckColorList(this);
 
         albumName = (TextView) findViewById(R.id.albumName);
         musicName = (TextView) findViewById(R.id.musicName);
@@ -655,6 +661,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
                 try {
                     playerPresenter.last();
                     setRepeatOnce();
+                    checkColorList();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -670,6 +677,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
                 try {
                     playerPresenter.last();
                     setRepeatOnce();
+                    checkColorList();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -685,6 +693,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
                 try {
                     playerPresenter.next();
                     setRepeatOnce();
+                    checkColorList();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -700,6 +709,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
                 try {
                     playerPresenter.next();
                     setRepeatOnce();
+                    checkColorList();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -868,6 +878,66 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
             this.btnBlue.setImageResource(R.drawable.list_blue);
             this.inBluePlayList = true;
         }
+    }
+
+    private void checkColorRed() {
+        if (this.checkColorList.findList("1")) {
+            this.inRedPlayList = true;
+            this.updateBtnRedImg();
+        } else {
+            this.inRedPlayList = false;
+            this.updateBtnRedImg();
+        }
+    }
+
+    private void checkColorOrange() {
+        if (this.checkColorList.findList("2")) {
+            this.inOrangePlayList = true;
+            this.updateBtnOrangeImg();
+        } else {
+            this.inOrangePlayList = false;
+            this.updateBtnOrangeImg();
+        }
+    }
+
+    private void checkColorYellow() {
+        if (this.checkColorList.findList("3")) {
+            this.inYellowPlayList = true;
+            this.updateBtnYellowImg();
+        } else {
+            this.inYellowPlayList = false;
+            this.updateBtnYellowImg();
+        }
+    }
+
+    private void checkColorGreen() {
+        if (this.checkColorList.findList("4")) {
+            this.inGreenPlayList = true;
+            this.updateBtnGreenImg();
+        } else {
+            this.inGreenPlayList = false;
+            this.updateBtnGreenImg();
+        }
+    }
+
+    private void checkColorBlue() {
+        if (this.checkColorList.findList("5")) {
+            this.inBluePlayList = true;
+            this.updateBtnBlueImg();
+        } else {
+            this.inBluePlayList = false;
+            this.updateBtnBlueImg();
+        }
+    }
+
+    @Override
+    public void checkColorList() {
+        this.checkColorList.setSong(this.playerPresenter.getCurrentSong());
+        this.checkColorRed();
+        this.checkColorOrange();
+        this.checkColorYellow();
+        this.checkColorGreen();
+        this.checkColorBlue();
     }
 
     private void iniSeekBar() {

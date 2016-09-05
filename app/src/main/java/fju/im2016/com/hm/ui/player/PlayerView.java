@@ -10,4 +10,5 @@ public interface PlayerView {
     void setTimeTextView(int currentPosition);
     void updateBtnPlayImage();
     void updatePanelPlayImage();
+    void checkColorList();
 }

@@ -26,6 +26,7 @@ public class PlayerPresenterImpl implements PlayerPresenter {
             public void onRrepeat() {
                 try {
                     next();
+                    playerView.checkColorList();
                 } catch (IOException e){
                     e.printStackTrace();
                 }
@@ -50,6 +51,7 @@ public class PlayerPresenterImpl implements PlayerPresenter {
                 } else {
                     try {
                         next();
+                        playerView.checkColorList();
                     } catch (IOException e){
                         e.printStackTrace();
                     }
