@@ -3,6 +3,7 @@ package fju.im2016.com.hm.presenter.player;
 import java.io.IOException;
 
 import fju.im2016.com.hm.core.entity.RepeatEnum;
+import fju.im2016.com.hm.core.entity.Song;
 import fju.im2016.com.hm.core.manager.SongManager;
 
 public interface PlayerPresenter {
@@ -29,6 +30,8 @@ public interface PlayerPresenter {
     void setRepeatEnum(RepeatEnum repeatEnum);
 
     RepeatEnum getRepeatEnum();
+
+    Song getCurrentSong();
 
     void establishSongIndexArray();
 

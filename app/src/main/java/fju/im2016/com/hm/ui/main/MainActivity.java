@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
@@ -48,6 +49,7 @@ import fju.im2016.com.hm.core.entity.player.Player;
 import fju.im2016.com.hm.core.manager.SlidingLayoutManager;
 import fju.im2016.com.hm.core.manager.SongManager;
 import fju.im2016.com.hm.core.service.BroadcastService;
+import fju.im2016.com.hm.dbhelper.DBHelper;
 import fju.im2016.com.hm.presenter.player.PlayerPresenter;
 import fju.im2016.com.hm.presenter.player.PlayerPresenterImpl;
 import fju.im2016.com.hm.ui.player.PlayerFragment;
@@ -64,12 +66,19 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
     private TextView albumName, musicName, runTime, fullTime, panelAlbumName, panelSongName;
     private SeekBar seekBar;
     private ImageView albumImage;
-    private ImageButton btnPlay, btnFront, btnNext, btnRe, btnRandom, panelPlay, panelFront, panelNext;
+    private ImageButton btnPlay, btnFront, btnNext, btnRe, btnRandom, panelPlay, panelFront, panelNext, btnRed, btnOrange, btnYellow, btnGreen, btnBlue;
     private Boolean Random = false;
+    private boolean inRedPlayList = false;
+    private boolean inOrangePlayList = false;
+    private boolean inYellowPlayList = false;
+    private boolean inGreenPlayList = false;
+    private boolean inBluePlayList = false;
     private RepeatEnum Repeat = RepeatEnum.repeatOff;
 
     private PlayerPresenter playerPresenter;
 
+    private SQLiteDatabase db;
+    private DBHelper helper;
 
     private int navItemId;
     private boolean showPanel = true;
@@ -123,7 +132,8 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        db = openOrCreateDatabase("music_database", MODE_PRIVATE, null);
+        helper = new DBHelper(getApplicationContext());
 
         this.iniButtonPlay();
         this.iniPanelPlay();
@@ -134,6 +144,11 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
         this.iniButtonRe();
         this.iniButtonRandom();
         this.iniSeekBar();
+        this.iniButtonRed();
+        this.iniButtonOrange();
+        this.iniButtonYellow();
+        this.iniButtonGreen();
+        this.iniButtonBlue();
 
         albumName = (TextView) findViewById(R.id.albumName);
         musicName = (TextView) findViewById(R.id.musicName);
@@ -427,21 +442,21 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
 //        }
 
         // hide toast
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                final View v = findViewById(R.id.action_home);
-
-                if (v != null) {
-                    v.setOnLongClickListener(new View.OnLongClickListener() {
-                        @Override
-                        public boolean onLongClick(View v) {
-                            return false;
-                        }
-                    });
-                }
-            }
-        });
+//        new Handler().post(new Runnable() {
+//            @Override
+//            public void run() {
+//                final View v = findViewById(R.id.action_home);
+//
+//                if (v != null) {
+//                    v.setOnLongClickListener(new View.OnLongClickListener() {
+//                        @Override
+//                        public boolean onLongClick(View v) {
+//                            return false;
+//                        }
+//                    });
+//                }
+//            }
+//        });
 
         return true;
     }
@@ -752,6 +767,106 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
         } else {
             btnRandom.setImageDrawable(getResources().getDrawable(R.drawable.random_on));
             Random = true;
+        }
+    }
+
+    private void iniButtonRed() {
+        this.btnRed = (ImageButton) findViewById(R.id.btnRed);
+        this.btnRed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateBtnRedImg();
+            }
+        });
+    }
+
+    private void updateBtnRedImg() {
+        if (inRedPlayList) {
+            this.btnRed.setImageResource(R.drawable.list_red_checked);
+            this.inRedPlayList = false;
+        } else {
+            this.btnRed.setImageResource(R.drawable.list_red);
+            this.inRedPlayList = true;
+        }
+    }
+
+    private void iniButtonOrange() {
+        this.btnOrange = (ImageButton) findViewById(R.id.btnOrange);
+        this.btnOrange.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateBtnOrangeImg();
+            }
+        });
+    }
+
+    private void updateBtnOrangeImg() {
+        if (inOrangePlayList) {
+            this.btnOrange.setImageResource(R.drawable.list_orange_checked);
+            this.inOrangePlayList = false;
+        } else {
+            this.btnOrange.setImageResource(R.drawable.list_orange);
+            this.inOrangePlayList = true;
+        }
+    }
+
+    private void iniButtonYellow() {
+        this.btnYellow = (ImageButton) findViewById(R.id.btnYellow);
+        this.btnYellow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateBtnYellowImg();
+            }
+        });
+    }
+
+    private void updateBtnYellowImg() {
+        if (inYellowPlayList) {
+            this.btnYellow.setImageResource(R.drawable.list_yellow_checked);
+            this.inYellowPlayList = false;
+        } else {
+            this.btnYellow.setImageResource(R.drawable.list_yellow);
+            this.inYellowPlayList = true;
+        }
+    }
+
+    private void iniButtonGreen() {
+        this.btnGreen = (ImageButton) findViewById(R.id.btnGreen);
+        this.btnGreen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateBtnGreenImg();
+            }
+        });
+    }
+
+    private void updateBtnGreenImg() {
+        if (inGreenPlayList) {
+            this.btnGreen.setImageResource(R.drawable.list_green_checked);
+            this.inGreenPlayList = false;
+        } else {
+            this.btnGreen.setImageResource(R.drawable.list_green);
+            this.inGreenPlayList = true;
+        }
+    }
+
+    private void iniButtonBlue() {
+        this.btnBlue = (ImageButton) findViewById(R.id.btnBlue);
+        this.btnBlue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateBtnBlueImg();
+            }
+        });
+    }
+
+    private void updateBtnBlueImg() {
+        if (inBluePlayList) {
+            this.btnBlue.setImageResource(R.drawable.list_blue_checked);
+            this.inBluePlayList = false;
+        } else {
+            this.btnBlue.setImageResource(R.drawable.list_blue);
+            this.inBluePlayList = true;
         }
     }
 

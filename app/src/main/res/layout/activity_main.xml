@@ -322,7 +322,7 @@
                             />
 
                         <ImageButton
-                            android:id="@+id/listRed"
+                            android:id="@+id/btnRed"
                             android:layout_width="25dp"
                             android:layout_height="wrap_content"
                             android:src="@drawable/list_red"
@@ -332,7 +332,7 @@
                             android:scaleType="centerInside" />
 
                         <ImageButton
-                            android:id="@+id/listOrange"
+                            android:id="@+id/btnOrange"
                             android:layout_width="25dp"
                             android:layout_height="wrap_content"
                             android:src="@drawable/list_orange"
@@ -342,7 +342,7 @@
                             android:scaleType="centerInside" />
 
                         <ImageButton
-                            android:id="@+id/listYellow"
+                            android:id="@+id/btnYellow"
                             android:layout_width="25dp"
                             android:layout_height="wrap_content"
                             android:src="@drawable/list_yellow"
@@ -352,7 +352,7 @@
                             android:scaleType="centerInside" />
 
                         <ImageButton
-                            android:id="@+id/listGreen"
+                            android:id="@+id/btnGreen"
                             android:layout_width="25dp"
                             android:layout_height="wrap_content"
                             android:src="@drawable/list_green"
@@ -363,7 +363,7 @@
                             android:scaleType="centerInside" />
 
                         <ImageButton
-                            android:id="@+id/listBlue"
+                            android:id="@+id/btnBlue"
                             android:layout_width="25dp"
                             android:layout_height="wrap_content"
                             android:src="@drawable/list_blue"

@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import fju.im2016.com.hm.core.entity.RepeatEnum;
 import fju.im2016.com.hm.core.entity.RepeatMode;
+import fju.im2016.com.hm.core.entity.Song;
 import fju.im2016.com.hm.core.entity.player.AndroidMediaPlayer;
 import fju.im2016.com.hm.core.entity.player.OnCompletionListener;
 import fju.im2016.com.hm.core.entity.player.OnTimeTextListener;
@@ -159,6 +160,11 @@ public class PlayerPresenterImpl implements PlayerPresenter {
     @Override
     public RepeatEnum getRepeatEnum() {
         return  this.repeatEnum;
+    }
+
+    @Override
+    public Song getCurrentSong() {
+        return  this.songManager.getCurrentPlay();
     }
 
     @Override
