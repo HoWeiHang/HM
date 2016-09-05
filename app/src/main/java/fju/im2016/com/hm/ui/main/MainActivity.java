@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
@@ -40,12 +41,15 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import fju.im2016.com.hm.R;
 import fju.im2016.com.hm.core.entity.CheckColorList;
 import fju.im2016.com.hm.core.entity.RepeatEnum;
 import fju.im2016.com.hm.core.entity.Song;
+import fju.im2016.com.hm.core.entity.SongOfList;
 import fju.im2016.com.hm.core.entity.player.Player;
 import fju.im2016.com.hm.core.manager.SlidingLayoutManager;
 import fju.im2016.com.hm.core.manager.SongManager;
@@ -53,6 +57,7 @@ import fju.im2016.com.hm.core.service.BroadcastService;
 import fju.im2016.com.hm.dbhelper.DBHelper;
 import fju.im2016.com.hm.presenter.player.PlayerPresenter;
 import fju.im2016.com.hm.presenter.player.PlayerPresenterImpl;
+import fju.im2016.com.hm.ui.component.PlayListAdapter;
 import fju.im2016.com.hm.ui.player.PlayerFragment;
 import fju.im2016.com.hm.ui.player.PlayerView;
 import fju.im2016.com.hm.ui.playlist.ListSongFragment;
@@ -69,6 +74,11 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
     private ImageView albumImage;
     private ImageButton btnPlay, btnFront, btnNext, btnRe, btnRandom, panelPlay, panelFront, panelNext, btnRed, btnOrange, btnYellow, btnGreen, btnBlue;
     private Boolean Random = false;
+    private boolean updateRedImg = false;
+    private boolean updateOrangeImg = false;
+    private boolean updateYellowImg = false;
+    private boolean updateGreenImg = false;
+    private boolean updateBlueImg = false;
     private boolean inRedPlayList = false;
     private boolean inOrangePlayList = false;
     private boolean inYellowPlayList = false;
@@ -81,6 +91,8 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
     private SQLiteDatabase db;
     private DBHelper helper;
     private CheckColorList checkColorList;
+    private List<SongOfList> songOfLists;
+    private SongOfList songOfList;
 
     private int navItemId;
     private boolean showPanel = true;
@@ -155,6 +167,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
         this.iniButtonBlue();
 
         this.checkColorList = new CheckColorList(this);
+        this.songOfLists = new ArrayList<SongOfList>();
 
         albumName = (TextView) findViewById(R.id.albumName);
         musicName = (TextView) findViewById(R.id.musicName);
@@ -785,18 +798,27 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
         this.btnRed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (inRedPlayList) {
+                    deleteSongFromList("1");
+                    inRedPlayList = false;
+                } else {
+                    helper.addsong(Integer.parseInt(playerPresenter.getCurrentSong().getId()), 1);
+                    inRedPlayList = true;
+                }
                 updateBtnRedImg();
             }
         });
     }
 
     private void updateBtnRedImg() {
-        if (inRedPlayList) {
+        if (updateRedImg) {
             this.btnRed.setImageResource(R.drawable.list_red_checked);
-            this.inRedPlayList = false;
+            this.updateRedImg = false;
+            this.inRedPlayList = true;
         } else {
             this.btnRed.setImageResource(R.drawable.list_red);
-            this.inRedPlayList = true;
+            this.updateRedImg = true;
+            this.inRedPlayList = false;
         }
     }
 
@@ -805,18 +827,27 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
         this.btnOrange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (inOrangePlayList) {
+                    deleteSongFromList("2");
+                    inOrangePlayList = false;
+                } else {
+                    helper.addsong(Integer.parseInt(playerPresenter.getCurrentSong().getId()), 2);
+                    inOrangePlayList = true;
+                }
                 updateBtnOrangeImg();
             }
         });
     }
 
     private void updateBtnOrangeImg() {
-        if (inOrangePlayList) {
+        if (updateOrangeImg) {
             this.btnOrange.setImageResource(R.drawable.list_orange_checked);
-            this.inOrangePlayList = false;
+            this.updateOrangeImg = false;
+            this.inOrangePlayList = true;
         } else {
             this.btnOrange.setImageResource(R.drawable.list_orange);
-            this.inOrangePlayList = true;
+            this.updateOrangeImg = true;
+            this.inOrangePlayList = false;
         }
     }
 
@@ -825,18 +856,27 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
         this.btnYellow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (inYellowPlayList) {
+                    deleteSongFromList("3");
+                    inYellowPlayList = false;
+                } else {
+                    helper.addsong(Integer.parseInt(playerPresenter.getCurrentSong().getId()), 3);
+                    inYellowPlayList = true;
+                }
                 updateBtnYellowImg();
             }
         });
     }
 
     private void updateBtnYellowImg() {
-        if (inYellowPlayList) {
+        if (updateYellowImg) {
             this.btnYellow.setImageResource(R.drawable.list_yellow_checked);
-            this.inYellowPlayList = false;
+            this.updateYellowImg = false;
+            this.inYellowPlayList = true;
         } else {
             this.btnYellow.setImageResource(R.drawable.list_yellow);
-            this.inYellowPlayList = true;
+            this.updateYellowImg = true;
+            this.inYellowPlayList = false;
         }
     }
 
@@ -845,18 +885,27 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
         this.btnGreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (inGreenPlayList) {
+                    deleteSongFromList("4");
+                    inGreenPlayList = false;
+                } else {
+                    helper.addsong(Integer.parseInt(playerPresenter.getCurrentSong().getId()), 4);
+                    inGreenPlayList = true;
+                }
                 updateBtnGreenImg();
             }
         });
     }
 
     private void updateBtnGreenImg() {
-        if (inGreenPlayList) {
+        if (updateGreenImg) {
             this.btnGreen.setImageResource(R.drawable.list_green_checked);
-            this.inGreenPlayList = false;
+            this.updateGreenImg = false;
+            this.inGreenPlayList = true;
         } else {
             this.btnGreen.setImageResource(R.drawable.list_green);
-            this.inGreenPlayList = true;
+            this.updateGreenImg = true;
+            this.inGreenPlayList = false;
         }
     }
 
@@ -865,27 +914,38 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
         this.btnBlue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (inBluePlayList) {
+                    deleteSongFromList("5");
+                    inBluePlayList = false;
+                } else {
+                    helper.addsong(Integer.parseInt(playerPresenter.getCurrentSong().getId()), 5);
+                    inBluePlayList = true;
+                }
                 updateBtnBlueImg();
             }
         });
     }
 
     private void updateBtnBlueImg() {
-        if (inBluePlayList) {
+        if (updateBlueImg) {
             this.btnBlue.setImageResource(R.drawable.list_blue_checked);
-            this.inBluePlayList = false;
+            this.updateBlueImg = false;
+            this.inBluePlayList = true;
         } else {
             this.btnBlue.setImageResource(R.drawable.list_blue);
-            this.inBluePlayList = true;
+            this.updateBlueImg = true;
+            this.inBluePlayList = false;
         }
     }
 
     private void checkColorRed() {
         if (this.checkColorList.findList("1")) {
             this.inRedPlayList = true;
+            this.updateRedImg = true;
             this.updateBtnRedImg();
         } else {
             this.inRedPlayList = false;
+            this.updateRedImg = false;
             this.updateBtnRedImg();
         }
     }
@@ -893,9 +953,11 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
     private void checkColorOrange() {
         if (this.checkColorList.findList("2")) {
             this.inOrangePlayList = true;
+            this.updateOrangeImg = true;
             this.updateBtnOrangeImg();
         } else {
             this.inOrangePlayList = false;
+            this.updateOrangeImg = false;
             this.updateBtnOrangeImg();
         }
     }
@@ -903,9 +965,11 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
     private void checkColorYellow() {
         if (this.checkColorList.findList("3")) {
             this.inYellowPlayList = true;
+            this.updateYellowImg = true;
             this.updateBtnYellowImg();
         } else {
             this.inYellowPlayList = false;
+            this.updateYellowImg = false;
             this.updateBtnYellowImg();
         }
     }
@@ -913,9 +977,11 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
     private void checkColorGreen() {
         if (this.checkColorList.findList("4")) {
             this.inGreenPlayList = true;
+            this.updateGreenImg = true;
             this.updateBtnGreenImg();
         } else {
             this.inGreenPlayList = false;
+            this.updateGreenImg = false;
             this.updateBtnGreenImg();
         }
     }
@@ -923,9 +989,11 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
     private void checkColorBlue() {
         if (this.checkColorList.findList("5")) {
             this.inBluePlayList = true;
+            this.updateBlueImg = true;
             this.updateBtnBlueImg();
         } else {
             this.inBluePlayList = false;
+            this.updateBlueImg = false;
             this.updateBtnBlueImg();
         }
     }
@@ -938,6 +1006,38 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
         this.checkColorYellow();
         this.checkColorGreen();
         this.checkColorBlue();
+    }
+
+    private void querySongOfList(String querySQL) {
+        if (songOfLists != null)
+            songOfLists.clear();
+        Cursor cSongOfList =db.rawQuery("select * from song_of_list where l_id = " + querySQL, null);
+        cSongOfList.moveToFirst();
+        getSongOfListInformation(cSongOfList);
+        cSongOfList.close();
+    }
+
+    private void getSongOfListInformation(Cursor cSongOfList) {
+        for (int i = 0; i < cSongOfList.getCount(); i++) {
+            String id = cSongOfList.getString(cSongOfList.getColumnIndex("_id"));
+            String songId = cSongOfList.getString(cSongOfList.getColumnIndex("s_id"));
+            String listId = cSongOfList.getString(cSongOfList.getColumnIndex("l_id"));
+
+            SongOfList songOfList = new SongOfList(id, songId, listId);
+            this.songOfLists.add(songOfList);
+
+            cSongOfList.moveToNext();
+        }
+    }
+
+    private void deleteSongFromList(String listId) {
+        querySongOfList(listId);
+        for (int i = 0; i < songOfLists.size(); i++) {
+            if (songOfLists.get(i).getSongId().equals(playerPresenter.getCurrentSong().getId())) {
+                songOfList = songOfLists.get(i);
+            }
+        }
+        helper.delete_song_of_list(Integer.parseInt(songOfList.getId()));
     }
 
     private void iniSeekBar() {
