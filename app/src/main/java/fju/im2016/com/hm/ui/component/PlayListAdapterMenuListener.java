@@ -29,8 +29,6 @@ public class PlayListAdapterMenuListener implements View.OnClickListener {
         this.context = context;
         this.playList = playList;
         this.playListOnDeleteCallBack = playListOnDeleteCallBack;
-        this.db = this.context.openOrCreateDatabase("music_database", android.content.Context.MODE_PRIVATE, null);
-        this.helper = new DBHelper(this.context.getApplicationContext());
     }
 
     @Override
@@ -41,9 +39,13 @@ public class PlayListAdapterMenuListener implements View.OnClickListener {
             public boolean onMenuItemSelected(MenuBuilder menu, MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.playlist_adapter_menu_delete:
+                        db = context.openOrCreateDatabase("music_database", android.content.Context.MODE_PRIVATE, null);
+                        helper = new DBHelper(context.getApplicationContext());
                         helper.delete_allsong(Integer.parseInt(playList.getId()));
                         helper.delete(Integer.parseInt(playList.getId()));
                         playListOnDeleteCallBack.onDelete();
+                        db.close();
+                        helper.close();
                         return true;
 
                     case R.id.playlist_adapter_menu_regulartime:

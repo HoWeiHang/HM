@@ -18,11 +18,11 @@ public class CheckColorList {
     private String listId;
     private Song song;
     private List<SongOfList> songOfLists;
+    private Context context;
 
     public CheckColorList(Context context) {
+        this.context = context;
         this.songOfLists = new ArrayList<SongOfList>();
-        this.db = context.openOrCreateDatabase("music_database", android.content.Context.MODE_PRIVATE, null);
-        this.helper = new DBHelper(context.getApplicationContext());
     }
 
     public void setSong(Song song) {
@@ -30,10 +30,14 @@ public class CheckColorList {
     }
 
     public boolean findList(String listId) {
+        this.db = context.openOrCreateDatabase("music_database", android.content.Context.MODE_PRIVATE, null);
+        this.helper = new DBHelper(context.getApplicationContext());
         Cursor cSongOfList = db.rawQuery("select * from song_of_list where l_id = " + listId, null);
         cSongOfList.moveToFirst();
         getSongOfListInformation(cSongOfList);
         cSongOfList.close();
+        this.db.close();
+        this.helper.close();
 
         return this.checkInList();
     }

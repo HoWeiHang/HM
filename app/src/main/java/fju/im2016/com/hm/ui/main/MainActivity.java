@@ -148,8 +148,6 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        db = openOrCreateDatabase("music_database", MODE_PRIVATE, null);
-        helper = new DBHelper(getApplicationContext());
 
         this.iniButtonPlay();
         this.iniPanelPlay();
@@ -802,7 +800,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
                     deleteSongFromList("1");
                     inRedPlayList = false;
                 } else {
-                    helper.addsong(Integer.parseInt(playerPresenter.getCurrentSong().getId()), 1);
+                    addSongToList(1);
                     inRedPlayList = true;
                 }
                 updateBtnRedImg();
@@ -831,7 +829,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
                     deleteSongFromList("2");
                     inOrangePlayList = false;
                 } else {
-                    helper.addsong(Integer.parseInt(playerPresenter.getCurrentSong().getId()), 2);
+                    addSongToList(2);
                     inOrangePlayList = true;
                 }
                 updateBtnOrangeImg();
@@ -860,7 +858,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
                     deleteSongFromList("3");
                     inYellowPlayList = false;
                 } else {
-                    helper.addsong(Integer.parseInt(playerPresenter.getCurrentSong().getId()), 3);
+                    addSongToList(3);
                     inYellowPlayList = true;
                 }
                 updateBtnYellowImg();
@@ -889,7 +887,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
                     deleteSongFromList("4");
                     inGreenPlayList = false;
                 } else {
-                    helper.addsong(Integer.parseInt(playerPresenter.getCurrentSong().getId()), 4);
+                    addSongToList(4);
                     inGreenPlayList = true;
                 }
                 updateBtnGreenImg();
@@ -918,7 +916,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
                     deleteSongFromList("5");
                     inBluePlayList = false;
                 } else {
-                    helper.addsong(Integer.parseInt(playerPresenter.getCurrentSong().getId()), 5);
+                    addSongToList(5);
                     inBluePlayList = true;
                 }
                 updateBtnBlueImg();
@@ -1030,7 +1028,17 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
         }
     }
 
+    private void addSongToList(int listId) {
+        this.db = openOrCreateDatabase("music_database", MODE_PRIVATE, null);
+        this.helper = new DBHelper(getApplicationContext());
+        helper.addsong(Integer.parseInt(playerPresenter.getCurrentSong().getId()), listId);
+        this.db.close();
+        this.helper.close();
+    }
+
     private void deleteSongFromList(String listId) {
+        this.db = openOrCreateDatabase("music_database", MODE_PRIVATE, null);
+        this.helper = new DBHelper(getApplicationContext());
         querySongOfList(listId);
         for (int i = 0; i < songOfLists.size(); i++) {
             if (songOfLists.get(i).getSongId().equals(playerPresenter.getCurrentSong().getId())) {
@@ -1038,6 +1046,8 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
             }
         }
         helper.delete_song_of_list(Integer.parseInt(songOfList.getId()));
+        this.db.close();
+        this.helper.close();
     }
 
     private void iniSeekBar() {

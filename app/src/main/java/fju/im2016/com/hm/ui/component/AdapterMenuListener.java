@@ -54,8 +54,6 @@ public class AdapterMenuListener implements View.OnClickListener, ListView.OnIte
         this.position = position;
         this.nowInWhichPlayListId = nowInWhichPlayListId;
         this.onDeleteCallBack = onDeleteCallBack;
-        this.db = this.context.openOrCreateDatabase("music_database", android.content.Context.MODE_PRIVATE, null);
-        this.helper = new DBHelper(this.context.getApplicationContext());
         this.songOfLists = new ArrayList<SongOfList>();
         this.playLists = new ArrayList<PlayList>();
         this.queryPlayList();
@@ -87,7 +85,11 @@ public class AdapterMenuListener implements View.OnClickListener, ListView.OnIte
                             onDeleteCallBack.onDelete();
                         } else {
                             querySongOfList(playLists.get(Integer.parseInt(nowInWhichPlayListId)).getId());
+                            db = context.openOrCreateDatabase("music_database", android.content.Context.MODE_PRIVATE, null);
+                            helper = new DBHelper(context.getApplicationContext());
                             helper.delete_song_of_list(Integer.parseInt(songOfLists.get(position).getId()));
+                            db.close();
+                            helper.close();
                             onDeleteCallBack.onDelete();
                         }
                         return true;
@@ -120,7 +122,11 @@ public class AdapterMenuListener implements View.OnClickListener, ListView.OnIte
         alertDialog.setPositiveButton("確認", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                db = context.openOrCreateDatabase("music_database", android.content.Context.MODE_PRIVATE, null);
+                helper = new DBHelper(context.getApplicationContext());
                 helper.addsong(Integer.parseInt(song.getId()), Integer.parseInt(playLists.get(choseList).getId()));
+                db.close();
+                helper.close();
             }
         });
         alertDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -140,7 +146,11 @@ public class AdapterMenuListener implements View.OnClickListener, ListView.OnIte
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //TODO empty and duplicated, selected after addList
+                db = context.openOrCreateDatabase("music_database", android.content.Context.MODE_PRIVATE, null);
+                helper = new DBHelper(context.getApplicationContext());
                 helper.newlist(editText.getText().toString());
+                db.close();
+                helper.close();
                 PlayList addPlayList = new PlayList(findId(editText.getText().toString()), editText.getText().toString());
                 addPlayList.setColorImg(R.drawable.list_purple);
                 playLists.add(playLists.size() - 1, addPlayList);
@@ -157,20 +167,28 @@ public class AdapterMenuListener implements View.OnClickListener, ListView.OnIte
     }
 
     private String findId(String listName) {
+        this.db = context.openOrCreateDatabase("music_database", android.content.Context.MODE_PRIVATE, null);
+        this.helper = new DBHelper(context.getApplicationContext());
         Cursor listWithFindedName = db.rawQuery("select * from list where list_name= '" + listName + "'", null);
         listWithFindedName.moveToFirst();
         String findedId = listWithFindedName.getString(listWithFindedName.getColumnIndex("_id"));
         listWithFindedName.close();
+        this.db.close();
+        this.helper.close();
         return findedId;
     }
 
     private void queryPlayList() {
         if (playLists != null)
             playLists.clear();
+        this.db = this.context.openOrCreateDatabase("music_database", android.content.Context.MODE_PRIVATE, null);
+        this.helper = new DBHelper(this.context.getApplicationContext());
         Cursor clist =db.rawQuery("select * from list", null);
         clist.moveToFirst();
         getCListInformation(clist);
         clist.close();
+        this.db.close();
+        this.helper.close();
 
         PlayList addPlayList = new PlayList(null, "新增播放清單");
         addPlayList.setColorImg(R.drawable.ic_plus_black);
@@ -180,10 +198,14 @@ public class AdapterMenuListener implements View.OnClickListener, ListView.OnIte
     private void querySongOfList(String querySQL) {
         if (songOfLists != null)
             songOfLists.clear();
+        this.db = context.openOrCreateDatabase("music_database", android.content.Context.MODE_PRIVATE, null);
+        this.helper = new DBHelper(context.getApplicationContext());
         Cursor cSongOfList =db.rawQuery("select * from song_of_list where l_id = " + querySQL, null);
         cSongOfList.moveToFirst();
         getSongOfListInformation(cSongOfList);
         cSongOfList.close();
+        this.db.close();
+        this.helper.close();
     }
 
     private void initialPlayList() {

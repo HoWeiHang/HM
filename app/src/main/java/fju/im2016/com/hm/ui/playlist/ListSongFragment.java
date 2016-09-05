@@ -59,6 +59,9 @@ public class ListSongFragment extends Fragment implements ListView.OnItemClickLi
         getSongOfListInformation(cSongOfList);
         cSongOfList.close();
 
+        this.db.close();
+        this.helper.close();
+
         Cursor c = getActivity().getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, null, null, null);
         c.moveToFirst();
         getInformation(c);
