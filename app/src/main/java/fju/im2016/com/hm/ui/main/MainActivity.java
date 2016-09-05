@@ -57,6 +57,7 @@ import fju.im2016.com.hm.core.service.BroadcastService;
 import fju.im2016.com.hm.dbhelper.DBHelper;
 import fju.im2016.com.hm.presenter.player.PlayerPresenter;
 import fju.im2016.com.hm.presenter.player.PlayerPresenterImpl;
+import fju.im2016.com.hm.ui.artist.ArtistFragment;
 import fju.im2016.com.hm.ui.component.PlayListAdapter;
 import fju.im2016.com.hm.ui.player.PlayerFragment;
 import fju.im2016.com.hm.ui.player.PlayerView;
@@ -380,7 +381,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
                 break;
             case R.id.nav_item_artist:
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.flContent, new PlayerFragment());
+                fragmentTransaction.replace(R.id.flContent, new ArtistFragment());
                 fragmentTransaction.commit();
                 menuItem.setChecked(true);
                 drawerLayout.closeDrawers();
