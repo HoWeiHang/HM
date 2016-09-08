@@ -20,23 +20,30 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="15dp"
         android:layout_toRightOf="@+id/playlist_adapter_color_img"
-        android:orientation="vertical" >
+        android:orientation="vertical">
+
         <TextView
             android:id="@+id/playlist_adapter_playlist_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="15dip"
+            android:ellipsize="end"
+            android:paddingBottom="15dip"
+            android:paddingLeft="15dip"
+            android:paddingRight="60dp"
+            android:paddingTop="15dip"
+            android:singleLine="true"
             android:textAppearance="?android:attr/textAppearanceMedium" />
     </LinearLayout>
+
     <ImageButton
         android:id="@+id/playlist_adapter_btnSetting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="10dp"
         android:layout_gravity="center_vertical"
+        android:layout_marginRight="10dp"
         android:background="#00000000"
-        android:padding="15dip"/>
+        android:padding="15dip" />
 
 
 </RelativeLayout>
