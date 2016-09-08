@@ -142,10 +142,9 @@ public class PlayListFragment extends Fragment implements ListView.OnItemClickLi
     @Override
     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
         if (position != playLists.size() - 1) {
-            //TODO inter list
             ListSongFragment listSongFragment = new ListSongFragment();
             Bundle bundle = new Bundle();
-            bundle.putString("playListId", playLists.get(position).getId());
+            bundle.putString("playListId", this.playLists.get(position).getId());
             bundle.putString("nowInWhichPlayListId", String.valueOf(position));
             listSongFragment.setArguments(bundle);
             FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();

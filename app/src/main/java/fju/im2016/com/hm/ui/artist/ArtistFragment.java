@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,6 +67,12 @@ public class ArtistFragment extends Fragment implements GridView.OnItemClickList
 
     @Override
     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-
+        ArtistSongFragment artistSongFragment = new ArtistSongFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("artistName", this.artists.get(position));
+        artistSongFragment.setArguments(bundle);
+        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.flContent, artistSongFragment);
+        fragmentTransaction.commit();
     }
 }
