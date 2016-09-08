@@ -57,6 +57,8 @@ import fju.im2016.com.hm.core.service.BroadcastService;
 import fju.im2016.com.hm.dbhelper.DBHelper;
 import fju.im2016.com.hm.presenter.player.PlayerPresenter;
 import fju.im2016.com.hm.presenter.player.PlayerPresenterImpl;
+import fju.im2016.com.hm.ui.album.AlbumFragment;
+import fju.im2016.com.hm.ui.album.AlbumSongFragment;
 import fju.im2016.com.hm.ui.artist.ArtistFragment;
 import fju.im2016.com.hm.ui.artist.ArtistSongFragment;
 import fju.im2016.com.hm.ui.component.PlayListAdapter;
@@ -69,7 +71,7 @@ import fju.im2016.com.hm.ui.youtube.FavoriteActivity;
 import fju.im2016.com.hm.ui.youtube.YoutubeActivity;
 
 
-public class MainActivity extends AppCompatActivity implements PlayerView, PlayerFragment.OnItemClickCallBack, ListSongFragment.OnItemClickCallBack, ArtistSongFragment.OnItemClickCallBack{
+public class MainActivity extends AppCompatActivity implements PlayerView, PlayerFragment.OnItemClickCallBack, ListSongFragment.OnItemClickCallBack, ArtistSongFragment.OnItemClickCallBack, AlbumSongFragment.OnItemClickCallBack{
 
     private TextView albumName, musicName, runTime, fullTime, panelAlbumName, panelSongName;
     private SeekBar seekBar;
@@ -375,7 +377,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
                 break;
             case R.id.nav_item_album:
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.flContent, new PlayerFragment());
+                fragmentTransaction.replace(R.id.flContent, new AlbumFragment());
                 fragmentTransaction.commit();
                 menuItem.setChecked(true);
                 drawerLayout.closeDrawers();
