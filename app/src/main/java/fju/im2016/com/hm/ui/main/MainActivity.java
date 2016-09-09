@@ -674,6 +674,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
             @Override
             public void onClick(View view) {
                 try {
+                    playerPresenter.setPause(false);
                     playerPresenter.last();
                     setRepeatOnce();
                     checkColorList();
@@ -690,6 +691,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
             @Override
             public void onClick(View view) {
                 try {
+                    playerPresenter.setPause(false);
                     playerPresenter.last();
                     setRepeatOnce();
                     checkColorList();
@@ -706,6 +708,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
             @Override
             public void onClick(View view) {
                 try {
+                    playerPresenter.setPause(false);
                     playerPresenter.next();
                     setRepeatOnce();
                     checkColorList();
@@ -722,6 +725,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
             @Override
             public void onClick(View view) {
                 try {
+                    playerPresenter.setPause(false);
                     playerPresenter.next();
                     setRepeatOnce();
                     checkColorList();
