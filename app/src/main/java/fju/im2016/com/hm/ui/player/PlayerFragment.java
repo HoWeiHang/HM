@@ -141,7 +141,12 @@ public class PlayerFragment extends Fragment implements ListView.OnItemClickList
     @Override
     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
         cListItem = position;
-        this.songManager.setCurrentSong(position);
+        Song song = (Song)adapter.getItem(position);
+        for (int i = 0; i < songManager.getSongs().size(); i++) {
+            if (song.getName().equals(songManager.getSongs().get(i).getName())) {
+                this.songManager.setCurrentSong(i);
+            }
+        }
         this.onItemClickCallBack.onClick(this.songManager);
 //        Intent intent = new Intent();
 //        intent.setClass(getActivity(), MainActivity.class);
