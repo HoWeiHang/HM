@@ -2,6 +2,7 @@ package fju.im2016.com.hm.ui.main;
 
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -9,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.ColorDrawable;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.app.SearchManager;
@@ -92,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
     private RepeatEnum Repeat = RepeatEnum.repeatOff;
 
     private PlayerPresenter playerPresenter;
+    private SongManager songManager;
 
     private SQLiteDatabase db;
     private DBHelper helper;
@@ -118,15 +121,6 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
     private SlidingUpPanelLayout slidingUpPanelLayout;
     private ImageButton btn_expand;
     SlidingLayoutManager c;
-
-    @Override
-    public void onDefault(SongManager songManager){
-        this.iniPlayer(songManager);
-        this.playerPresenter.pause();
-        this.updateBtnPlayImage();
-        this.updatePanelPlayImage();
-        this.checkColorList();
-    }
 
     @Override
     public void onClick(SongManager songManager) {
@@ -159,6 +153,27 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
             e.printStackTrace();
         }
         this.playerPresenter.updateView();
+    }
+
+    private void getInformation(Cursor c) {
+        for (int i = 0; i < c.getCount(); i++) {
+            String name = c.getString(c.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE));
+            String path = c.getString(c.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA));
+            String id = c.getString(c.getColumnIndexOrThrow(MediaStore.Audio.Media._ID));
+            String artist = c.getString(c.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST));
+            String album = c.getString(c.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM));
+            String albumId = c.getString(c.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID));
+            double length = c.getDouble(c.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION));
+
+            Song song = new Song(id, name, path);
+            song.setAlbum(album);
+            song.setAlbumId(albumId);
+            song.setArtist(artist);
+            song.setLength(length);
+            this.songManager.addSong(song);
+
+            c.moveToNext();
+        }
     }
 
     @Override
@@ -199,6 +214,22 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
         }
 
         this.playerPresenter.setRepeatEnum(Repeat);
+
+        this.songManager = new SongManager();
+
+        Context ctx = this;
+        ContentResolver resolver = ctx.getContentResolver();
+        Cursor cursor = resolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, null, null, null);
+        cursor.moveToFirst();
+        getInformation(cursor);
+        cursor.close();
+
+        this.songManager.setCurrentSong(0);
+        this.iniPlayer(songManager);
+        this.playerPresenter.pause();
+        this.updateBtnPlayImage();
+        this.updatePanelPlayImage();
+        this.checkColorList();
 
         // ------------------------------------------
 

@@ -67,8 +67,6 @@ public class PlayerFragment extends Fragment implements ListView.OnItemClickList
         getInformation(c);
         c.close();
 
-        this.songManager.setCurrentSong(0);
-        this.onItemClickCallBack.onDefault(this.songManager);
 
         this.initialMusicList();
         this.onItemClickCallBack.sendAdapter(this.adapter);
@@ -155,7 +153,6 @@ public class PlayerFragment extends Fragment implements ListView.OnItemClickList
 
     public interface OnItemClickCallBack {
         void onClick(SongManager songManager) ;
-        void onDefault(SongManager songManager);
         void sendAdapter(MusicListAdapter musicListAdapter);
     }
 
