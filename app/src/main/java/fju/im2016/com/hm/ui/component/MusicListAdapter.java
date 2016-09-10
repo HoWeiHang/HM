@@ -6,36 +6,43 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import fju.im2016.com.hm.R;
 import fju.im2016.com.hm.core.entity.Song;
 
-public class MusicListAdapter extends BaseAdapter {
+public class MusicListAdapter extends BaseAdapter implements Filterable {
     private List<Song> songs;
+    private List<Song> filterSongs;
     private Context context;
     private boolean deleteFromMediaStore;
     private String nowInWhichPlayListId;
+    private SongFilter songFilter;
 
     public MusicListAdapter(List<Song> songs, Context context, boolean deleteFromMediaStore, String nowInWhichPlayListId) {
         this.songs = songs;
+        this.filterSongs = songs;
         this.context = context;
         this.deleteFromMediaStore = deleteFromMediaStore;
         this.nowInWhichPlayListId = nowInWhichPlayListId;
+        this.getFilter();
     }
 
     @Override
     public int getCount() {
-        return this.songs.size();
+        return this.filterSongs.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return this.songs.get(i);
+        return this.filterSongs.get(i);
     }
 
     @Override
@@ -61,7 +68,7 @@ public class MusicListAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        final Song song = this.songs.get(position);
+        final Song song = this.filterSongs.get(position);
         holder.adapter_songName.setText(song.getName());
         holder.adapter_artist.setText(song.getArtist());
         holder.adapter_albumImage.setImageResource(R.drawable.album);
@@ -84,5 +91,52 @@ public class MusicListAdapter extends BaseAdapter {
         TextView adapter_songName, adapter_artist;
         ImageView adapter_albumImage;
         ImageButton adapter_btnSetting;
+    }
+
+    @Override
+    public Filter getFilter() {
+        if (this.songFilter == null) {
+            this.songFilter = new SongFilter();
+        }
+
+        return this.songFilter;
+    }
+
+    private class SongFilter extends Filter {
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            FilterResults filterResults = new FilterResults();
+            if (constraint!=null && constraint.length()>0) {
+                List<Song> tempList = new ArrayList<Song>();
+
+                // search content in friend list
+                for (Song song : songs) {
+                    if (song.getName().toLowerCase().contains(constraint.toString().toLowerCase())) {
+                        tempList.add(song);
+                    }
+                }
+
+                filterResults.count = tempList.size();
+                filterResults.values = tempList;
+            } else {
+                filterResults.count = songs.size();
+                filterResults.values = songs;
+            }
+
+            return filterResults;
+        }
+
+        /**
+         * Notify about filtered list to ui
+         * @param constraint text
+         * @param results filtered result
+         */
+        @SuppressWarnings("unchecked")
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            filterSongs = (List<Song>) results.values;
+            notifyDataSetChanged();
+        }
     }
 }

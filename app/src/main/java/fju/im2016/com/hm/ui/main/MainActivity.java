@@ -61,6 +61,7 @@ import fju.im2016.com.hm.ui.album.AlbumFragment;
 import fju.im2016.com.hm.ui.album.AlbumSongFragment;
 import fju.im2016.com.hm.ui.artist.ArtistFragment;
 import fju.im2016.com.hm.ui.artist.ArtistSongFragment;
+import fju.im2016.com.hm.ui.component.MusicListAdapter;
 import fju.im2016.com.hm.ui.component.PlayListAdapter;
 import fju.im2016.com.hm.ui.player.PlayerFragment;
 import fju.im2016.com.hm.ui.player.PlayerView;
@@ -71,7 +72,7 @@ import fju.im2016.com.hm.ui.youtube.FavoriteActivity;
 import fju.im2016.com.hm.ui.youtube.YoutubeActivity;
 
 
-public class MainActivity extends AppCompatActivity implements PlayerView, PlayerFragment.OnItemClickCallBack, ListSongFragment.OnItemClickCallBack, ArtistSongFragment.OnItemClickCallBack, AlbumSongFragment.OnItemClickCallBack{
+public class MainActivity extends AppCompatActivity implements PlayerView, PlayerFragment.OnItemClickCallBack, ListSongFragment.OnItemClickCallBack, ArtistSongFragment.OnItemClickCallBack, AlbumSongFragment.OnItemClickCallBack, SearchView.OnQueryTextListener{
 
     private TextView albumName, musicName, runTime, fullTime, panelAlbumName, panelSongName;
     private SeekBar seekBar;
@@ -97,6 +98,8 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
     private CheckColorList checkColorList;
     private List<SongOfList> songOfLists;
     private SongOfList songOfList;
+
+    private MusicListAdapter musicListAdapter;
 
     private int navItemId;
     private boolean showPanel = true;
@@ -136,6 +139,11 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
         this.playerPresenter.clear();
         setRepeatOnce();
         this.checkColorList();
+    }
+
+    @Override
+    public void sendAdapter(MusicListAdapter musicListAdapter) {
+        this.musicListAdapter = musicListAdapter;
     }
 
     private void iniPlayer(SongManager songManager) {
@@ -431,6 +439,18 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
     }
 
     @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        this.musicListAdapter.getFilter().filter(newText);
+
+        return true;
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         this.menu = menu;
@@ -444,12 +464,12 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
         hideOption(R.id.action_moreInfo);
 
         // Associate searchable configuration with the SearchView
-        SearchManager searchManager =
-                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView =
-                (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(getComponentName()));
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
+        searchView.setSubmitButtonEnabled(true);
+        searchView.setOnQueryTextListener(this);
 
 //        MenuItem searchItem = menu.findItem(R.id.action_search);
 //        SearchManager searchManager = (SearchManager) MainActivity.this.getSystemService(Context.SEARCH_SERVICE);

@@ -46,6 +46,7 @@ public class PlayerFragment extends Fragment implements ListView.OnItemClickList
     private SongManager songManager;
     private View view;
     private OnItemClickCallBack onItemClickCallBack;
+    private MusicListAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup viewGroup, Bundle savedInstanceState) {
@@ -70,6 +71,7 @@ public class PlayerFragment extends Fragment implements ListView.OnItemClickList
         this.onItemClickCallBack.onDefault(this.songManager);
 
         this.initialMusicList();
+        this.onItemClickCallBack.sendAdapter(this.adapter);
     }
 
 //        this.powerHandler = new PowerHandler();
@@ -81,7 +83,7 @@ public class PlayerFragment extends Fragment implements ListView.OnItemClickList
 //        ArrayAdapter<String> adaSong = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, songName);
 //        this.lstMusic.setAdapter(adaSong);
 
-        MusicListAdapter adapter = new MusicListAdapter(this.songManager.getSongs(), this.getContext(), true, null);
+        adapter = new MusicListAdapter(this.songManager.getSongs(), this.getContext(), true, null);
         this.lstMusic.setAdapter(adapter);
 
         if (ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -149,6 +151,7 @@ public class PlayerFragment extends Fragment implements ListView.OnItemClickList
     public interface OnItemClickCallBack {
         void onClick(SongManager songManager) ;
         void onDefault(SongManager songManager);
+        void sendAdapter(MusicListAdapter musicListAdapter);
     }
 
     @Override
