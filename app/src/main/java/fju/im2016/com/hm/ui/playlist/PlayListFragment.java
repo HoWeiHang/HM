@@ -144,6 +144,7 @@ public class PlayListFragment extends Fragment implements ListView.OnItemClickLi
         if (position != playLists.size() - 1) {
             ListSongFragment listSongFragment = new ListSongFragment();
             Bundle bundle = new Bundle();
+            bundle.putString("playListName", this.playLists.get(position).getName());
             bundle.putString("playListId", this.playLists.get(position).getId());
             bundle.putString("nowInWhichPlayListId", String.valueOf(position));
             listSongFragment.setArguments(bundle);

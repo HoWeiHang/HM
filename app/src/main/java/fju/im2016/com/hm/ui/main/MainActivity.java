@@ -146,6 +146,11 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
         this.musicListAdapter = musicListAdapter;
     }
 
+    @Override
+    public void setToolBarTitle(String toolBarTitle) {
+        this.getSupportActionBar().setTitle(toolBarTitle);
+    }
+
     private void iniPlayer(SongManager songManager) {
         this.playerPresenter.iniSongManager(songManager);
         try {

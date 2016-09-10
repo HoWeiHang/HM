@@ -39,6 +39,8 @@ public class ArtistSongFragment extends Fragment implements ListView.OnItemClick
         this.songManager = new SongManager();
         this.artistName = getArguments().getString("artistName");
 
+        this.onItemClickCallBack.setToolBarTitle(this.artistName);
+
         Cursor c = getActivity().getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, "ARTIST='"+ artistName +"'", null, null);
         c.moveToFirst();
         getInformation(c);
@@ -86,6 +88,7 @@ public class ArtistSongFragment extends Fragment implements ListView.OnItemClick
 
     public interface OnItemClickCallBack {
         void onClick(SongManager songManager) ;
+        void setToolBarTitle(String toolBarTitle);
     }
 
     @Override

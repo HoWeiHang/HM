@@ -36,6 +36,8 @@ public class AlbumSongFragment extends Fragment implements ListView.OnItemClickL
         this.songManager = new SongManager();
         this.albumName = getArguments().getString("albumName");
 
+        this.onItemClickCallBack.setToolBarTitle(this.albumName);
+
         Cursor c = getActivity().getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, "ALBUM='"+ albumName +"'", null, null);
         c.moveToFirst();
         getInformation(c);
@@ -83,6 +85,7 @@ public class AlbumSongFragment extends Fragment implements ListView.OnItemClickL
 
     public interface OnItemClickCallBack {
         void onClick(SongManager songManager) ;
+        void setToolBarTitle(String toolBarTitle);
     }
 
     @Override

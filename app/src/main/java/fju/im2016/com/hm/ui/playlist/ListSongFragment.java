@@ -30,7 +30,7 @@ public class ListSongFragment extends Fragment implements ListView.OnItemClickLi
     private SQLiteDatabase db;
     private DBHelper helper;
     private ListView lstListSong;
-    private String playListId, nowInWhichPlayListId;
+    private String playListId, nowInWhichPlayListId, playListName;
     private List<SongOfList> songOfLists;
     private List<Song> tempSongs;
     private SongManager songManager;
@@ -49,10 +49,13 @@ public class ListSongFragment extends Fragment implements ListView.OnItemClickLi
         this.songManager = new SongManager();
         this.songOfLists = new ArrayList<SongOfList>();
         this.tempSongs = new ArrayList<Song>();
+        this.playListName = getArguments().getString("playListName");
         this.playListId = getArguments().getString("playListId");
         this.nowInWhichPlayListId = getArguments().getString("nowInWhichPlayListId");
         this.db = this.getActivity().openOrCreateDatabase("music_database", android.content.Context.MODE_PRIVATE, null);
         this.helper = new DBHelper(this.getActivity().getApplicationContext());
+
+        this.onItemClickCallBack.setToolBarTitle(this.playListName);
 
         Cursor cSongOfList = db.rawQuery("select * from song_of_list where l_id = " + this.playListId, null);
         cSongOfList.moveToFirst();
@@ -131,6 +134,7 @@ public class ListSongFragment extends Fragment implements ListView.OnItemClickLi
 
     public interface OnItemClickCallBack {
         void onClick(SongManager songManager) ;
+        void setToolBarTitle(String toolBarTitle);
     }
 
     @Override
