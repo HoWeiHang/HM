@@ -392,6 +392,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.flContent, new AlbumFragment());
                 fragmentTransaction.commit();
+                hideOption(R.id.action_search);
                 menuItem.setChecked(true);
                 drawerLayout.closeDrawers();
                 break;
@@ -399,6 +400,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.flContent, new ArtistFragment());
                 fragmentTransaction.commit();
+                hideOption(R.id.action_search);
                 menuItem.setChecked(true);
                 drawerLayout.closeDrawers();
                 break;
@@ -406,6 +408,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.flContent, new PlayListFragment());
                 fragmentTransaction.commit();
+                hideOption(R.id.action_search);
                 menuItem.setChecked(true);
                 drawerLayout.closeDrawers();
                 break;
@@ -422,7 +425,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
                 break;
             default:
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.flContent, new PlayerFragment(  ) );
+                fragmentTransaction.replace(R.id.flContent, new PlayerFragment());
                 fragmentTransaction.commit();
                 menuItem.setChecked(true);
                 drawerLayout.closeDrawers();
