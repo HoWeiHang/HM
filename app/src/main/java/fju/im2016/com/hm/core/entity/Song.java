@@ -1,8 +1,9 @@
 package fju.im2016.com.hm.core.entity;
 
 public class Song {
-    private String id, name, path, artist, album, albumId;
+    private String id, name, path, artist, album;
     private double length;
+    private long albumId;
 
     public Song() {
     }
@@ -33,7 +34,7 @@ public class Song {
         this.album = album;
     }
 
-    public void setAlbumId(String albumId) {
+    public void setAlbumId(long albumId) {
         this.albumId = albumId;
     }
 
@@ -61,7 +62,7 @@ public class Song {
         return this.album;
     }
 
-    public String getAlbumId() {
+    public long getAlbumId() {
         return this.albumId;
     }
 
