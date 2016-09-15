@@ -105,12 +105,14 @@ public class ListSongFragment extends Fragment implements ListView.OnItemClickLi
             String album = c.getString(c.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM));
             long albumId = c.getLong(c.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID));
             double length = c.getDouble(c.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION));
+            double size = c.getDouble(c.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE));
 
             Song song = new Song(id, name, path);
             song.setAlbum(album);
             song.setAlbumId(albumId);
             song.setArtist(artist);
             song.setLength(length);
+            song.setSize(size);
             this.tempSongs.add(song);
             c.moveToNext();
         }

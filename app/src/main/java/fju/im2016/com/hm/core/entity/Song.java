@@ -2,7 +2,7 @@ package fju.im2016.com.hm.core.entity;
 
 public class Song {
     private String id, name, path, artist, album;
-    private double length;
+    private double length, size;
     private long albumId;
 
     public Song() {
@@ -42,6 +42,10 @@ public class Song {
         this.length = length;
     }
 
+    public void setSize(double size) {
+        this.size = size;
+    }
+
     public String getId() {
         return this.id;
     }
@@ -70,7 +74,11 @@ public class Song {
         return this.length;
     }
 
+    public double getSize() {
+        return this.size;
+    }
+
     public String toString() {
-        return String.format("{id:%s,name:%s,path:%s,artist:%s,album:%s,albumId:%s,length:%s}", this.id, this.name, this.path, this.artist, this.album, this.albumId, this.length);
+        return String.format("{id:%s,name:%s,path:%s,artist:%s,album:%s,albumId:%s,length:%s, size:%s}", this.id, this.name, this.path, this.artist, this.album, this.albumId, this.length, this.size);
     }
 }

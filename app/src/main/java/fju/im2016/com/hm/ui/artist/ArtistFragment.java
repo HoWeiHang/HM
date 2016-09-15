@@ -1,5 +1,6 @@
 package fju.im2016.com.hm.ui.artist;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
@@ -24,6 +25,7 @@ public class ArtistFragment extends Fragment implements GridView.OnItemClickList
     private GridView gridView;
     private List<String> artists;
     private GridViewAdapter gridViewAdapter;
+    private OnPageChangeCallBack onPageChangeCallBack;
 
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup viewGroup, Bundle savedInstanceState) {
@@ -73,6 +75,22 @@ public class ArtistFragment extends Fragment implements GridView.OnItemClickList
         artistSongFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.flContent, artistSongFragment);
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+        onPageChangeCallBack.setTitle(this.artists.get(position));
+    }
+
+    public interface OnPageChangeCallBack {
+        void setTitle(String title) ;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            onPageChangeCallBack = (OnPageChangeCallBack) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement OnArticleSelectedListener");
+        }
     }
 }

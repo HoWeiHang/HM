@@ -1,5 +1,6 @@
 package fju.im2016.com.hm.ui.playlist;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
@@ -19,6 +20,7 @@ import java.util.List;
 
 import fju.im2016.com.hm.R;
 import fju.im2016.com.hm.core.entity.PlayList;
+import fju.im2016.com.hm.core.manager.SongManager;
 import fju.im2016.com.hm.dbhelper.DBHelper;
 import fju.im2016.com.hm.ui.component.PlayListAdapter;
 import fju.im2016.com.hm.ui.player.PlayerFragment;
@@ -31,6 +33,7 @@ public class PlayListFragment extends Fragment implements ListView.OnItemClickLi
     private ListView lstPlaylist;
     private EditText editText;
     private PlayListAdapter adapter;
+    private OnPageChangeCallBack onPageChangeCallBack;
 
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup viewGroup, Bundle savedInstanceState) {
@@ -150,10 +153,26 @@ public class PlayListFragment extends Fragment implements ListView.OnItemClickLi
             listSongFragment.setArguments(bundle);
             FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.flContent, listSongFragment);
+            fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
+            onPageChangeCallBack.setTitle(this.playLists.get(position).getName());
         } else {
             AlertDialog.Builder addListDialog = new AlertDialog.Builder(this.getActivity());
             this.iniAddListDialog(addListDialog, LayoutInflater.from(this.getActivity()).inflate(R.layout.add_list, null));
+        }
+    }
+
+    public interface OnPageChangeCallBack {
+        void setTitle(String title) ;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            onPageChangeCallBack = (OnPageChangeCallBack) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement OnArticleSelectedListener");
         }
     }
 

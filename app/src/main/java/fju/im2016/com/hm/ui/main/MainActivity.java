@@ -3,6 +3,7 @@ package fju.im2016.com.hm.ui.main;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -10,6 +11,8 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.ColorDrawable;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
@@ -35,12 +38,14 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -49,6 +54,7 @@ import java.util.concurrent.TimeUnit;
 
 import fju.im2016.com.hm.R;
 import fju.im2016.com.hm.core.entity.CheckColorList;
+import fju.im2016.com.hm.core.entity.PageEnum;
 import fju.im2016.com.hm.core.entity.RepeatEnum;
 import fju.im2016.com.hm.core.entity.Song;
 import fju.im2016.com.hm.core.entity.SongOfList;
@@ -74,7 +80,7 @@ import fju.im2016.com.hm.ui.youtube.FavoriteActivity;
 import fju.im2016.com.hm.ui.youtube.YoutubeActivity;
 
 
-public class MainActivity extends AppCompatActivity implements PlayerView, PlayerFragment.OnItemClickCallBack, ListSongFragment.OnItemClickCallBack, ArtistSongFragment.OnItemClickCallBack, AlbumSongFragment.OnItemClickCallBack, SearchView.OnQueryTextListener{
+public class MainActivity extends AppCompatActivity implements PlayerView, PlayerFragment.OnItemClickCallBack, PlayListFragment.OnPageChangeCallBack, ListSongFragment.OnItemClickCallBack, ArtistFragment.OnPageChangeCallBack, ArtistSongFragment.OnItemClickCallBack, AlbumFragment.OnPageChangeCallBack, AlbumSongFragment.OnItemClickCallBack, SearchView.OnQueryTextListener{
 
     private TextView albumName, musicName, runTime, fullTime, panelAlbumName, panelSongName;
     private SeekBar seekBar;
@@ -104,6 +110,14 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
 
     private MusicListAdapter musicListAdapter;
 
+    private char[] charArray;
+    private String newAddress, newFilename;
+    private int countAddress;
+    private File file;
+
+    private PageEnum pageEnum;
+    private String nowTitle;
+
     private int navItemId;
     private boolean showPanel = true;
     private boolean hidePanel = false;
@@ -121,6 +135,8 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
     private SlidingUpPanelLayout slidingUpPanelLayout;
     private ImageButton btn_expand;
     SlidingLayoutManager c;
+
+    private int duration;
 
     @Override
     public void onClick(SongManager songManager) {
@@ -164,12 +180,14 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
             String album = c.getString(c.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM));
             long albumId = c.getLong(c.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID));
             double length = c.getDouble(c.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION));
+            double size = c.getDouble(c.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE));
 
             Song song = new Song(id, name, path);
             song.setAlbum(album);
             song.setAlbumId(albumId);
             song.setArtist(artist);
             song.setLength(length);
+            song.setSize(size);
             this.songManager.addSong(song);
 
             c.moveToNext();
@@ -273,6 +291,8 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
 
         navigateTo(navView.getMenu().findItem(navItemId));
 
+        this.pageEnum = PageEnum.pageAllSong;
+
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.flContent, new PlayerFragment());
         fragmentTransaction.commit();
@@ -338,7 +358,33 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
                         isExpanded = false;
                         isCollapsed = true;
                         panelSongName.requestFocus();
-                        getSupportActionBar().setTitle("歌曲列表 - 全部歌曲");
+                        switch (pageEnum) {
+                            case pageAllSong:
+                                getSupportActionBar().setTitle("全部歌曲");
+                                showOption(R.id.action_search);
+                                break;
+
+                            case pageAlbum:
+                                getSupportActionBar().setTitle("專輯");
+                                hideOption(R.id.action_search);
+                                break;
+
+                            case pageArtist:
+                                getSupportActionBar().setTitle("演出者");
+                                hideOption(R.id.action_search);
+                                break;
+
+                            case pagePlaylist:
+                                getSupportActionBar().setTitle("我的播放清單");
+                                hideOption(R.id.action_search);
+                                break;
+
+                            case pageOther:
+                                getSupportActionBar().setTitle("" + nowTitle);
+                                hideOption(R.id.action_search);
+                                break;
+
+                        }
                         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, Gravity.LEFT);
                         actionBarDrawerToggle = new ActionBarDrawerToggle(MainActivity.this, drawerLayout, toolbar, R.string.openDrawer, R.string.closeDrawer) {
                             @Override
@@ -358,7 +404,6 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
                         };
                         drawerLayout.addDrawerListener(actionBarDrawerToggle);
                         actionBarDrawerToggle.syncState();
-                        showOption(R.id.action_search);
                         showOption(R.id.action_home);
                         hideOption(R.id.action_setRingtone);
                         hideOption(R.id.action_sleepClock);
@@ -413,31 +458,40 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
         // Create a new fragment and specify the fragment to show based on nav item clicked
         switch(menuItem.getItemId()) {
             case R.id.nav_item_all_songs:
+                this.pageEnum = PageEnum.pageAllSong;
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.flContent, new PlayerFragment());
+                fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
+                showOption(R.id.action_search);
                 menuItem.setChecked(true);
                 drawerLayout.closeDrawers();
                 break;
             case R.id.nav_item_album:
+                this.pageEnum = PageEnum.pageAlbum;
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.flContent, new AlbumFragment());
+                fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
                 hideOption(R.id.action_search);
                 menuItem.setChecked(true);
                 drawerLayout.closeDrawers();
                 break;
             case R.id.nav_item_artist:
+                this.pageEnum = PageEnum.pageArtist;
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.flContent, new ArtistFragment());
+                fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
                 hideOption(R.id.action_search);
                 menuItem.setChecked(true);
                 drawerLayout.closeDrawers();
                 break;
             case R.id.nav_item_playlist:
+                this.pageEnum = PageEnum.pagePlaylist;
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.flContent, new PlayListFragment());
+                fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
                 hideOption(R.id.action_search);
                 menuItem.setChecked(true);
@@ -455,11 +509,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
                 drawerLayout.closeDrawers();
                 break;
             default:
-                fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.flContent, new PlayerFragment());
-                fragmentTransaction.commit();
-                menuItem.setChecked(true);
-                drawerLayout.closeDrawers();
+                return;
         }
 
 
@@ -552,6 +602,12 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
                 return true;
 
             case R.id.action_setRingtone:
+                newAddress = "";
+                newFilename = "";
+                charArray = String.valueOf(playerPresenter.getCurrentSong().getPath()).toCharArray();
+                getCountAddress();
+                setFile(getNewAddress(), getNewFilename());
+                setRingtones();
                 return true;
 
             case R.id.action_sleepClock:
@@ -560,17 +616,95 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
                 startActivityForResult(intent, ACTIVITY_SLEEP);
                 return true;
 
-
             case R.id.action_addToPalyLists:
                 return true;
 
             case R.id.action_moreInfo:
+                LayoutInflater inflater_more = LayoutInflater.from(MainActivity.this);
+                ScrollView more = (ScrollView) inflater_more.inflate(R.layout.moreinformation, null);
+                AlertDialog.Builder dialog_more = new AlertDialog.Builder(MainActivity.this);
+                TextView m_name = (TextView) more.findViewById(R.id.m_name);
+                m_name.setText(this.playerPresenter.getCurrentSong().getName());
+                TextView m_singer = (TextView) more.findViewById(R.id.m_singer);
+                m_singer.setText(this.playerPresenter.getCurrentSong().getArtist());
+                TextView m_album = (TextView) more.findViewById(R.id.m_album);
+                m_album.setText(this.playerPresenter.getCurrentSong().getAlbum());
+                TextView m_long = (TextView) more.findViewById(R.id.m_long);
+                m_long.setText(this.minSecFormat(duration));
+                TextView m_path = (TextView) more.findViewById(R.id.m_path);
+                m_path.setText(this.playerPresenter.getCurrentSong().getPath());
+                TextView m_size = (TextView) more.findViewById(R.id.m_size);
+                m_size.setText(""+String.format("%.2f", (this.playerPresenter.getCurrentSong().getSize() / (1024 * 1024)))+" MB");
+                dialog_more.setView(more);
+                dialog_more.setTitle("更多內容");
+
+                dialog_more.setNegativeButton("CLOSE", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                    }
+                });
+                dialog_more.show();
                 return true;
 
             default:
                 return super.onOptionsItemSelected(item);
         }
 
+    }
+
+    @Override
+    public void setTitle(String title) {
+        this.pageEnum = PageEnum.pageOther;
+        this.nowTitle = title;
+    }
+
+    private int getCountAddress() {
+        for (int i = 0; i < this.charArray.length; i++) {
+            if (this.charArray[i] == '/') {
+                this.countAddress = i;
+            }
+        }
+        return this.countAddress;
+    }
+
+    private String getNewAddress() {
+        for (int i = 0; i <= this.countAddress; i++) {
+            this.newAddress += this.charArray[i];
+        }
+        return this.newAddress;
+    }
+
+    private String getNewFilename() {
+        for (int i = this.countAddress + 1; i < this.charArray.length; i++) {
+            this.newFilename += this.charArray[i];
+        }
+        return this.newFilename;
+    }
+
+    private File getFile() {
+        return this.file;
+    }
+
+    private void setFile(String address, String filename) {
+        this.file = new File(address, filename);
+    }
+
+    private void setRingtones() {
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.MediaColumns.DATA, this.getFile().getAbsolutePath());
+        values.put(MediaStore.MediaColumns.TITLE, this.newFilename);
+        values.put(MediaStore.MediaColumns.MIME_TYPE, "audio/*");
+
+        values.put(MediaStore.Audio.Media.IS_RINGTONE, true);
+        values.put(MediaStore.Audio.Media.IS_NOTIFICATION, false);
+        values.put(MediaStore.Audio.Media.IS_ALARM, false);
+        values.put(MediaStore.Audio.Media.IS_MUSIC, false);
+
+        Uri uri = MediaStore.Audio.Media.getContentUriForPath(this.getFile().getAbsolutePath());
+        this.getContentResolver().delete(uri, MediaStore.MediaColumns.DATA + "=\"" + this.getFile().getAbsolutePath() + "\"", null);
+        Uri newUri = this.getApplicationContext().getContentResolver().insert(uri, values);
+
+        RingtoneManager.setActualDefaultRingtoneUri(this.getApplicationContext(), RingtoneManager.TYPE_RINGTONE, newUri);
     }
 
     private BroadcastReceiver brFinish = new BroadcastReceiver() {
@@ -1170,7 +1304,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
 
     @Override
     public void setView(Song currentSong, Player player) {
-        int duration = player.getDuration();
+        duration = player.getDuration();
         this.musicName.setText(currentSong.getName());
         this.albumName.setText(currentSong.getAlbum() + " - " + currentSong.getArtist());
         this.panelSongName.setText(currentSong.getName());

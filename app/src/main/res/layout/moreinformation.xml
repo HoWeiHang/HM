@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fadingEdge="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content">
+    <LinearLayout
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:gravity="center_horizontal"
+        android:background="#FFFFFF">
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center_vertical">
+            <TextView
+                android:id="@+id/m_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:textSize="26px"
+                android:text="music-name"
+                android:textColor="#0D47A1"/>
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="300dp"
+            android:layout_height="1dp"
+            android:padding="30dp"
+            android:layout_marginTop="10dp"
+            android:background="#CCFF90"/>
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center_vertical">
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="45dp"
+                android:layout_marginLeft="15dp"
+                android:textSize="26px"
+                android:text="演唱者"
+                android:gravity="center_vertical"/>
+            <TextView
+                android:id="@+id/m_singer"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:textSize="26px"
+                android:gravity="center_vertical"
+                android:text="阿文"/>
+
+        </LinearLayout>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center_vertical">
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="45dp"
+                android:layout_marginLeft="15dp"
+                android:textSize="26px"
+                android:text="專輯"
+                android:gravity="center_vertical"/>
+            <TextView
+                android:id="@+id/m_album"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:textSize="26px"
+                android:gravity="center_vertical"
+                android:text="阿文"/>
+
+        </LinearLayout>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center_vertical">
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="45dp"
+                android:layout_marginLeft="15dp"
+                android:textSize="26px"
+                android:text="歌曲長度"
+                android:gravity="center_vertical"/>
+            <TextView
+                android:id="@+id/m_long"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:textSize="26px"
+                android:gravity="center_vertical"
+                android:text="03:20"/>
+
+        </LinearLayout>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center_vertical">
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="45dp"
+                android:layout_marginLeft="15dp"
+                android:textSize="26px"
+                android:text="路徑"
+                android:gravity="center_vertical"/>
+            <TextView
+                android:id="@+id/m_path"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:textSize="26px"
+                android:gravity="center_vertical"
+                android:text="hello-http://androidmarkcool.blogspot.tw/2015/04/android-uiedittext.html-hello"/>
+
+        </LinearLayout>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center_vertical">
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="45dp"
+                android:layout_marginLeft="15dp"
+                android:textSize="26px"
+                android:text="檔案大小"
+                android:gravity="center_vertical"/>
+            <TextView
+                android:id="@+id/m_size"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:textSize="26px"
+                android:gravity="center_vertical"
+                android:text="阿文"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+</ScrollView>
