@@ -34,10 +34,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -55,6 +58,7 @@ import java.util.concurrent.TimeUnit;
 import fju.im2016.com.hm.R;
 import fju.im2016.com.hm.core.entity.CheckColorList;
 import fju.im2016.com.hm.core.entity.PageEnum;
+import fju.im2016.com.hm.core.entity.PlayList;
 import fju.im2016.com.hm.core.entity.RepeatEnum;
 import fju.im2016.com.hm.core.entity.Song;
 import fju.im2016.com.hm.core.entity.SongOfList;
@@ -80,7 +84,7 @@ import fju.im2016.com.hm.ui.youtube.FavoriteActivity;
 import fju.im2016.com.hm.ui.youtube.YoutubeActivity;
 
 
-public class MainActivity extends AppCompatActivity implements PlayerView, PlayerFragment.OnItemClickCallBack, PlayListFragment.OnPageChangeCallBack, ListSongFragment.OnItemClickCallBack, ArtistFragment.OnPageChangeCallBack, ArtistSongFragment.OnItemClickCallBack, AlbumFragment.OnPageChangeCallBack, AlbumSongFragment.OnItemClickCallBack, SearchView.OnQueryTextListener{
+public class MainActivity extends AppCompatActivity implements PlayerView, ListView.OnItemClickListener, PlayerFragment.OnItemClickCallBack, PlayListFragment.OnPageChangeCallBack, ListSongFragment.OnItemClickCallBack, ArtistFragment.OnPageChangeCallBack, ArtistSongFragment.OnItemClickCallBack, AlbumFragment.OnPageChangeCallBack, AlbumSongFragment.OnItemClickCallBack, SearchView.OnQueryTextListener{
 
     private TextView albumName, musicName, runTime, fullTime, panelAlbumName, panelSongName;
     private SeekBar seekBar;
@@ -114,6 +118,14 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
     private String newAddress, newFilename;
     private int countAddress;
     private File file;
+
+    private List<PlayList> playLists;
+    private PlayListAdapter playListAdapter;
+    private ListView lstPlaylist;
+    private EditText editText;
+    private AlertDialog theDialog;
+    private int choseList;
+    private boolean songInList = false;
 
     private PageEnum pageEnum;
     private String nowTitle;
@@ -216,6 +228,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
 
         this.checkColorList = new CheckColorList(this);
         this.songOfLists = new ArrayList<SongOfList>();
+        this.playLists = new ArrayList<PlayList>();
 
         albumName = (TextView) findViewById(R.id.albumName);
         musicName = (TextView) findViewById(R.id.musicName);
@@ -617,6 +630,11 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
                 return true;
 
             case R.id.action_addToPalyLists:
+                queryPlayList();
+                AlertDialog.Builder addlistDialog = new AlertDialog.Builder(this);
+                iniChoseListDialog(addlistDialog, LayoutInflater.from(this).inflate(R.layout.add_list_dialog_layout, null));
+                enableDialog(false);
+                initialPlayList();
                 return true;
 
             case R.id.action_moreInfo:
@@ -650,6 +668,167 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
                 return super.onOptionsItemSelected(item);
         }
 
+    }
+
+    private void enableDialog(boolean enabled) {
+        theDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(enabled);
+    }
+
+    private void iniChoseListDialog(AlertDialog.Builder alertDialog, View view) {
+        this.lstPlaylist = (ListView) view.findViewById(R.id.lstPlayList);
+        alertDialog.setView(view);
+        alertDialog.setPositiveButton("確認", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                db = openOrCreateDatabase("music_database", android.content.Context.MODE_PRIVATE, null);
+                helper = new DBHelper(getApplicationContext());
+                helper.addsong(Integer.parseInt(playerPresenter.getCurrentSong().getId()), Integer.parseInt(playLists.get(choseList).getId()));
+                db.close();
+                helper.close();
+            }
+        });
+        alertDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        theDialog = alertDialog.create();
+        theDialog.show();
+    }
+
+    private void iniAddListDialog(AlertDialog.Builder alertDialog, View view) {
+        this.editText = (EditText) view.findViewById(R.id.addList_editText);
+        alertDialog.setView(view);
+        alertDialog.setPositiveButton("確認", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //TODO empty and duplicated, selected after addList
+                db = openOrCreateDatabase("music_database", android.content.Context.MODE_PRIVATE, null);
+                helper = new DBHelper(getApplicationContext());
+                helper.newlist(editText.getText().toString());
+                db.close();
+                helper.close();
+                PlayList addPlayList = new PlayList(findId(editText.getText().toString()), editText.getText().toString());
+                addPlayList.setColorImg(R.drawable.list_purple);
+                playLists.add(playLists.size() - 1, addPlayList);
+                playListAdapter.notifyDataSetChanged();
+            }
+        });
+        alertDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        alertDialog.show();
+    }
+
+    private String findId(String listName) {
+        this.db = openOrCreateDatabase("music_database", android.content.Context.MODE_PRIVATE, null);
+        this.helper = new DBHelper(getApplicationContext());
+        Cursor listWithFindedName = db.rawQuery("select * from list where list_name= '" + listName + "'", null);
+        listWithFindedName.moveToFirst();
+        String findedId = listWithFindedName.getString(listWithFindedName.getColumnIndex("_id"));
+        listWithFindedName.close();
+        this.db.close();
+        this.helper.close();
+        return findedId;
+    }
+
+    private void queryPlayList() {
+        if (playLists != null)
+            playLists.clear();
+        this.db = this.openOrCreateDatabase("music_database", android.content.Context.MODE_PRIVATE, null);
+        this.helper = new DBHelper(this.getApplicationContext());
+        Cursor clist =db.rawQuery("select * from list", null);
+        clist.moveToFirst();
+        getCListInformation(clist);
+        clist.close();
+        this.db.close();
+        this.helper.close();
+
+        PlayList addPlayList = new PlayList(null, "新增播放清單");
+        addPlayList.setColorImg(R.drawable.ic_plus_black);
+        this.playLists.add(addPlayList);
+    }
+
+    private void initialPlayList() {
+        this.playListAdapter = new PlayListAdapter(this.playLists, this, false);
+        this.lstPlaylist.setAdapter(playListAdapter);
+        this.lstPlaylist.setSelector(R.color.nav_item_background);
+        this.lstPlaylist.setOnItemClickListener(this);
+    }
+
+    private void getCListInformation(Cursor clist) {
+        for (int i = 0; i < clist.getCount(); i++) {
+            String id = clist.getString(clist.getColumnIndex("_id"));
+            String name = clist.getString(clist.getColumnIndex("list_name"));
+
+            PlayList playList = new PlayList(id, name);
+            switch (i) {
+                case 0:
+                    playList.setColorImg(R.drawable.list_red);
+                    break;
+                case 1:
+                    playList.setColorImg(R.drawable.list_orange);
+                    break;
+                case 2:
+                    playList.setColorImg(R.drawable.list_yellow);
+                    break;
+                case 3:
+                    playList.setColorImg(R.drawable.list_green);
+                    break;
+                case 4:
+                    playList.setColorImg(R.drawable.list_blue);
+                    break;
+                default:
+                    playList.setColorImg(R.drawable.list_purple);
+            }
+            this.playLists.add(playList);
+
+            clist.moveToNext();
+        }
+    }
+
+    private boolean checkExist() {
+        for (int i = 0; i < this.songOfLists.size(); i++) {
+            if (this.playerPresenter.getCurrentSong().getId().equals(this.songOfLists.get(i).getSongId())) {
+                this.songInList = true;
+            }
+        }
+        return this.songInList;
+    }
+
+    private void showDuplicatedDialog() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("警告");
+        dialog.setMessage("這首歌有囉!");
+        dialog.setPositiveButton("確認", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+
+            }
+        });
+        dialog.show();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+        this.songInList = false;
+        this.choseList = position;
+        if (position != playLists.size() - 1) {
+            this.querySongOfList(this.playLists.get(position).getId());
+            if (this.checkExist()) {
+                this.showDuplicatedDialog();
+                this.enableDialog(false);
+            } else {
+                this.enableDialog(true);
+            }
+        } else {
+            AlertDialog.Builder addListDialog = new AlertDialog.Builder(this);
+            this.iniAddListDialog(addListDialog, LayoutInflater.from(this).inflate(R.layout.add_list, null));
+        }
     }
 
     @Override
@@ -1210,10 +1389,14 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
     private void querySongOfList(String querySQL) {
         if (songOfLists != null)
             songOfLists.clear();
+        this.db = openOrCreateDatabase("music_database", android.content.Context.MODE_PRIVATE, null);
+        this.helper = new DBHelper(getApplicationContext());
         Cursor cSongOfList =db.rawQuery("select * from song_of_list where l_id = " + querySQL, null);
         cSongOfList.moveToFirst();
         getSongOfListInformation(cSongOfList);
         cSongOfList.close();
+        this.db.close();
+        this.helper.close();
     }
 
     private void getSongOfListInformation(Cursor cSongOfList) {
@@ -1238,14 +1421,14 @@ public class MainActivity extends AppCompatActivity implements PlayerView, Playe
     }
 
     private void deleteSongFromList(String listId) {
-        this.db = openOrCreateDatabase("music_database", MODE_PRIVATE, null);
-        this.helper = new DBHelper(getApplicationContext());
         querySongOfList(listId);
         for (int i = 0; i < songOfLists.size(); i++) {
             if (songOfLists.get(i).getSongId().equals(playerPresenter.getCurrentSong().getId())) {
                 songOfList = songOfLists.get(i);
             }
         }
+        this.db = openOrCreateDatabase("music_database", MODE_PRIVATE, null);
+        this.helper = new DBHelper(getApplicationContext());
         helper.delete_song_of_list(Integer.parseInt(songOfList.getId()));
         this.db.close();
         this.helper.close();
