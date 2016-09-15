@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/indexbg"
+    tools:context="com.example.karen.viewpager2.MainActivity">
+
+    <ImageButton
+        android:id="@+id/btnMediaPlayer"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/mediaplayer_icon"
+        android:layout_marginLeft="33dp"
+        android:layout_marginTop="20dp"
+        android:background="@null"
+        android:scaleType="centerInside" />
+
+    <ImageButton
+        android:id="@+id/btnYoutube"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/youtube_icon"
+        android:layout_marginTop="125dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="21dp"
+        android:background="@null"
+        android:scaleType="centerInside" />
+
+    <ImageButton
+        android:id="@+id/btnSetting"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/setting_icon"
+        android:layout_marginTop="264dp"
+        android:layout_marginLeft="43dp"
+        android:background="@null"
+        android:scaleType="centerInside" />
+
+    <ImageButton
+        android:id="@+id/index_manual"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:scaleType="centerInside"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="50dp"
+        android:layout_marginBottom="25dp"
+        android:background="@null"
+        android:src="@drawable/manual"/>
+</RelativeLayout>

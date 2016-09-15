@@ -127,7 +127,6 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
     private int choseList;
     private boolean songInList = false;
 
-    private PageEnum pageEnum;
     private String nowTitle;
 
     private int navItemId;
@@ -170,6 +169,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
 
     @Override
     public void setToolBarTitle(String toolBarTitle) {
+        this.nowTitle = toolBarTitle;
         this.getSupportActionBar().setTitle(toolBarTitle);
     }
 
@@ -304,8 +304,6 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
 
         navigateTo(navView.getMenu().findItem(navItemId));
 
-        this.pageEnum = PageEnum.pageAllSong;
-
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.flContent, new PlayerFragment());
         fragmentTransaction.commit();
@@ -371,33 +369,9 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
                         isExpanded = false;
                         isCollapsed = true;
                         panelSongName.requestFocus();
-                        switch (pageEnum) {
-                            case pageAllSong:
-                                getSupportActionBar().setTitle("全部歌曲");
-                                showOption(R.id.action_search);
-                                break;
 
-                            case pageAlbum:
-                                getSupportActionBar().setTitle("專輯");
-                                hideOption(R.id.action_search);
-                                break;
+                        getSupportActionBar().setTitle("" + nowTitle);
 
-                            case pageArtist:
-                                getSupportActionBar().setTitle("演出者");
-                                hideOption(R.id.action_search);
-                                break;
-
-                            case pagePlaylist:
-                                getSupportActionBar().setTitle("我的播放清單");
-                                hideOption(R.id.action_search);
-                                break;
-
-                            case pageOther:
-                                getSupportActionBar().setTitle("" + nowTitle);
-                                hideOption(R.id.action_search);
-                                break;
-
-                        }
                         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, Gravity.LEFT);
                         actionBarDrawerToggle = new ActionBarDrawerToggle(MainActivity.this, drawerLayout, toolbar, R.string.openDrawer, R.string.closeDrawer) {
                             @Override
@@ -471,7 +445,6 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
         // Create a new fragment and specify the fragment to show based on nav item clicked
         switch(menuItem.getItemId()) {
             case R.id.nav_item_all_songs:
-                this.pageEnum = PageEnum.pageAllSong;
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.flContent, new PlayerFragment());
                 fragmentTransaction.addToBackStack(null);
@@ -481,7 +454,6 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
                 drawerLayout.closeDrawers();
                 break;
             case R.id.nav_item_album:
-                this.pageEnum = PageEnum.pageAlbum;
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.flContent, new AlbumFragment());
                 fragmentTransaction.addToBackStack(null);
@@ -491,7 +463,6 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
                 drawerLayout.closeDrawers();
                 break;
             case R.id.nav_item_artist:
-                this.pageEnum = PageEnum.pageArtist;
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.flContent, new ArtistFragment());
                 fragmentTransaction.addToBackStack(null);
@@ -501,7 +472,6 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
                 drawerLayout.closeDrawers();
                 break;
             case R.id.nav_item_playlist:
-                this.pageEnum = PageEnum.pagePlaylist;
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.flContent, new PlayListFragment());
                 fragmentTransaction.addToBackStack(null);
