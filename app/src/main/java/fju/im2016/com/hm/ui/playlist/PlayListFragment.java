@@ -55,6 +55,8 @@ public class PlayListFragment extends Fragment implements ListView.OnItemClickLi
         this.db.close();
         this.helper.close();
 
+        onPageChangeCallBack.setToolBarTitle("我的播放清單");
+
         PlayList addPlayList = new PlayList(null, "新增播放清單");
         addPlayList.setColorImg(R.drawable.ic_plus_black);
         this.playLists.add(addPlayList);
@@ -155,7 +157,7 @@ public class PlayListFragment extends Fragment implements ListView.OnItemClickLi
             fragmentTransaction.replace(R.id.flContent, listSongFragment);
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
-            onPageChangeCallBack.setTitle(this.playLists.get(position).getName());
+//            onPageChangeCallBack.setTitle(this.playLists.get(position).getName());
         } else {
             AlertDialog.Builder addListDialog = new AlertDialog.Builder(this.getActivity());
             this.iniAddListDialog(addListDialog, LayoutInflater.from(this.getActivity()).inflate(R.layout.add_list, null));
@@ -163,7 +165,7 @@ public class PlayListFragment extends Fragment implements ListView.OnItemClickLi
     }
 
     public interface OnPageChangeCallBack {
-        void setTitle(String title) ;
+        void setToolBarTitle(String toolBarTitle) ;
     }
 
     @Override

@@ -39,6 +39,8 @@ public class ArtistFragment extends Fragment implements GridView.OnItemClickList
         super.onActivityCreated(savedInstanceState);
         this.artists = new ArrayList<String>();
 
+        onPageChangeCallBack.setToolBarTitle("演出者");
+
         Context ctx = getContext();
         ContentResolver resolver = ctx.getContentResolver();
         Cursor c = resolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, new String[]{"distinct artist"}, null, null, null);
@@ -77,11 +79,11 @@ public class ArtistFragment extends Fragment implements GridView.OnItemClickList
         fragmentTransaction.replace(R.id.flContent, artistSongFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
-        onPageChangeCallBack.setTitle(this.artists.get(position));
+//        onPageChangeCallBack.setTitle(this.artists.get(position));
     }
 
     public interface OnPageChangeCallBack {
-        void setTitle(String title) ;
+        void setToolBarTitle(String toolBarTitle) ;
     }
 
     @Override

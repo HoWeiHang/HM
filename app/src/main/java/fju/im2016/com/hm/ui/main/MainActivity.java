@@ -831,12 +831,6 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
         }
     }
 
-    @Override
-    public void setTitle(String title) {
-        this.pageEnum = PageEnum.pageOther;
-        this.nowTitle = title;
-    }
-
     private int getCountAddress() {
         for (int i = 0; i < this.charArray.length; i++) {
             if (this.charArray[i] == '/') {

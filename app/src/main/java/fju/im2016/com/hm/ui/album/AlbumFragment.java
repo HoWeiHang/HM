@@ -39,6 +39,8 @@ public class AlbumFragment extends Fragment implements GridView.OnItemClickListe
         super.onActivityCreated(savedInstanceState);
         this.albums = new ArrayList<String>();
 
+        onPageChangeCallBack.setToolBarTitle("專輯");
+
         Context ctx = getContext();
         ContentResolver resolver = ctx.getContentResolver();
         Cursor c = resolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, new String[]{"distinct album"}, null, null, null);
@@ -77,11 +79,11 @@ public class AlbumFragment extends Fragment implements GridView.OnItemClickListe
         fragmentTransaction.replace(R.id.flContent, albumSongFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
-        onPageChangeCallBack.setTitle(this.albums.get(position));
+//        onPageChangeCallBack.setTitle(this.albums.get(position));
     }
 
     public interface OnPageChangeCallBack {
-        void setTitle(String title) ;
+        void setToolBarTitle(String toolBarTitle) ;
     }
 
     @Override

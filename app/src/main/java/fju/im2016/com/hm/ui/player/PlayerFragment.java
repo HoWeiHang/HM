@@ -60,6 +60,8 @@ public class PlayerFragment extends Fragment implements ListView.OnItemClickList
         super.onActivityCreated(savedInstanceState);
         this.songManager = new SongManager();
 
+        onItemClickCallBack.setToolBarTitle("全部歌曲");
+
         Context ctx = getContext();
         ContentResolver resolver = ctx.getContentResolver();
         Cursor c = resolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, null, null, null);
@@ -156,6 +158,7 @@ public class PlayerFragment extends Fragment implements ListView.OnItemClickList
     public interface OnItemClickCallBack {
         void onClick(SongManager songManager) ;
         void sendAdapter(MusicListAdapter musicListAdapter);
+        void setToolBarTitle(String toolBarTitle) ;
     }
 
     @Override
