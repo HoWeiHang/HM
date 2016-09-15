@@ -38,7 +38,7 @@
         android:scaleType="centerInside" />
 
     <ImageButton
-        android:id="@+id/index_manual"
+        android:id="@+id/btnMmanual"
         android:layout_width="70dp"
         android:layout_height="wrap_content"
         android:scaleType="centerInside"
