@@ -2,6 +2,7 @@ package fju.im2016.com.hm.ui.component;
 
 import android.app.Activity;
 import android.content.Context;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,6 +83,11 @@ public class MusicListAdapter extends BaseAdapter implements Filterable {
                 songs.remove(position);
                 notifyDataSetChanged();
             }
+
+            @Override
+            public void onRingtoneSetting() {
+                showToast(R.drawable.ic_ring, song.getName() + " 已被設為鈴聲");
+            }
         }));
 
 
@@ -91,6 +98,22 @@ public class MusicListAdapter extends BaseAdapter implements Filterable {
         TextView adapter_songName, adapter_artist;
         ImageView adapter_albumImage;
         ImageButton adapter_btnSetting;
+    }
+
+    private void showToast(int img, String string) {
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+        View layout = inflater.inflate(R.layout.toast_layout, null);
+
+        ImageView image = (ImageView) layout.findViewById(R.id.image);
+        image.setImageResource(img);
+        TextView text = (TextView) layout.findViewById(R.id.text);
+        text.setText(string);
+
+        Toast toast = new Toast(context);
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(layout);
+        toast.show();
     }
 
     @Override

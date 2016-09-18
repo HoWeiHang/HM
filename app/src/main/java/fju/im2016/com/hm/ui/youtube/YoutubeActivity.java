@@ -1,20 +1,28 @@
 package fju.im2016.com.hm.ui.youtube;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.Toast;
 
@@ -23,16 +31,18 @@ import java.util.ArrayList;
 
 import fju.im2016.com.hm.R;
 import fju.im2016.com.hm.dbhelper.DBHelper;
+import fju.im2016.com.hm.ui.main.IndexActivity;
 
 public class YoutubeActivity extends AppCompatActivity {
+
     private ArrayList<ListObject> myFavoriteList = new ArrayList<ListObject>();
-    //  private MyWebChromeClient mWebChromeClient = null;
-    //  private View mCustomView;
-    //  private RelativeLayout mContentView;
-    //  private FrameLayout mCustomViewContainer;
-    //  private WebChromeClient.CustomViewCallback mCustomViewCallback;
+    private MyWebChromeClient mWebChromeClient = null;
+    private View mCustomView;
+    private RelativeLayout mContentView;
+    private FrameLayout mCustomViewContainer;
+    private WebChromeClient.CustomViewCallback mCustomViewCallback;
     private TableLayout youtubeTableLayout;
-    private ImageButton favoriteButton,goToFavoriteButton,indexButton;
+    private ImageButton favoriteButton,goToFavoriteButton,indexButton,goToYoutubeButton;
     private WebView mWebView;
     private SQLiteDatabase db;
     private DBHelper helper;
@@ -43,6 +53,30 @@ public class YoutubeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.youtube);
+
+        if (!isConnected()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(YoutubeActivity.this);
+            AlertDialog alert;
+            builder.setTitle("提醒");
+            builder.setMessage("尚未開啟網路，請開啟網路連線!");
+            builder.setCancelable(false);
+            builder.setPositiveButton("確認", new DialogInterface.OnClickListener()
+
+                    {
+                        public void onClick(DialogInterface dialog, int id) {
+                            Intent it = new Intent(android.provider.Settings.ACTION_SETTINGS);
+                            startActivity(it);
+                        }
+                    }
+
+            );
+            alert = builder.create();
+            alert.show();
+
+
+
+
+        }
 
         db = openOrCreateDatabase("music_database", MODE_PRIVATE, null);
         helper = new DBHelper(getApplicationContext());
@@ -113,14 +147,14 @@ public class YoutubeActivity extends AppCompatActivity {
                 Intent it = new Intent(YoutubeActivity.this, FavoriteActivity.class);
                 it.putExtra("list", (Serializable) myFavoriteList);
                 startActivity(it);
-                finish();
             }
         });
 
         indexButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(),"indexButton", Toast.LENGTH_LONG).show();
+                Intent it = new Intent(YoutubeActivity.this, IndexActivity.class);
+                startActivity(it);
             }
         });
 
@@ -128,15 +162,15 @@ public class YoutubeActivity extends AppCompatActivity {
         mWebView = (WebView) findViewById(R.id.webView);
 
         WebSettings ws = mWebView.getSettings();   //取得websocket的設定權力
-        //mWebChromeClient = new MyWebChromeClient();
+        mWebChromeClient = new MyWebChromeClient();
         //使webview可以讀取javascript
         ws.setJavaScriptEnabled(true);
         //設置加載進來的頁面自適應手機屏幕
         ws.setUseWideViewPort(true); //可任意比例縮放
         ws.setLoadWithOverviewMode(true);
-        //mWebView.setWebChromeClient(mWebChromeClient);  //輔助WebView處理Javascript的對話方塊、網站圖示、網站title、載入進度等
+        mWebView.setWebChromeClient(mWebChromeClient);  //輔助WebView處理Javascript的對話方塊、網站圖示、網站title、載入進度等
         mWebView.setWebViewClient(mWebViewClient);    //幫助WebView處理各種通知、請求事件
-        // mWebView.setInitialScale(1);    //設定webview顯示大小
+        mWebView.setInitialScale(1);    //設定webview顯示大小
         mWebView.goBack();  //使webview可以返回
 
         Intent intent = getIntent();
@@ -161,7 +195,8 @@ public class YoutubeActivity extends AppCompatActivity {
         fabHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent it = new Intent(YoutubeActivity.this, IndexActivity.class);
+                startActivity(it);
             }
         });
 
@@ -196,6 +231,7 @@ public class YoutubeActivity extends AppCompatActivity {
 
         return true;
     }
+
 
 
     //加入我的最愛
@@ -242,5 +278,62 @@ public class YoutubeActivity extends AppCompatActivity {
         }
 
     };
+
+    private boolean isConnected(){
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            return true;
+        }
+        return false;
+    }
+
+    private class MyWebChromeClient extends WebChromeClient {
+
+
+        FrameLayout.LayoutParams LayoutParameters = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT);
+
+
+
+        @Override
+        public void onShowCustomView(View view, CustomViewCallback callback) {
+            // if a view already exists then immediately terminate the new one
+            if (mCustomView != null) {
+                callback.onCustomViewHidden();
+                return;
+            }
+            mContentView = (RelativeLayout) findViewById(R.id.youtube);
+            mContentView.setVisibility(View.GONE);
+            mCustomViewContainer = new FrameLayout(YoutubeActivity.this);
+            mCustomViewContainer.setLayoutParams(LayoutParameters);
+            mCustomViewContainer.setBackgroundResource(android.R.color.black);
+            view.setLayoutParams(LayoutParameters);
+            mCustomViewContainer.addView(view);
+            mCustomView = view;
+            mCustomViewCallback = callback;
+            mCustomViewContainer.setVisibility(View.VISIBLE);
+            setContentView(mCustomViewContainer);
+        }
+
+        @Override
+        public void onHideCustomView() {
+            if (mCustomView == null) {
+                return;
+            } else {
+                getSupportActionBar().show();
+                // Hide the custom view.
+                mCustomView.setVisibility(View.GONE);
+                // Remove the custom view from its container.
+                mCustomViewContainer.removeView(mCustomView);
+                mCustomView = null;
+                mCustomViewContainer.setVisibility(View.GONE);
+                mCustomViewCallback.onCustomViewHidden();
+                // Show the content view.
+                mContentView.setVisibility(View.VISIBLE);
+                setContentView(mContentView);
+            }
+        }
+    }
 
 }

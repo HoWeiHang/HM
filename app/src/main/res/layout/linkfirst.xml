@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/login"
+    tools:context="fju.im2016.com.hm.ui.LinkFirst.LinkFirstActivity">
+
+    <ImageView
+        android:layout_width="270dp"
+        android:layout_height="260dp"
+        android:layout_marginTop="140dp"
+        android:layout_centerHorizontal="true"
+        android:background="#281565C0"/>
+
+    <LinearLayout
+        android:layout_width="250dp"
+        android:layout_height="260dp"
+        android:background="#FFFFFF"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="130dp"
+        android:padding="25dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="10dp"
+                android:layout_height="25dp"
+                android:layout_marginTop="2dp"
+                android:background="#303F9F"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#303F9F"
+                android:textSize="22sp"
+                android:layout_marginLeft="20dp"
+                android:text="Wi-Fi 連線"/>
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/wifi_name"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
+            android:padding="8dp"
+            android:singleLine="true"
+            android:background="#F5F5F5"
+            android:textColorHint="#BDBDBD"
+            android:textColor="#0D47A1"
+            android:textSize="15sp"
+            android:hint="輸入Wi-Fi 名稱"/>
+
+        <EditText
+            android:id="@+id/wifi_pwd"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:padding="8dp"
+            android:singleLine="true"
+            android:password="true"
+            android:background="#F5F5F5"
+            android:textColorHint="#BDBDBD"
+            android:textColor="#0D47A1"
+            android:textSize="15sp"
+            android:hint="輸入密碼"/>
+
+    </LinearLayout>
+
+
+    <ImageButton
+        android:id="@+id/skip"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="345dp"
+        android:layout_marginLeft="75dp"
+        android:background="@drawable/skip"/>
+    <ImageButton
+        android:id="@+id/link"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="75dp"
+        android:layout_marginTop="340dp"
+        android:background="@drawable/link"/>
+
+
+</RelativeLayout>

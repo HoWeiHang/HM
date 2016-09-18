@@ -1,10 +1,10 @@
 package fju.im2016.com.hm.ui.youtube;
 
-
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -12,6 +12,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -36,74 +39,115 @@ import java.util.Map;
 
 import fju.im2016.com.hm.R;
 import fju.im2016.com.hm.dbhelper.DBHelper;
+import fju.im2016.com.hm.ui.main.IndexActivity;
+import fju.im2016.com.hm.ui.main.MainActivity;
 
+/**
+ * Created by User on 2016/8/18.
+ */
 public class FavoriteActivity extends AppCompatActivity implements Serializable,YouTubePlayer.OnFullscreenListener {
+
     private ListView mlistView;
     private SQLiteDatabase db;
     private DBHelper helper;
     List<String> myPlaylist = new ArrayList<String>();
     ArrayList<ListObject> myFavoriteList = new ArrayList<ListObject>();
     private PageAdapter adapter;
-    private ImageButton fvIndexButton;
+    private ImageButton fvIndexButton,goToYoutubeButton;
     buttonViewHolder cancelButton;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.youtube_favorite);
 
         db = openOrCreateDatabase("music_database", MODE_PRIVATE, null);
         helper = new DBHelper(getApplicationContext());
 
-        fvIndexButton = (ImageButton)findViewById(R.id.fv_index);
-
-        fvIndexButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getApplicationContext(),"indexButton", Toast.LENGTH_LONG).show();
-            }
-        });
-
-
-        mlistView = (ListView) findViewById(R.id.listView);
-
-
         Cursor clist = helper.select_youtube_song();
         clist.moveToFirst();
-        for(int i = 0 ; i < clist.getCount() ; i++ )
-        {
-            int id = clist.getInt(clist.getColumnIndex("_id"));
-            String url = clist.getString(clist.getColumnIndex("youtube_id"));
-            String name = clist.getString(clist.getColumnIndex("youtube_name"));
-            ListObject myFavoriteObject = new ListObject(id,url,name);
-            myPlaylist.add(url);
-            myFavoriteList.add(myFavoriteObject);
-
-            clist.moveToNext();
-        }
-        clist.close();
 
 
-        adapter = new PageAdapter(this,myFavoriteList);
-        mlistView.setAdapter(adapter);
 
-        //上方使用的videoFragment
-        final VideoFragment videoFragment =
-                (VideoFragment) getFragmentManager().findFragmentById(R.id.fragment);
-        videoFragment.setPlayVideoList(myPlaylist);
-        //videoFragment.setToolbar(toolbar);
+        if(clist.getCount() == 0){
+            setContentView(R.layout.favorite_null_main);
 
-        mlistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                videoFragment.setVideoId(position);
+            goToYoutubeButton = (ImageButton)findViewById(R.id.fv_y_index);
+            goToYoutubeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent it = new Intent(FavoriteActivity.this, YoutubeActivity.class);
+                    startActivity(it);
+                }
+            });
+            fvIndexButton = (ImageButton) findViewById(R.id.fv_index);
+
+            fvIndexButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent it = new Intent(FavoriteActivity.this, IndexActivity.class);
+                    startActivity(it);
+                }
+            });
+        }else {
+            setContentView(R.layout.youtube_favorite);
+
+            goToYoutubeButton = (ImageButton)findViewById(R.id.fv_y_index);
+            goToYoutubeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent it = new Intent(FavoriteActivity.this, YoutubeActivity.class);
+                    startActivity(it);
+                }
+            });
+
+
+            fvIndexButton = (ImageButton) findViewById(R.id.fv_index);
+
+            fvIndexButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent it = new Intent(FavoriteActivity.this, IndexActivity.class);
+                    startActivity(it);
+                }
+            });
+
+
+            mlistView = (ListView) findViewById(R.id.listView);
+
+
+            clist.moveToFirst();
+            for (int i = 0; i < clist.getCount(); i++) {
+                int id = clist.getInt(clist.getColumnIndex("_id"));
+                String url = clist.getString(clist.getColumnIndex("youtube_id"));
+                String name = clist.getString(clist.getColumnIndex("youtube_name"));
+                ListObject myFavoriteObject = new ListObject(id, url, name);
+                myPlaylist.add(url);
+                myFavoriteList.add(myFavoriteObject);
+
+                clist.moveToNext();
             }
+            clist.close();
 
 
+            adapter = new PageAdapter(this, myFavoriteList);
+            mlistView.setAdapter(adapter);
+
+            //上方使用的videoFragment
+            final VideoFragment videoFragment =
+                    (VideoFragment) getFragmentManager().findFragmentById(R.id.fragment);
+            videoFragment.setPlayVideoList(myPlaylist);
+            //videoFragment.setToolbar(toolbar);
+
+            mlistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    videoFragment.setVideoId(position);
+                }
 
 
-        });
+            });
+        }
     }
 
 

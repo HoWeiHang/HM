@@ -67,30 +67,14 @@ public class AdapterMenuListener implements View.OnClickListener, ListView.OnIte
             public boolean onMenuItemSelected(MenuBuilder menu, MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.adapter_menu_setRingtone:
-                        newAddress = "";
-                        newFilename = "";
-                        charArray = String.valueOf(song.getPath()).toCharArray();
-                        getCountAddress();
-                        setFile(getNewAddress(), getNewFilename());
-                        setRingtones();
+                        setRingtoneAlert();
                         return true;
 
                     case R.id.adapter_menu_delete:
                         if (deleteFromMediaStore) {
-                            context.getContentResolver().delete(
-                                    MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                                    MediaStore.Audio.Media._ID + "=\'" + song.getId().toString() + "\'",
-                                    null);
-                            new File(song.getPath()).delete();
-                            onDeleteCallBack.onDelete();
+                            deleteFromMediaStoreAlert();
                         } else {
-                            querySongOfList(playLists.get(Integer.parseInt(nowInWhichPlayListId)).getId());
-                            db = context.openOrCreateDatabase("music_database", android.content.Context.MODE_PRIVATE, null);
-                            helper = new DBHelper(context.getApplicationContext());
-                            helper.delete_song_of_list(Integer.parseInt(songOfLists.get(position).getId()));
-                            db.close();
-                            helper.close();
-                            onDeleteCallBack.onDelete();
+                            deleteFromPlayListAlert();
                         }
                         return true;
 
@@ -110,6 +94,83 @@ public class AdapterMenuListener implements View.OnClickListener, ListView.OnIte
         popupMenu.inflate(R.menu.menu_adapter);
 
         popupMenu.show();
+    }
+
+    private void setRingtoneAlert() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this.context);
+        dialog.setIcon(R.drawable.ic_note);
+        dialog.setTitle(" 確認設定 ? ");
+        dialog.setMessage("確定要將這首歌設為您的鈴聲 ? ");
+        dialog.setPositiveButton("確認", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                newAddress = "";
+                newFilename = "";
+                charArray = String.valueOf(song.getPath()).toCharArray();
+                getCountAddress();
+                setFile(getNewAddress(), getNewFilename());
+                setRingtones();
+                onDeleteCallBack.onRingtoneSetting();
+            }
+        });
+        dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        dialog.show();
+    }
+
+    private void deleteFromPlayListAlert() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this.context);
+        dialog.setIcon(R.drawable.ic_exclamation);
+        dialog.setTitle(" 確認刪除 ?");
+        dialog.setMessage("這首歌僅會從此播放清單中刪除，並不會從您的裝置中消失 。");
+        dialog.setPositiveButton("確認", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                querySongOfList(playLists.get(Integer.parseInt(nowInWhichPlayListId)).getId());
+                db = context.openOrCreateDatabase("music_database", android.content.Context.MODE_PRIVATE, null);
+                helper = new DBHelper(context.getApplicationContext());
+                helper.delete_song_of_list(Integer.parseInt(songOfLists.get(position).getId()));
+                db.close();
+                helper.close();
+                onDeleteCallBack.onDelete();
+            }
+        });
+        dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        dialog.show();
+    }
+
+    private void deleteFromMediaStoreAlert() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this.context);
+        dialog.setIcon(R.drawable.ic_exclamation);
+        dialog.setTitle(" 確認刪除 ?");
+        dialog.setMessage("這首歌將永遠從您的裝置上消失 。");
+        dialog.setPositiveButton("確認", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                context.getContentResolver().delete(
+                        MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                        MediaStore.Audio.Media._ID + "=\'" + song.getId().toString() + "\'",
+                        null);
+                new File(song.getPath()).delete();
+                onDeleteCallBack.onDelete();
+            }
+        });
+        dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        dialog.show();
     }
 
     private void enableDialog(boolean enabled) {
@@ -319,8 +380,9 @@ public class AdapterMenuListener implements View.OnClickListener, ListView.OnIte
 
     private void showDuplicatedDialog() {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this.context);
-        dialog.setTitle("警告");
-        dialog.setMessage("這首歌有囉!");
+        dialog.setIcon(R.drawable.ic_warning);
+        dialog.setTitle(" 警告");
+        dialog.setMessage("這首歌有囉 !");
         dialog.setPositiveButton("確認", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface arg0, int arg1) {
@@ -351,4 +413,5 @@ public class AdapterMenuListener implements View.OnClickListener, ListView.OnIte
 
 interface OnDeleteCallBack {
     void onDelete();
+    void onRingtoneSetting();
 }

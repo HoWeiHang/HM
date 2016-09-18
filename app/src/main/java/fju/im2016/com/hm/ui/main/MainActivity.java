@@ -27,11 +27,13 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.AdapterView;
@@ -79,6 +81,7 @@ import fju.im2016.com.hm.ui.player.PlayerFragment;
 import fju.im2016.com.hm.ui.player.PlayerView;
 import fju.im2016.com.hm.ui.playlist.ListSongFragment;
 import fju.im2016.com.hm.ui.playlist.PlayListFragment;
+import fju.im2016.com.hm.ui.setting.SettingActivity;
 import fju.im2016.com.hm.ui.sleepclock.SleepClockActivity;
 import fju.im2016.com.hm.ui.youtube.FavoriteActivity;
 import fju.im2016.com.hm.ui.youtube.YoutubeActivity;
@@ -210,6 +213,8 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        registerReceiver(vcCommand, new IntentFilter(SettingActivity.VC_BR));
 
         this.iniButtonPlay();
         this.iniPanelPlay();
@@ -371,6 +376,8 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
                         panelSongName.requestFocus();
 
                         getSupportActionBar().setTitle("" + nowTitle);
+                        if (nowTitle.equals("全部歌曲"))
+                            showOption(R.id.action_search);
 
                         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, Gravity.LEFT);
                         actionBarDrawerToggle = new ActionBarDrawerToggle(MainActivity.this, drawerLayout, toolbar, R.string.openDrawer, R.string.closeDrawer) {
@@ -496,7 +503,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
         }
 
 
-        Toast.makeText(MainActivity.this, menuItem.getTitle() + " pressed", Toast.LENGTH_LONG).show();
+//        Toast.makeText(MainActivity.this, menuItem.getTitle() + " pressed", Toast.LENGTH_LONG).show();
         toolbar.setTitle(menuItem.getTitle());
         // Highlight the selected item has been done by NavigationView
         menuItem.setChecked(true);
@@ -582,15 +589,11 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
                 return true;
 
             case R.id.action_home:
+                startActivity(new Intent().setClass(MainActivity.this, IndexActivity.class));
                 return true;
 
             case R.id.action_setRingtone:
-                newAddress = "";
-                newFilename = "";
-                charArray = String.valueOf(playerPresenter.getCurrentSong().getPath()).toCharArray();
-                getCountAddress();
-                setFile(getNewAddress(), getNewFilename());
-                setRingtones();
+                setRingtoneAlert();
                 return true;
 
             case R.id.action_sleepClock:
@@ -624,7 +627,8 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
                 TextView m_size = (TextView) more.findViewById(R.id.m_size);
                 m_size.setText(""+String.format("%.2f", (this.playerPresenter.getCurrentSong().getSize() / (1024 * 1024)))+" MB");
                 dialog_more.setView(more);
-                dialog_more.setTitle("更多內容");
+                dialog_more.setIcon(R.drawable.ic_info);
+                dialog_more.setTitle(" 更多內容");
 
                 dialog_more.setNegativeButton("CLOSE", new DialogInterface.OnClickListener() {
                     @Override
@@ -638,6 +642,32 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
                 return super.onOptionsItemSelected(item);
         }
 
+    }
+
+    private void setRingtoneAlert() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setIcon(R.drawable.ic_note);
+        dialog.setTitle(" 確認設定 ? ");
+        dialog.setMessage("確定要將這首歌設為您的鈴聲 ? ");
+        dialog.setPositiveButton("確認", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                newAddress = "";
+                newFilename = "";
+                charArray = String.valueOf(playerPresenter.getCurrentSong().getPath()).toCharArray();
+                getCountAddress();
+                setFile(getNewAddress(), getNewFilename());
+                setRingtones();
+                listToast(R.drawable.ic_ring, playerPresenter.getCurrentSong().getName() + " 已被設為鈴聲");
+            }
+        });
+        dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        dialog.show();
     }
 
     private void enableDialog(boolean enabled) {
@@ -772,6 +802,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
 
     private void showDuplicatedDialog() {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setIcon(R.drawable.ic_warning);
         dialog.setTitle("警告");
         dialog.setMessage("這首歌有囉!");
         dialog.setPositiveButton("確認", new DialogInterface.OnClickListener() {
@@ -952,6 +983,8 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
             slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
         } else {
             super.onBackPressed();
+            if (nowTitle.equals("全部歌曲"))
+                showOption(R.id.action_search);
         }
     }
 
@@ -1135,15 +1168,34 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
         }
     }
 
+    private void listToast(int img, String string) {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.toast_layout,
+                (ViewGroup) findViewById(R.id.toast_layout_root));
+
+        ImageView image = (ImageView) layout.findViewById(R.id.image);
+        image.setImageResource(img);
+        TextView text = (TextView) layout.findViewById(R.id.text);
+        text.setText(string);
+
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(layout);
+        toast.show();
+    }
+
     private void iniButtonRed() {
         this.btnRed = (ImageButton) findViewById(R.id.btnRed);
         this.btnRed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (inRedPlayList) {
+                    listToast(R.drawable.ic_delete, "移除自紅色清單");
                     deleteSongFromList("1");
                     inRedPlayList = false;
                 } else {
+                    listToast(R.drawable.ic_tick, "已加入紅色清單");
                     addSongToList(1);
                     inRedPlayList = true;
                 }
@@ -1170,9 +1222,11 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
             @Override
             public void onClick(View v) {
                 if (inOrangePlayList) {
+                    listToast(R.drawable.ic_delete, "移除自橙色清單");
                     deleteSongFromList("2");
                     inOrangePlayList = false;
                 } else {
+                    listToast(R.drawable.ic_tick, "已加入橙色清單");
                     addSongToList(2);
                     inOrangePlayList = true;
                 }
@@ -1199,9 +1253,11 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
             @Override
             public void onClick(View v) {
                 if (inYellowPlayList) {
+                    listToast(R.drawable.ic_delete, "移除自黃色清單");
                     deleteSongFromList("3");
                     inYellowPlayList = false;
                 } else {
+                    listToast(R.drawable.ic_tick, "已加入黃色清單");
                     addSongToList(3);
                     inYellowPlayList = true;
                 }
@@ -1228,9 +1284,11 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
             @Override
             public void onClick(View v) {
                 if (inGreenPlayList) {
+                    listToast(R.drawable.ic_delete, "移除自綠色清單");
                     deleteSongFromList("4");
                     inGreenPlayList = false;
                 } else {
+                    listToast(R.drawable.ic_tick, "已加入綠色清單");
                     addSongToList(4);
                     inGreenPlayList = true;
                 }
@@ -1257,9 +1315,11 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
             @Override
             public void onClick(View v) {
                 if (inBluePlayList) {
+                    listToast(R.drawable.ic_delete, "移除自藍色清單");
                     deleteSongFromList("5");
                     inBluePlayList = false;
                 } else {
+                    listToast(R.drawable.ic_tick, "已加入藍色清單");
                     addSongToList(5);
                     inBluePlayList = true;
                 }
@@ -1478,5 +1538,38 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
     private String minSecFormat(int millisecond) {
         long seconds = TimeUnit.MILLISECONDS.toSeconds((long) millisecond) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long) millisecond));
         return String.format("%d:%02d", TimeUnit.MILLISECONDS.toMinutes(millisecond), seconds);
+    }
+
+    // ---------------------------------
+
+    private BroadcastReceiver vcCommand = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getStringExtra("vcCommand").equals("play")) {
+                playerPresenter.clickPlay();
+                updateBtnPlayImage();
+                updatePanelPlayImage();
+            } else if (intent.getStringExtra("vcCommand").equals("stop")) {
+                playerPresenter.pause();
+                updateBtnPlayImage();
+                updatePanelPlayImage();
+            }
+        }
+    };
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        unregisterReceiver(vcCommand);
+    }
+
+    @Override
+    public void onStop() {
+        try {
+            unregisterReceiver(vcCommand);
+        } catch (Exception e) {
+            // Receiver was probably already stopped in onPause()
+        }
+        super.onStop();
     }
 }

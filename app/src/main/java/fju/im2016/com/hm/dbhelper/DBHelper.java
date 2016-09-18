@@ -31,6 +31,11 @@ public class DBHelper extends SQLiteOpenHelper{
     private final static String VIDEO_ID = "youtube_id";
     private final static String VIDEO_NAME = "youtube_name";
 
+    private final static String IP_TABLE = "ipset";
+    private final static String IP_ID = "_id";
+    private final static String IP = "IP";
+
+
 
     private String sqlsong =
             "CREATE TABLE IF NOT EXISTS "+SONG_TABLE+"("+
@@ -60,6 +65,13 @@ public class DBHelper extends SQLiteOpenHelper{
                     VIDEO_NAME+" CHAR"+
                     ")";
 
+    private String sqlip =
+            "CREATE TABLE IF NOT EXISTS "+IP_TABLE+"("+
+                    IP_ID+" INTEGER PRIMARY KEY AUTOINCREMENT,"+
+                    IP+" CHAR"+
+                    ")";
+
+
     private SQLiteDatabase database;
 
     public DBHelper(Context context) {
@@ -73,12 +85,14 @@ public class DBHelper extends SQLiteOpenHelper{
         db.execSQL(sqllist);
         db.execSQL(sqlsong_of_list);
         db.execSQL(sqlyoutube);
+        db.execSQL(sqlip);
 
         db.execSQL("insert into list values (1,'紅色清單')");
         db.execSQL("insert into list values (2,'橙色清單')");
         db.execSQL("insert into list values (3,'黃色清單')");
         db.execSQL("insert into list values (4,'綠色清單')");
         db.execSQL("insert into list values (5,'藍色清單')");
+        db.execSQL("insert into ipset values (1,'0.0.0.0')");
     }
 
     @Override
@@ -128,6 +142,18 @@ public class DBHelper extends SQLiteOpenHelper{
         ContentValues values = new ContentValues();
         values.put("song_name", itemText);
         database.update("song", values, "_id" + "=" + Integer.toString(id), null);
+    }
+
+    public void update_IP(String itemText){
+        ContentValues values = new ContentValues();
+        values.put("IP", itemText);
+        database.update("ipset", values, "_id" + "=" + Integer.toString(1), null);
+    }
+
+    public Cursor select_ip(){
+        Cursor cursor_ip = database.rawQuery("select * from ipset", null);
+        return cursor_ip;
+
     }
 
     public Cursor select_youtube_song(){

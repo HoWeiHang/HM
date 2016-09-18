@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="0dp"
+    android:background="#363636"
+    tools:context="fju.im2016.com.hm.ui.setting.SettingActivity">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="20dp"
+        android:textSize="18sp"
+        android:textColor="#FFFFFF"
+        android:text="聲控" />
+
+    <ToggleButton
+        android:id="@+id/soundpower"
+        android:layout_width="60dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="17dp"
+        android:textOn=""
+        android:background="@drawable/selector"
+        android:textOff="" />
+
+
+    <ImageView
+        android:src="@drawable/sound"
+        android:layout_height="23dp"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="21dp"
+        android:layout_marginLeft="80dp"
+        android:background="@null"
+        />
+
+
+
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="65dp"
+        android:background="#F56679"
+        android:id="@+id/imageView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="87dp"
+        android:textSize="18sp"
+        android:textColor="#FFFFFF"
+        android:text="遠端控制"
+        android:id="@+id/textView2" />
+
+    <ImageView
+        android:src="@drawable/wifi"
+        android:layout_height="23dp"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="88dp"
+        android:layout_marginLeft="113dp"
+        android:background="@null"
+        android:id="@+id/imageView2" />
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="133dp"
+        android:background="#3E4436"
+        />
+
+    <Button
+        android:id="@+id/settingConnect_btn"
+
+        android:text="重置 Wi-Fi 連線"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:radius="11dp"
+
+        android:layout_marginTop="145dp"
+        android:layout_centerHorizontal="true"
+
+        android:layout_width="230dp"
+        android:layout_height="45dp"
+        android:background="@drawable/button_blue"
+        />
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="202dp"
+        android:background="#3E4436"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="223dp"
+        android:textSize="18sp"
+        android:textColor="#FFFFFF"
+        android:text="音響電源" />
+
+
+    <ToggleButton
+        android:id="@+id/speakerspower"
+        android:layout_width="60dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="222dp"
+        android:textOn=""
+        android:background="@drawable/selector"
+        android:textOff="" />
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="272dp"
+        android:background="#3E4436"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="293dp"
+        android:textSize="18sp"
+        android:textColor="#FFFFFF"
+        android:text="音響音量" />
+
+    <ImageButton
+        android:id="@+id/sound_up"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="283dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="80dp"
+        android:scaleType="centerInside"
+        android:background="@null"
+        android:src="@drawable/add"/>
+    <ImageButton
+        android:id="@+id/sound_down"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="283dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="30dp"
+        android:scaleType="centerInside"
+        android:background="@null"
+        android:src="@drawable/ic_minus"/>
+
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="342dp"
+        android:background="#3E4436"
+        />
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="400dp"
+        android:layout_centerHorizontal="true">
+
+        <ImageButton
+            android:id="@+id/goToMediaPlayer"
+            android:layout_width="85dp"
+            android:layout_height="85dp"
+            android:src="@drawable/mediaplayer_icon"
+            android:background="@null"
+            android:scaleType="centerInside" />
+
+        <ImageButton
+            android:id="@+id/goToYoutube"
+            android:layout_width="85dp"
+            android:layout_height="85dp"
+            android:src="@drawable/youtube_icon"
+            android:layout_marginLeft="30dp"
+            android:background="@null"
+            android:scaleType="centerInside" />
+
+        <ImageButton
+            android:id="@+id/goToIndex"
+            android:layout_width="85dp"
+            android:layout_height="85dp"
+            android:src="@drawable/index_icon"
+            android:layout_marginLeft="30dp"
+            android:background="@null"
+            android:scaleType="centerInside" />
+
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:text="New Text"
+        android:id="@+id/textView"
+        android:textSize="25sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignBottom="@+id/imageView"
+        android:layout_toLeftOf="@+id/sound_up"
+        android:layout_toRightOf="@+id/imageView2"
+        android:layout_toEndOf="@+id/imageView2" />
+
+
+</RelativeLayout>

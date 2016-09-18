@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/login"
+    tools:context="fju.im2016.com.hm.ui.LinkFirst.PrivateIPSet">
+
+    <ImageView
+        android:layout_width="320dp"
+        android:layout_height="480dp"
+        android:layout_marginTop="40dp"
+        android:layout_centerHorizontal="true"
+        android:background="#281565C0"/>
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="480dp"
+        android:background="#FFFFFF"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:padding="20dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="10dp"
+                android:layout_height="25dp"
+                android:layout_marginTop="2dp"
+                android:background="#303F9F"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#303F9F"
+                android:textSize="22sp"
+                android:layout_marginLeft="20dp"
+                android:text="設定虛擬IP"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_marginTop="23dp"
+            android:text="您的虛擬IP為"/>
+
+        <TextView
+            android:id="@+id/to_private_ip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:padding="8dp"
+            android:background="#F5F5F5"
+            android:textColor="#0D47A1"
+            android:textSize="15sp"
+            android:textAlignment="center"
+            android:text="192.168.86.8"/>
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-10dp">
+            <TextView
+                android:layout_width="235dp"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_marginTop="40dp"
+                android:layout_marginLeft="18dp"
+                android:background="#FFECEC"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="22dp"
+                android:paddingRight="10dp"
+                android:text="請至Wi-Fi分享器(AP)設定介面"/>
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-20dp"
+                android:src="@drawable/step1"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-23dp">
+            <TextView
+                android:layout_width="235dp"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_marginTop="40dp"
+                android:layout_marginLeft="18dp"
+                android:background="#FFECEC"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="22dp"
+                android:paddingRight="10dp"
+                android:text="點選NAT → Port Forwarding"/>
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-20dp"
+                android:src="@drawable/step2"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-40dp">
+            <TextView
+                android:layout_width="235dp"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_marginTop="40dp"
+                android:layout_marginLeft="18dp"
+                android:background="#FFECEC"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="22dp"
+                android:paddingRight="10dp"
+                android:text="輸入虛擬IP， port 為 81"/>
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-20dp"
+                android:src="@drawable/step3"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-40dp">
+            <TextView
+                android:layout_width="235dp"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_marginTop="40dp"
+                android:layout_marginLeft="18dp"
+                android:background="#FFECEC"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="22dp"
+                android:paddingRight="10dp"
+                android:text="儲存並套用"/>
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-20dp"
+                android:src="@drawable/step4"/>
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/nextstep"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="470dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="14dp"
+        android:background="@drawable/nextstep"/>
+
+</RelativeLayout>

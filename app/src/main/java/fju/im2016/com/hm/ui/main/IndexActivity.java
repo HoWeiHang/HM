@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import fju.im2016.com.hm.R;
+import fju.im2016.com.hm.ui.setting.SettingActivity;
 import fju.im2016.com.hm.ui.youtube.YoutubeActivity;
 
 public class IndexActivity extends AppCompatActivity {
@@ -49,7 +50,7 @@ public class IndexActivity extends AppCompatActivity {
         this.btnSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent().setClass(IndexActivity.this, SettingActivity.class));
             }
         });
     }

@@ -14,12 +14,14 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.main.IndexActivity">
+        <activity android:name=".ui.LinkFirst.LinkFirstActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".ui.main.IndexActivity">
         </activity>
         <activity android:name=".ui.main.MainActivity">
             <meta-data
@@ -31,6 +33,18 @@
         <activity
             android:name=".ui.sleepclock.SleepClockActivity"
             android:theme="@style/myDialog">
+        </activity>
+
+        <activity
+            android:name=".ui.LinkFirst.PrivateIPSet">
+        </activity>
+
+        <activity
+            android:name=".ui.LinkFirst.PublicIPSet">
+        </activity>
+
+        <activity
+            android:name=".ui.setting.SettingActivity">
         </activity>
 
         <activity

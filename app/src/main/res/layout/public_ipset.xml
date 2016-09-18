@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/login"
+    tools:context="fju.im2016.com.hm.ui.LinkFirst.PublicIPSet">
+
+
+    <ImageView
+        android:layout_width="300dp"
+        android:layout_height="280dp"
+        android:layout_marginTop="130dp"
+        android:layout_centerHorizontal="true"
+        android:background="#281565C0"/>
+
+    <LinearLayout
+        android:layout_width="280dp"
+        android:layout_height="280dp"
+        android:background="#FFFFFF"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="120dp"
+        android:padding="25dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="10dp"
+                android:layout_height="25dp"
+                android:layout_marginTop="2dp"
+                android:background="#303F9F"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#303F9F"
+                android:textSize="22sp"
+                android:layout_marginLeft="20dp"
+                android:text="輸入固定IP"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:textSize="16sp"
+            android:text="請輸入家中的固定IP" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:text="若無固定IP，請洽電信業者
+" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal">
+            <EditText
+                android:id="@+id/IP1"
+                android:layout_width="50dp"
+                android:layout_height="35dp"
+                android:numeric="integer"
+                android:singleLine="true"
+                android:background="#F5F5F5"
+                android:textColor="#0D47A1"
+                android:gravity="center"
+                android:maxLength="3"
+                android:textSize="18sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:layout_marginTop="8dp"
+                android:padding="2dp"
+                android:textSize="18sp"
+                android:text="." />
+            <EditText
+                android:id="@+id/IP2"
+                android:layout_width="50dp"
+                android:layout_height="35dp"
+                android:numeric="integer"
+                android:singleLine="true"
+                android:background="#F5F5F5"
+                android:textColor="#0D47A1"
+                android:gravity="center"
+                android:maxLength="3"
+                android:textSize="18sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:layout_marginTop="8dp"
+                android:padding="2dp"
+                android:textSize="18sp"
+                android:text="." />
+            <EditText
+                android:id="@+id/IP3"
+                android:layout_width="50dp"
+                android:layout_height="35dp"
+                android:numeric="integer"
+                android:singleLine="true"
+                android:background="#F5F5F5"
+                android:textColor="#0D47A1"
+                android:gravity="center"
+                android:maxLength="3"
+                android:textSize="18sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:layout_marginTop="8dp"
+                android:padding="2dp"
+                android:textSize="18sp"
+                android:text="." />
+            <EditText
+                android:id="@+id/IP4"
+                android:layout_width="50dp"
+                android:layout_height="35dp"
+                android:numeric="integer"
+                android:singleLine="true"
+                android:background="#F5F5F5"
+                android:textColor="#0D47A1"
+                android:gravity="center"
+                android:maxLength="3"
+                android:textSize="18sp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/back"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="360dp"
+        android:layout_marginLeft="70dp"
+        android:background="@drawable/backstep"/>
+    <ImageButton
+        android:id="@+id/finish"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:layout_marginTop="355dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="70dp"
+        android:background="@drawable/finish"/>
+
+</RelativeLayout>
