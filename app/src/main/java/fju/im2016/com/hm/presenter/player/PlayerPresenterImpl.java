@@ -134,6 +134,12 @@ public class PlayerPresenterImpl implements PlayerPresenter {
     }
 
     @Override
+    public void play() {
+        this.isPause = false;
+        this.player.play();
+    }
+
+    @Override
     public void stop() {
 
     }

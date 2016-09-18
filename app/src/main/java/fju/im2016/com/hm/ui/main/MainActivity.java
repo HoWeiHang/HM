@@ -492,11 +492,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
                 startActivity(it);
                 break;
             case R.id.nav_item_setting:
-                fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.flContent, new PlayerFragment());
-                fragmentTransaction.commit();
-                menuItem.setChecked(true);
-                drawerLayout.closeDrawers();
+                startActivity(new Intent().setClass(MainActivity.this, SettingActivity.class));
                 break;
             default:
                 return;
@@ -1546,7 +1542,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getStringExtra("vcCommand").equals("play")) {
-                playerPresenter.clickPlay();
+                playerPresenter.play();
                 updateBtnPlayImage();
                 updatePanelPlayImage();
             } else if (intent.getStringExtra("vcCommand").equals("stop")) {
@@ -1557,19 +1553,19 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
         }
     };
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        unregisterReceiver(vcCommand);
-    }
-
-    @Override
-    public void onStop() {
-        try {
-            unregisterReceiver(vcCommand);
-        } catch (Exception e) {
-            // Receiver was probably already stopped in onPause()
-        }
-        super.onStop();
-    }
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//        unregisterReceiver(vcCommand);
+//    }
+//
+//    @Override
+//    public void onStop() {
+//        try {
+//            unregisterReceiver(vcCommand);
+//        } catch (Exception e) {
+//            // Receiver was probably already stopped in onPause()
+//        }
+//        super.onStop();
+//    }
 }

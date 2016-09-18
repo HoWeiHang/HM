@@ -19,6 +19,8 @@ public interface PlayerPresenter {
 
     void pause();
 
+    void play();
+
     void stop();
 
     void setPause(boolean isPause);
