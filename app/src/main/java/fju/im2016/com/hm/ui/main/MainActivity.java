@@ -77,6 +77,7 @@ import fju.im2016.com.hm.ui.artist.ArtistFragment;
 import fju.im2016.com.hm.ui.artist.ArtistSongFragment;
 import fju.im2016.com.hm.ui.component.MusicListAdapter;
 import fju.im2016.com.hm.ui.component.PlayListAdapter;
+import fju.im2016.com.hm.ui.manual.ManualActivity;
 import fju.im2016.com.hm.ui.player.PlayerFragment;
 import fju.im2016.com.hm.ui.player.PlayerView;
 import fju.im2016.com.hm.ui.playlist.ListSongFragment;
@@ -493,6 +494,9 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
                 break;
             case R.id.nav_item_setting:
                 startActivity(new Intent().setClass(MainActivity.this, SettingActivity.class));
+                break;
+            case R.id.nav_item_manual:
+                startActivity(new Intent().setClass(MainActivity.this, ManualActivity.class));
                 break;
             default:
                 return;

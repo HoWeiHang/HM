@@ -13,13 +13,10 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
+        android:largeHeap="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ui.LinkFirst.LinkFirstActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".ui.main.IndexActivity">
         </activity>
@@ -45,6 +42,23 @@
 
         <activity
             android:name=".ui.setting.SettingActivity">
+        </activity>
+
+        <activity
+            android:name=".ui.viewpager.Leading">
+        </activity>
+
+        <activity
+            android:name=".ui.manual.ManualActivity">
+        </activity>
+
+        <activity
+            android:name=".ui.viewpager.SplashScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <activity

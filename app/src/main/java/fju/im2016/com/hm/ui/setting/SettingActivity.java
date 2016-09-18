@@ -41,6 +41,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import fju.im2016.com.hm.R;
+import fju.im2016.com.hm.ui.LinkFirst.LinkFirstActivity;
 import fju.im2016.com.hm.ui.main.IndexActivity;
 import fju.im2016.com.hm.ui.main.MainActivity;
 import fju.im2016.com.hm.ui.youtube.YoutubeActivity;
@@ -353,7 +354,7 @@ public class SettingActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Intent it = new Intent();
-                            // it.setClass(MainActivity.this,LinkFirstActivity);
+                            it.setClass(SettingActivity.this,LinkFirstActivity.class);
                             startActivity(it);
                             Toast.makeText(getApplicationContext(), "恩哼", Toast.LENGTH_SHORT).show();
                         }

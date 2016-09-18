@@ -7,9 +7,9 @@
     <ImageView
         android:id="@+id/image_youtube"
         android:layout_width="30dp"
-        android:layout_height="25dp"
+        android:layout_height="30dp"
         android:layout_centerVertical="true"
-        android:src="@drawable/ic_y"/>
+        android:src="@drawable/ic_q"/>
 
     <TextView android:id="@+id/item_text"
         android:layout_width="match_parent"
@@ -17,5 +17,5 @@
         android:gravity="center_vertical"
         android:layout_toRightOf="@+id/image_youtube"
         android:layout_marginLeft="22dp"
-        android:text="YouTube"/>
+        android:text="說明"/>
 </RelativeLayout>
