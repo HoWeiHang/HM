@@ -29,6 +29,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -272,6 +273,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("全部歌曲");
+        nowTitle = "全部歌曲";
         setSupportActionBar(toolbar);
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -453,40 +455,48 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
         // Create a new fragment and specify the fragment to show based on nav item clicked
         switch(menuItem.getItemId()) {
             case R.id.nav_item_all_songs:
-                fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.flContent, new PlayerFragment());
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-                showOption(R.id.action_search);
-                menuItem.setChecked(true);
-                drawerLayout.closeDrawers();
+                if (!nowTitle.equals("全部歌曲")) {
+                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.flContent, new PlayerFragment());
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                    showOption(R.id.action_search);
+                    menuItem.setChecked(true);
+                    drawerLayout.closeDrawers();
+                }
                 break;
             case R.id.nav_item_album:
-                fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.flContent, new AlbumFragment());
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-                hideOption(R.id.action_search);
-                menuItem.setChecked(true);
-                drawerLayout.closeDrawers();
+                if (!nowTitle.equals("專輯")) {
+                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.flContent, new AlbumFragment());
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                    hideOption(R.id.action_search);
+                    menuItem.setChecked(true);
+                    drawerLayout.closeDrawers();
+                }
                 break;
             case R.id.nav_item_artist:
-                fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.flContent, new ArtistFragment());
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-                hideOption(R.id.action_search);
-                menuItem.setChecked(true);
-                drawerLayout.closeDrawers();
+                if (!nowTitle.equals("演出者")) {
+                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.flContent, new ArtistFragment());
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                    hideOption(R.id.action_search);
+                    menuItem.setChecked(true);
+                    drawerLayout.closeDrawers();
+                }
                 break;
             case R.id.nav_item_playlist:
-                fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.flContent, new PlayListFragment());
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-                hideOption(R.id.action_search);
-                menuItem.setChecked(true);
-                drawerLayout.closeDrawers();
+                if (!nowTitle.equals("我的播放清單")) {
+                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.flContent, new PlayListFragment());
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                    hideOption(R.id.action_search);
+                    menuItem.setChecked(true);
+                    drawerLayout.closeDrawers();
+                }
                 break;
             case R.id.nav_item_youtube:
                 Intent it = new Intent(MainActivity.this, YoutubeActivity.class);
@@ -1557,7 +1567,23 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
         }
     };
 
-//    @Override
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getSupportActionBar().setTitle("" + nowTitle);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && nowTitle.equals("全部歌曲")) {
+            // Add your Dialogue or whatever to alert
+            moveTaskToBack(false);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    //    @Override
 //    public void onPause() {
 //        super.onPause();
 //        unregisterReceiver(vcCommand);

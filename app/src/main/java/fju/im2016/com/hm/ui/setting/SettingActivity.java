@@ -207,7 +207,7 @@ public class SettingActivity extends AppCompatActivity {
         this.goTo_MediaPlayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent().setClass(SettingActivity.this, MainActivity.class));
+                startActivity(new Intent().setClass(SettingActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
             }
         });
     }
