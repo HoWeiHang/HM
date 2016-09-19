@@ -255,17 +255,17 @@ public class FavoriteActivity extends AppCompatActivity implements Serializable,
                     new AlertDialog.Builder(FavoriteActivity.this)
                             .setTitle("確認刪除")
                             .setMessage("您真的要刪嗎?")
-                            .setPositiveButton("刪吧", new DialogInterface.OnClickListener() {
+                            .setPositiveButton("確認", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     removeItem(position,id);
                                     Toast.makeText(getApplicationContext(), "已刪除", Toast.LENGTH_SHORT).show();
                                 }
                             })
-                            .setNeutralButton("別刪", new DialogInterface.OnClickListener() {
+                            .setNeutralButton("取消", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    Toast.makeText(getApplicationContext(), "那你按屁", Toast.LENGTH_SHORT).show();
+
                                 }
                             })
                             .show();

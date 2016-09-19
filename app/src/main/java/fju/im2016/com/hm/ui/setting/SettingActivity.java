@@ -260,7 +260,7 @@ public class SettingActivity extends AppCompatActivity {
                                         @Override
                                         public void run() {
 
-                                            Log.e("wlf", "已经连接到服务器【" + getURI() + "】");
+                                            Log.e("wlf", "已經連接到服務器【" + getURI() + "】");
 
 
                                             textView.setText("Connect is Start!!!");
@@ -356,13 +356,11 @@ public class SettingActivity extends AppCompatActivity {
                             Intent it = new Intent();
                             it.setClass(SettingActivity.this,LinkFirstActivity.class);
                             startActivity(it);
-                            Toast.makeText(getApplicationContext(), "恩哼", Toast.LENGTH_SHORT).show();
                         }
                     })
                     .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Toast.makeText(getApplicationContext(),"按心酸?", Toast.LENGTH_SHORT).show();
                         }
                     })
                     .show();
@@ -387,13 +385,13 @@ public class SettingActivity extends AppCompatActivity {
                             .setPositiveButton("確認", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    Toast.makeText(getApplicationContext(), "重來吧", Toast.LENGTH_SHORT).show();
+
                                 }
                             })
                             .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    Toast.makeText(getApplicationContext(),"你取消也無法連線阿!!!", Toast.LENGTH_SHORT).show();
+
                                 }
                             })
                             .show();

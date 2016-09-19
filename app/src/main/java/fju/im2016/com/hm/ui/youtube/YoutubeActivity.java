@@ -114,7 +114,7 @@ public class YoutubeActivity extends AppCompatActivity {
 
 
                 if (checkInFavorite) {
-                    Toast.makeText(getApplicationContext(), "有病嗎?已加入過最愛了", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "已加入過我的最愛", Toast.LENGTH_SHORT).show();
                 } else {
                     new AlertDialog.Builder(YoutubeActivity.this)
                             .setTitle("確認加入")
@@ -123,7 +123,6 @@ public class YoutubeActivity extends AppCompatActivity {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
 
-                                    Toast.makeText(getApplicationContext(), "那你按屁", Toast.LENGTH_SHORT).show();
                                 }
                             })
                             .setNeutralButton("確認", new DialogInterface.OnClickListener() {
