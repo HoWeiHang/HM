@@ -51,7 +51,7 @@ public class IndexActivity extends AppCompatActivity {
         this.btnSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent().setClass(IndexActivity.this, SettingActivity.class));
+                startActivity(new Intent().setClass(IndexActivity.this, SettingActivity.class).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
             }
         });
     }

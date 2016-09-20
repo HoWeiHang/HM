@@ -503,7 +503,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
                 startActivity(it);
                 break;
             case R.id.nav_item_setting:
-                startActivity(new Intent().setClass(MainActivity.this, SettingActivity.class));
+                startActivity(new Intent().setClass(MainActivity.this, SettingActivity.class).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
                 break;
             case R.id.nav_item_manual:
                 startActivity(new Intent().setClass(MainActivity.this, ManualActivity.class));
@@ -1575,7 +1575,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK && nowTitle.equals("全部歌曲")) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && nowTitle.equals("全部歌曲") && (slidingUpPanelLayout.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED )) {
             // Add your Dialogue or whatever to alert
             moveTaskToBack(false);
             return true;
