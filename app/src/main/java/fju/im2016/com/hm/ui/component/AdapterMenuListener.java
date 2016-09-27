@@ -405,6 +405,7 @@ public class AdapterMenuListener implements View.OnClickListener, ListView.OnIte
                 this.enableDialog(true);
             }
         } else {
+            this.enableDialog(false);
             AlertDialog.Builder addListDialog = new AlertDialog.Builder(this.context);
             this.iniAddListDialog(addListDialog, LayoutInflater.from(this.context).inflate(R.layout.add_list, null));
         }

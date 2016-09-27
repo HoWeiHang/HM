@@ -4,6 +4,8 @@ package fju.im2016.com.hm.ui.setting;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -42,9 +44,11 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import fju.im2016.com.hm.R;
+import fju.im2016.com.hm.dbhelper.DBHelper;
 import fju.im2016.com.hm.ui.LinkFirst.LinkFirstActivity;
 import fju.im2016.com.hm.ui.main.IndexActivity;
 import fju.im2016.com.hm.ui.main.MainActivity;
+import fju.im2016.com.hm.ui.youtube.ListObject;
 import fju.im2016.com.hm.ui.youtube.YoutubeActivity;
 
 public class SettingActivity extends AppCompatActivity {
@@ -55,7 +59,9 @@ public class SettingActivity extends AppCompatActivity {
     private ImageButton sound_up,sound_down,goTo_Index,goTo_YouTube,goTo_MediaPlayer;
     private TextView textView;
     private Button settingButton;
-    String result = "";
+    private SQLiteDatabase db;
+    private DBHelper helper;
+    String result = "",ip = "";
     public static final String VC_BR = "fju_im2016_com_hm_ui_setting_voice_control";
     private Intent vcBroadcast = new Intent(VC_BR);
 
@@ -63,6 +69,9 @@ public class SettingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.setting);
+
+        db = openOrCreateDatabase("music_database", MODE_PRIVATE, null);
+        helper = new DBHelper(getApplicationContext());
 
         speakersButton=(ToggleButton)findViewById(R.id.speakerspower);
         soundButton=(ToggleButton)findViewById(R.id.soundpower);
@@ -73,6 +82,14 @@ public class SettingActivity extends AppCompatActivity {
 
 
         settingButton.setOnClickListener(connectSetting);
+
+        Cursor clist = helper.select_ip();
+        clist.moveToFirst();
+        for (int i = 0; i < clist.getCount(); i++) {
+            ip = clist.getString(clist.getColumnIndex("IP"));
+            clist.moveToNext();
+        }
+        clist.close();
 
         iniBtnMediaPlayer();
         iniBtnYoutube();
@@ -94,7 +111,7 @@ public class SettingActivity extends AppCompatActivity {
                     public void run() {
 
                         // 網頁的 URL
-                        String url = "http://192.168.4.1:81/RLHIGH";
+                        String url = "http://"+ip+":81/RLHIGH";
 
                         // 開始進入網路的部分
                         result = getContent(url);
@@ -111,7 +128,7 @@ public class SettingActivity extends AppCompatActivity {
                     public void run() {
 
                         // 網頁的 URL
-                        String url = "http://192.168.4.1:81/RLLOW";
+                        String url = "http://"+ip+":81/RLLOW";
 
                         // 開始進入網路的部分
                         result = getContent(url);
@@ -131,7 +148,7 @@ public class SettingActivity extends AppCompatActivity {
                         public void run() {
 
                             // 網頁的 URL
-                            String url = "http://192.168.4.1:81/RYON";
+                            String url = "http://"+ip+":81/RYON";
 
                             // 開始進入網路的部分
                             result = getContent(url);
@@ -146,7 +163,7 @@ public class SettingActivity extends AppCompatActivity {
                         public void run() {
 
                             // 網頁的 URL
-                            String url = "http://192.168.4.1:81/RYOFF";
+                            String url = "http://"+ip+":81/RYOFF";
 
                             // 開始進入網路的部分
                             result = getContent(url);
@@ -248,7 +265,7 @@ public class SettingActivity extends AppCompatActivity {
                             if (selectDraft == null) {
                                 return;
                             }
-                            String address = "ws://192.168.4.1";
+                            String address = "ws://"+ip;
                             /*if (address.contains("JSR356-WebSocket")) {
                                 address += mNameEdt.getText().toString().trim();
                             }*/

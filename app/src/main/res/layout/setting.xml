@@ -26,6 +26,26 @@
         android:background="@drawable/selector"
         android:textOff="" />
 
+    <TextView
+        android:id="@+id/status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="57dp"
+        android:layout_marginLeft="30dp"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:text="狀態："/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:text="none"
+        android:id="@+id/textView"
+        android:textSize="18sp"
+        android:layout_marginTop="57dp"
+        android:layout_toRightOf="@+id/status"/>
+
 
     <ImageView
         android:src="@drawable/sound"
@@ -42,7 +62,7 @@
     <ImageView
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="65dp"
+        android:layout_marginTop="102dp"
         android:background="#F56679"
         android:id="@+id/imageView" />
 
@@ -50,7 +70,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
-        android:layout_marginTop="87dp"
+        android:layout_marginTop="124dp"
         android:textSize="18sp"
         android:textColor="#FFFFFF"
         android:text="遠端控制"
@@ -60,7 +80,7 @@
         android:src="@drawable/wifi"
         android:layout_height="23dp"
         android:layout_width="wrap_content"
-        android:layout_marginTop="88dp"
+        android:layout_marginTop="125dp"
         android:layout_marginLeft="113dp"
         android:background="@null"
         android:id="@+id/imageView2" />
@@ -68,7 +88,7 @@
     <ImageView
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="133dp"
+        android:layout_marginTop="170dp"
         android:background="#3E4436"
         />
 
@@ -80,7 +100,7 @@
         android:textSize="18sp"
         android:radius="11dp"
 
-        android:layout_marginTop="145dp"
+        android:layout_marginTop="182dp"
         android:layout_centerHorizontal="true"
 
         android:layout_width="230dp"
@@ -91,7 +111,7 @@
     <ImageView
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="202dp"
+        android:layout_marginTop="239dp"
         android:background="#3E4436"
         />
 
@@ -99,7 +119,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
-        android:layout_marginTop="223dp"
+        android:layout_marginTop="260dp"
         android:textSize="18sp"
         android:textColor="#FFFFFF"
         android:text="音響電源" />
@@ -111,7 +131,7 @@
         android:layout_height="30dp"
         android:layout_alignParentRight="true"
         android:layout_marginRight="30dp"
-        android:layout_marginTop="222dp"
+        android:layout_marginTop="259dp"
         android:textOn=""
         android:background="@drawable/selector"
         android:textOff="" />
@@ -119,7 +139,7 @@
     <ImageView
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="272dp"
+        android:layout_marginTop="309dp"
         android:background="#3E4436"
         />
 
@@ -127,7 +147,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
-        android:layout_marginTop="293dp"
+        android:layout_marginTop="330dp"
         android:textSize="18sp"
         android:textColor="#FFFFFF"
         android:text="音響音量" />
@@ -136,7 +156,7 @@
         android:id="@+id/sound_up"
         android:layout_width="30dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="283dp"
+        android:layout_marginTop="320dp"
         android:layout_alignParentRight="true"
         android:layout_marginRight="80dp"
         android:scaleType="centerInside"
@@ -146,7 +166,7 @@
         android:id="@+id/sound_down"
         android:layout_width="30dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="283dp"
+        android:layout_marginTop="320dp"
         android:layout_alignParentRight="true"
         android:layout_marginRight="30dp"
         android:scaleType="centerInside"
@@ -157,7 +177,7 @@
     <ImageView
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="342dp"
+        android:layout_marginTop="379dp"
         android:background="#3E4436"
         />
 
@@ -166,7 +186,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="400dp"
+        android:layout_marginTop="420dp"
         android:layout_centerHorizontal="true">
 
         <ImageButton
@@ -198,18 +218,7 @@
 
     </LinearLayout>
 
-    <TextView
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
-        android:text="New Text"
-        android:id="@+id/textView"
-        android:textSize="25sp"
-        android:layout_alignParentTop="true"
-        android:layout_alignBottom="@+id/imageView"
-        android:layout_toLeftOf="@+id/sound_up"
-        android:layout_toRightOf="@+id/imageView2"
-        android:layout_toEndOf="@+id/imageView2" />
+
 
 
 </RelativeLayout>

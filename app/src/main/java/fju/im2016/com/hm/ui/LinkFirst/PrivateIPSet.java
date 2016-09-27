@@ -25,7 +25,8 @@ public class PrivateIPSet extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.private_ip);
 
-
+        db = openOrCreateDatabase("music_database", MODE_PRIVATE, null);
+        helper = new DBHelper(getApplicationContext());
 
         virtualIP_Tv = (TextView)findViewById(R.id.to_private_ip);
         Intent it = this.getIntent();
@@ -42,6 +43,8 @@ public class PrivateIPSet extends AppCompatActivity {
 
         @Override
         public void onClick(View v){
+            helper.update_IP_virtual(ip);
+
             Intent it = new Intent();
             it.setClass(PrivateIPSet.this, PublicIPSet.class);
             it.putExtra("IP",ip);

@@ -837,6 +837,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
                 this.enableDialog(true);
             }
         } else {
+            this.enableDialog(false);
             AlertDialog.Builder addListDialog = new AlertDialog.Builder(this);
             this.iniAddListDialog(addListDialog, LayoutInflater.from(this).inflate(R.layout.add_list, null));
         }

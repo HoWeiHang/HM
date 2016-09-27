@@ -93,6 +93,7 @@ public class DBHelper extends SQLiteOpenHelper{
         db.execSQL("insert into list values (4,'綠色清單')");
         db.execSQL("insert into list values (5,'藍色清單')");
         db.execSQL("insert into ipset values (1,'0.0.0.0')");
+        db.execSQL("insert into ipset values (2,'0.0.0.0')");
     }
 
     @Override
@@ -148,6 +149,12 @@ public class DBHelper extends SQLiteOpenHelper{
         ContentValues values = new ContentValues();
         values.put("IP", itemText);
         database.update("ipset", values, "_id" + "=" + Integer.toString(1), null);
+    }
+
+    public void update_IP_virtual(String itemText){
+        ContentValues values = new ContentValues();
+        values.put("IP", itemText);
+        database.update("ipset", values, "_id" + "=" + Integer.toString(2), null);
     }
 
     public Cursor select_ip(){
