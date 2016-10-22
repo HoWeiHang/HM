@@ -10,11 +10,14 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.MediaMetadataRetriever;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -1238,7 +1241,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
             public void onClick(View view) {
                 updateBtnRandomImage();
                 playerPresenter.switchPlayMode();
-                if(Random) {
+                if (Random) {
                     playerPresenter.setRandom(true);
                 } else {
                     playerPresenter.setRandom(false);
@@ -1610,6 +1613,28 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
         if (this.playerPresenter != null) {
             this.updateBtnPlayImage();
             this.updatePanelPlayImage();
+        }
+        getEmbeddedPicture(playerPresenter.getCurrentSong().getPath());
+    }
+
+    public void getEmbeddedPicture(String songPath){
+        android.media.MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+        mmr.setDataSource(songPath);
+
+        byte [] data = mmr.getEmbeddedPicture();
+        //coverart is an Imageview object
+
+        // convert the byte array to a bitmap
+        if(data != null) {
+            Bitmap image =  BitmapFactory.decodeByteArray(data, 0, data.length);
+            if (image != null) {
+                Bitmap songImage = Bitmap.createScaledBitmap(image, 1024, 768, true);
+                albumImage.setImageBitmap(songImage);
+            } else {
+                albumImage.setImageResource(R.drawable.album);
+            }
+        } else {
+            albumImage.setImageResource(R.drawable.album);
         }
     }
 

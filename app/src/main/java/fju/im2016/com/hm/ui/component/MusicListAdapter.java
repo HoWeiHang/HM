@@ -2,6 +2,9 @@ package fju.im2016.com.hm.ui.component;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.MediaMetadataRetriever;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -73,7 +76,7 @@ public class MusicListAdapter extends BaseAdapter implements Filterable {
         final Song song = this.filterSongs.get(position);
         holder.adapter_songName.setText(song.getName());
         holder.adapter_artist.setText(song.getArtist());
-        holder.adapter_albumImage.setImageResource(R.drawable.album);
+        getEmbeddedPicture(song.getPath(), holder.adapter_albumImage);
         holder.adapter_btnSetting.setImageResource(R.drawable.overflow);
 
 
@@ -98,6 +101,27 @@ public class MusicListAdapter extends BaseAdapter implements Filterable {
         TextView adapter_songName, adapter_artist;
         ImageView adapter_albumImage;
         ImageButton adapter_btnSetting;
+    }
+
+    public void getEmbeddedPicture(String songPath, ImageView albumImage){
+        android.media.MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+        mmr.setDataSource(songPath);
+
+        byte [] data = mmr.getEmbeddedPicture();
+        //coverart is an Imageview object
+
+        // convert the byte array to a bitmap
+        if(data != null) {
+            Bitmap image =  BitmapFactory.decodeByteArray(data, 0, data.length);
+            if (image != null) {
+                Bitmap songImage = Bitmap.createScaledBitmap(image, 1024, 768, true);
+                albumImage.setImageBitmap(songImage);
+            } else {
+                albumImage.setImageResource(R.drawable.album);
+            }
+        } else {
+            albumImage.setImageResource(R.drawable.album);
+        }
     }
 
     private void showToast(int img, String string) {
