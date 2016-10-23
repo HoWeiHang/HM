@@ -1614,22 +1614,76 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
             this.updateBtnPlayImage();
             this.updatePanelPlayImage();
         }
-        getEmbeddedPicture(playerPresenter.getCurrentSong().getPath());
+//        getEmbeddedPicture(playerPresenter.getCurrentSong().getPath());
+        decodeSampledBitmapFromResource(playerPresenter.getCurrentSong().getPath(), albumImage, 100, 100);
     }
 
-    public void getEmbeddedPicture(String songPath){
-        android.media.MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+//    public void getEmbeddedPicture(String songPath){
+//        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+//        mmr.setDataSource(songPath);
+//
+//        byte [] data = mmr.getEmbeddedPicture();
+//        //coverart is an Imageview object
+//
+//        // convert the byte array to a bitmap
+//        if(data != null) {
+//            Bitmap image =  BitmapFactory.decodeByteArray(data, 0, data.length);
+//            if (image != null) {
+//                Bitmap songImage = Bitmap.createScaledBitmap(image, 100, 100, true);
+//                albumImage.setImageBitmap(image);
+//            } else {
+//                albumImage.setImageResource(R.drawable.album);
+//            }
+//        } else {
+//            albumImage.setImageResource(R.drawable.album);
+//        }
+//    }
+
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) >= reqHeight
+                    && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
+    }
+
+    public void  decodeSampledBitmapFromResource(String songPath, ImageView albumImage, int reqWidth, int reqHeight) {
+
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
         mmr.setDataSource(songPath);
 
         byte [] data = mmr.getEmbeddedPicture();
-        //coverart is an Imageview object
-
-        // convert the byte array to a bitmap
         if(data != null) {
-            Bitmap image =  BitmapFactory.decodeByteArray(data, 0, data.length);
+            BitmapFactory.decodeByteArray(data, 0, data.length, options);
+        }
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+
+        if(data != null) {
+            Bitmap image =  BitmapFactory.decodeByteArray(data, 0, data.length, options);
             if (image != null) {
-                Bitmap songImage = Bitmap.createScaledBitmap(image, 1024, 768, true);
-                albumImage.setImageBitmap(songImage);
+                albumImage.setImageBitmap(image);
             } else {
                 albumImage.setImageResource(R.drawable.album);
             }
