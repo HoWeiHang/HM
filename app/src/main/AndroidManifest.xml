@@ -72,6 +72,15 @@
         </activity>
 
         <service android:name=".core.service.BroadcastService" />
+
+        <activity android:name=".ui.IntelligentPlayer.Intelligent_Player"
+            android:theme="@style/myDialog">
+
+        </activity>
+
+        <receiver android:name=".ui.IntelligentPlayer.Intelligent_Player$AlarmReceiver">
+
+        </receiver>
     </application>
 
 </manifest>

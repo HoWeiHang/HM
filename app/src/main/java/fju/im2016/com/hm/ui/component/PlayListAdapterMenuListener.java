@@ -1,7 +1,9 @@
 package fju.im2016.com.hm.ui.component;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -16,6 +18,7 @@ import java.io.File;
 import fju.im2016.com.hm.R;
 import fju.im2016.com.hm.core.entity.PlayList;
 import fju.im2016.com.hm.dbhelper.DBHelper;
+import fju.im2016.com.hm.ui.IntelligentPlayer.Intelligent_Player;
 
 public class PlayListAdapterMenuListener implements View.OnClickListener {
     private PlayListOnDeleteCallBack playListOnDeleteCallBack;
@@ -24,6 +27,7 @@ public class PlayListAdapterMenuListener implements View.OnClickListener {
     private PopupMenu popupMenu;
     private SQLiteDatabase db;
     private DBHelper helper;
+    private final int resultNum = 0;
 
     public PlayListAdapterMenuListener(Context context, PlayList playList, PlayListOnDeleteCallBack playListOnDeleteCallBack) {
         this.context = context;
@@ -50,6 +54,10 @@ public class PlayListAdapterMenuListener implements View.OnClickListener {
 
                     case R.id.playlist_adapter_menu_regulartime:
                         //TODO regular time play
+                        Intent intentActivity = new Intent();
+                        intentActivity.setClass(context,Intelligent_Player.class);
+                        intentActivity.putExtra("list_id",playList.getId());
+                        ((Activity)context).startActivityForResult(intentActivity,resultNum);
                         return true;
 
                     default:

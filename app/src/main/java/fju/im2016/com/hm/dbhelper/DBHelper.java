@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import fju.im2016.com.hm.ui.IntelligentPlayer.Intelligent_Object;
 import fju.im2016.com.hm.ui.youtube.ListObject;
 
 public class DBHelper extends SQLiteOpenHelper{
@@ -34,6 +35,22 @@ public class DBHelper extends SQLiteOpenHelper{
     private final static String IP_TABLE = "ipset";
     private final static String IP_ID = "_id";
     private final static String IP = "IP";
+
+    private final static String INTELLIGENT_PLAYER_TABLE = "intelligent_player";
+    private final static String ID = "_id";
+    private final static String INTENT_NUMBER = "intent_number";
+    private final static String INTENT_COUNT = "intent_count";
+    private final static String HOUR = "hour";
+    private final static String MINUTE = "minute";
+    private final static String SUN_B = "sun_b";
+    private final static String MON_B = "mon_b";
+    private final static String TUE_B = "tue_b";
+    private final static String WED_B = "wed_b";
+    private final static String THU_B = "thu_b";
+    private final static String FRI_B = "fri_b";
+    private final static String SAT_B = "sat_b";
+    private final static String REPEAT_B = "repeat_b";
+
 
 
 
@@ -71,6 +88,24 @@ public class DBHelper extends SQLiteOpenHelper{
                     IP+" CHAR"+
                     ")";
 
+    private String sql_intelligent =
+            "CREATE TABLE IF NOT EXISTS "+INTELLIGENT_PLAYER_TABLE+"("+
+                    ID+" INTEGER PRIMARY KEY AUTOINCREMENT,"+
+                    INTENT_NUMBER+" INTEGER,"+
+                    INTENT_COUNT+" INTEGER,"+
+                    HOUR+" CHAR,"+
+                    MINUTE+" CHAR,"+
+                    SUN_B+" INTEGER,"+
+                    MON_B+" INTEGER,"+
+                    TUE_B+" INTEGER,"+
+                    WED_B+" INTEGER,"+
+                    THU_B+" INTEGER,"+
+                    FRI_B+" INTEGER,"+
+                    SAT_B+" INTEGER,"+
+                    REPEAT_B+" INTEGER,"+
+                    L_ID+" INTEGER"+
+                    ")";
+
 
     private SQLiteDatabase database;
 
@@ -86,6 +121,7 @@ public class DBHelper extends SQLiteOpenHelper{
         db.execSQL(sqlsong_of_list);
         db.execSQL(sqlyoutube);
         db.execSQL(sqlip);
+        db.execSQL(sql_intelligent);
 
         db.execSQL("insert into list values (1,'紅色清單')");
         db.execSQL("insert into list values (2,'橙色清單')");
@@ -179,6 +215,87 @@ public class DBHelper extends SQLiteOpenHelper{
         database.delete("youtube", "_id" + "=" + Integer.toString(id), null);
     }
 
+    public Cursor select_intelligent_time(String LIST_ID){
+        Cursor cursor_intelligent_player = database.rawQuery("select * from intelligent_player where l_id="+LIST_ID, null);
+        return cursor_intelligent_player;
+    }
+
+    public Cursor select_intelligent_time(){
+        Cursor cursor_intelligent_player = database.rawQuery("select * from intelligent_player", null);
+        return cursor_intelligent_player;
+    }
+
+    public void addIntelligentPlayer(Intelligent_Object intelligent_object){
+
+        int intent_number = intelligent_object.getINTENT_NUMBER();
+        int intent_count = intelligent_object.getINTENT_COUNT();
+        String hour = intelligent_object.getHOUR();
+        String minute = intelligent_object.getMINUTE();
+        int sun = (intelligent_object.isSUN_B())?1:0;
+        int mon = (intelligent_object.isMON_B())?1:0;
+        int tue = (intelligent_object.isTUE_B())?1:0;
+        int wed = (intelligent_object.isWED_B())?1:0;
+        int thu = (intelligent_object.isTHU_B())?1:0;
+        int fri = (intelligent_object.isFRI_B())?1:0;
+        int sat = (intelligent_object.isSAT_B())?1:0;
+        int repeat = (intelligent_object.isREPEAT_B())?1:0;
+        int list_ID = intelligent_object.getLIST_ID();
+
+        ContentValues values = new ContentValues();
+        values.put("intent_number",intent_number);
+        values.put("intent_count",intent_count);
+        values.put("hour", hour);
+        values.put("minute", minute);
+        values.put("sun_b", sun);
+        values.put("mon_b", mon);
+        values.put("tue_b", tue);
+        values.put("wed_b", wed);
+        values.put("thu_b", thu);
+        values.put("fri_b", fri);
+        values.put("sat_b", sat);
+        values.put("repeat_b", repeat);
+        values.put("l_id", list_ID);
+
+        database.insert("intelligent_player", null, values);
+    }
+
+    public void updateIntelligentPlayer(Intelligent_Object intelligent_object){
+
+        int intent_number = intelligent_object.getINTENT_NUMBER();
+        int intent_count = intelligent_object.getINTENT_COUNT();
+        String hour = intelligent_object.getHOUR();
+        String minute = intelligent_object.getMINUTE();
+        int sun = (intelligent_object.isSUN_B())?1:0;
+        int mon = (intelligent_object.isMON_B())?1:0;
+        int tue = (intelligent_object.isTUE_B())?1:0;
+        int wed = (intelligent_object.isWED_B())?1:0;
+        int thu = (intelligent_object.isTHU_B())?1:0;
+        int fri = (intelligent_object.isFRI_B())?1:0;
+        int sat = (intelligent_object.isSAT_B())?1:0;
+        int repeat = (intelligent_object.isREPEAT_B())?1:0;
+        int list_ID = intelligent_object.getLIST_ID();
+
+        ContentValues values = new ContentValues();
+        values.put("intent_number",intent_number);
+        values.put("intent_count",intent_count);
+        values.put("hour", hour);
+        values.put("minute", minute);
+        values.put("sun_b", sun);
+        values.put("mon_b", mon);
+        values.put("tue_b", tue);
+        values.put("wed_b", wed);
+        values.put("thu_b", thu);
+        values.put("fri_b", fri);
+        values.put("sat_b", sat);
+        values.put("repeat_b", repeat);
+        values.put("l_id", list_ID);
+
+        database.update("intelligent_player", values, "l_id" + "=" + list_ID, null);
+    }
+
+    public void delete_IntelligentPlayer(String LIST_ID){
+        database.delete("intelligent_player", "l_id" + "=" + LIST_ID, null);
+    }
 
     public void close(){
         database.close();

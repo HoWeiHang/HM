@@ -20,9 +20,9 @@
             android:icon="@drawable/ic_music"
             android:title="我的播放清單" />
         <item
-            android:checkable="false"
-            android:enabled="false"
-            android:title="" />
+            android:id="@+id/nav_item_lately"
+            android:icon="@drawable/ic_lately"
+            android:title="最近播放" />
         <item
             android:checkable="false"
             android:enabled="false"

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="320dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="#FFFFFF"
+    android:orientation="vertical"
+    >
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:text="請選擇固定星期及時間"/>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_gravity="center">
+
+        <ToggleButton
+            android:id="@+id/t_sun"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:textOn=""
+            android:background="@drawable/suntoggle"
+            android:textOff="" />
+        <ToggleButton
+            android:id="@+id/t_mon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="2px"
+            android:textOn=""
+            android:background="@drawable/montoggle"
+            android:textOff="" />
+        <ToggleButton
+            android:id="@+id/t_tue"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="2px"
+            android:textOn=""
+            android:background="@drawable/tuetoggle"
+            android:textOff="" />
+        <ToggleButton
+            android:id="@+id/t_wed"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="2px"
+            android:textOn=""
+            android:background="@drawable/wedtoggle"
+            android:textOff="" />
+        <ToggleButton
+            android:id="@+id/t_thu"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="2px"
+            android:textOn=""
+            android:background="@drawable/thutoggle"
+            android:textOff="" />
+        <ToggleButton
+            android:id="@+id/t_fri"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="2px"
+            android:textOn=""
+            android:background="@drawable/fritoggle"
+            android:textOff="" />
+        <ToggleButton
+            android:id="@+id/t_sat"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="2px"
+            android:textOn=""
+            android:background="@drawable/sattoggle"
+            android:textOff="" />
+
+
+
+    </LinearLayout>
+
+
+    <TimePicker
+        android:id="@+id/timePicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-20dp"
+        android:scaleY="0.8"
+        android:scaleX="0.8"
+        android:layout_gravity="center_horizontal"
+        android:timePickerMode="spinner"/>
+
+
+    <CheckBox
+        android:id="@+id/ch_every_week"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-10dp"
+        android:layout_gravity="center"
+        android:textStyle="normal"
+        android:background="#00000000"
+        android:textColor="#0caa96"
+        android:text=" 設定每週同時播放" />
+
+    <TextView
+        android:id="@+id/textTime2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12px"/>
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="#E0E0E0"/>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/cancel"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="?android:attr/borderlessButtonStyle"
+            android:text="取消設定"/>
+        <ImageView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#E0E0E0"/>
+        <Button
+            android:id="@+id/confirm"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="?android:attr/borderlessButtonStyle"
+            android:text="確認"/>
+    </LinearLayout>
+
+</LinearLayout>
