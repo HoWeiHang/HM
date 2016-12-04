@@ -2,6 +2,11 @@ package fju.im2016.com.hm.ui.component;
 
 import android.app.Activity;
 import android.content.Context;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.MediaMetadataRetriever;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,14 +62,75 @@ public class GridViewAdapter extends BaseAdapter {
 
         final String artist = this.artists.get(position);
         holder.gridview_adapter_artist_name.setText(artist);
+
         if (this.albumOrArtist == true) {
-            holder.gridview_adapter_artist_img.setImageResource(R.drawable.album);
+//            holder.gridview_adapter_artist_img.setImageResource(R.drawable.album);
+
+            Cursor c = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, "ALBUM='"+ artist +"'", null, null);
+            c.moveToFirst();
+            String path = c.getString(c.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA));
+            c.close();
+
+            decodeSampledBitmapFromResource(path, holder.gridview_adapter_artist_img, 100, 100);
         } else {
             holder.gridview_adapter_artist_img.setImageResource(R.drawable.singer);
         }
 
 
         return convertView;
+    }
+
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) >= reqHeight
+                    && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
+    }
+
+    public void  decodeSampledBitmapFromResource(String songPath, ImageView albumImage, int reqWidth, int reqHeight) {
+
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+        mmr.setDataSource(songPath);
+
+        byte [] data = mmr.getEmbeddedPicture();
+        if(data != null) {
+            BitmapFactory.decodeByteArray(data, 0, data.length, options);
+        }
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+
+        if(data != null) {
+            Bitmap image =  BitmapFactory.decodeByteArray(data, 0, data.length, options);
+            if (image != null) {
+                albumImage.setImageBitmap(image);
+            } else {
+                albumImage.setImageResource(R.drawable.album);
+            }
+        } else {
+            albumImage.setImageResource(R.drawable.album);
+        }
     }
 
     private class ViewHolder {

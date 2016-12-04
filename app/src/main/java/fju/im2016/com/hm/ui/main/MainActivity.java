@@ -177,6 +177,9 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
     //觸發間隔時間
     private static final int UPTATE_INTERVAL_TIME = 70;
 
+    private ImageView header_img;
+    private TextView header_text;
+
     @Override
     public void onClick(SongManager songManager) {
         this.playerPresenter.setPause(false);
@@ -203,6 +206,14 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
     }
 
     private void iniPlayer(SongManager songManager) {
+        navView = (NavigationView) findViewById(R.id.navigation_view);
+        setupDrawerContent(navView);
+
+        View header = navView.getHeaderView(0);
+        header_img = (ImageView) header.findViewById(R.id.header_img);
+        header_text = (TextView) header.findViewById(R.id.header_text);
+        header_text.setSelected(true);
+
         this.playerPresenter.iniSongManager(songManager);
         try {
             this.playerPresenter.iniMediaPlayer();
@@ -269,6 +280,8 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
         panelAlbumName = (TextView) findViewById(R.id.panelAlbumName);
         panelSongName = (TextView) findViewById(R.id.panelSongName);
         albumImage = (ImageView) findViewById(R.id.albumImage);
+
+        panelSongName.setSelected(true);
 
         try {
             this.iniPlayerPresenter();
@@ -1659,6 +1672,8 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
         }
 //        getEmbeddedPicture(playerPresenter.getCurrentSong().getPath());
         decodeSampledBitmapFromResource(playerPresenter.getCurrentSong().getPath(), albumImage, 100, 100);
+        decodeSampledBitmapFromResource(playerPresenter.getCurrentSong().getPath(), header_img, 100, 100);
+        header_text.setText(playerPresenter.getCurrentSong().getName());
     }
 
 //    public void getEmbeddedPicture(String songPath){

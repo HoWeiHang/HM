@@ -4,18 +4,28 @@
     android:layout_height="150dp"
     android:background="#090b25"
     >
+    <ImageView
+        android:id="@+id/header_img"
+        android:layout_width="170dp"
+        android:layout_height="150dp"
+        android:src="@drawable/test"/>
     <TextView
-        android:id="@+id/name"
-        android:layout_width="match_parent"
+        android:id="@+id/header_text"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="24dp"
-        android:layout_marginStart="24dp"
+        android:layout_marginLeft="160dp"
         android:layout_alignParentBottom="true"
         android:text="Hot Music"
         android:textSize="16sp"
         android:typeface="monospace"
         android:textColor="#fff"
         android:textStyle="bold"
-        android:paddingBottom="8dp"
+        android:paddingBottom="5dp"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
         />
 </RelativeLayout>
