@@ -79,12 +79,14 @@ import fju.im2016.com.hm.core.service.BroadcastService;
 import fju.im2016.com.hm.dbhelper.DBHelper;
 import fju.im2016.com.hm.presenter.player.PlayerPresenter;
 import fju.im2016.com.hm.presenter.player.PlayerPresenterImpl;
+import fju.im2016.com.hm.ui.IntelligentPlayer.AlarmReceiver;
 import fju.im2016.com.hm.ui.album.AlbumFragment;
 import fju.im2016.com.hm.ui.album.AlbumSongFragment;
 import fju.im2016.com.hm.ui.artist.ArtistFragment;
 import fju.im2016.com.hm.ui.artist.ArtistSongFragment;
 import fju.im2016.com.hm.ui.component.MusicListAdapter;
 import fju.im2016.com.hm.ui.component.PlayListAdapter;
+import fju.im2016.com.hm.ui.latelyplay.LatelyPlayFragment;
 import fju.im2016.com.hm.ui.manual.ManualActivity;
 import fju.im2016.com.hm.ui.player.PlayerFragment;
 import fju.im2016.com.hm.ui.player.PlayerView;
@@ -96,7 +98,7 @@ import fju.im2016.com.hm.ui.youtube.FavoriteActivity;
 import fju.im2016.com.hm.ui.youtube.YoutubeActivity;
 
 
-public class MainActivity extends AppCompatActivity implements PlayerView, ListView.OnItemClickListener, PlayerFragment.OnItemClickCallBack, PlayListFragment.OnPageChangeCallBack, ListSongFragment.OnItemClickCallBack, ArtistFragment.OnPageChangeCallBack, ArtistSongFragment.OnItemClickCallBack, AlbumFragment.OnPageChangeCallBack, AlbumSongFragment.OnItemClickCallBack, SearchView.OnQueryTextListener{
+public class MainActivity extends AppCompatActivity implements PlayerView, ListView.OnItemClickListener, PlayerFragment.OnItemClickCallBack, PlayListFragment.OnPageChangeCallBack, ListSongFragment.OnItemClickCallBack, ArtistFragment.OnPageChangeCallBack, ArtistSongFragment.OnItemClickCallBack, AlbumFragment.OnPageChangeCallBack, AlbumSongFragment.OnItemClickCallBack, SearchView.OnQueryTextListener, LatelyPlayFragment.OnPageChangeCallBack{
 
     private TextView albumName, musicName, runTime, fullTime, panelAlbumName, panelSongName;
     private SeekBar seekBar;
@@ -186,6 +188,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
         this.playerPresenter.clear();
         setRepeatOnce();
         this.checkColorList();
+        addToLatelyPlay();
     }
 
     @Override
@@ -238,6 +241,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
         setContentView(R.layout.activity_main);
 
         registerReceiver(vcCommand, new IntentFilter(SettingActivity.VC_BR));
+        registerReceiver(intelligent_play, new IntentFilter(AlarmReceiver.IP_BR));
 
         this.iniButtonPlay();
         this.iniPanelPlay();
@@ -510,9 +514,15 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
             {
                 //達到搖一搖甩動後要做的事情
                 Log.d("TAG", "搖一搖中...");
-                playerPresenter.clickPlay();
-                updateBtnPlayImage();
-                updatePanelPlayImage();
+                try {
+                    playerPresenter.setPause(false);
+                    playerPresenter.next();
+                    setRepeatOnce();
+                    checkColorList();
+                    addToLatelyPlay();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
@@ -578,6 +588,15 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
                     menuItem.setChecked(true);
                     drawerLayout.closeDrawers();
                 }
+                break;
+            case R.id.nav_item_lately:
+                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.flContent, new LatelyPlayFragment());
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                    hideOption(R.id.action_search);
+                    menuItem.setChecked(true);
+                    drawerLayout.closeDrawers();
                 break;
             case R.id.nav_item_youtube:
                 Intent it = new Intent(MainActivity.this, YoutubeActivity.class);
@@ -1139,6 +1158,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
                     playerPresenter.last();
                     setRepeatOnce();
                     checkColorList();
+                    addToLatelyPlay();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -1156,6 +1176,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
                     playerPresenter.last();
                     setRepeatOnce();
                     checkColorList();
+                    addToLatelyPlay();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -1173,6 +1194,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
                     playerPresenter.next();
                     setRepeatOnce();
                     checkColorList();
+                    addToLatelyPlay();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -1190,6 +1212,7 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
                     playerPresenter.next();
                     setRepeatOnce();
                     checkColorList();
+                    addToLatelyPlay();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -1258,6 +1281,26 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
             btnRandom.setImageDrawable(getResources().getDrawable(R.drawable.random_on));
             Random = true;
         }
+    }
+
+    private void addToLatelyPlay() {
+        db = openOrCreateDatabase("music_database", android.content.Context.MODE_PRIVATE, null);
+        helper = new DBHelper(getApplicationContext());
+        Cursor cLately = helper.select_lately_play();
+        if (cLately.getCount() < 15) {
+            helper.addLatelyPlay(Integer.parseInt(playerPresenter.getCurrentSong().getId()));
+        } else if (cLately.getCount() == 15) {
+            for (int i = 2; i < 16 ; i++) {
+                Cursor cSongId = helper.select_lately_play(i);
+                cSongId.moveToFirst();
+                int tempSongId = cSongId.getInt(cSongId.getColumnIndex("s_id"));
+                cSongId.close();
+                helper.updateLatelyPlay(i - 1, tempSongId);
+            }
+            helper.updateLatelyPlay(15, Integer.parseInt(playerPresenter.getCurrentSong().getId()));
+        }
+        db.close();
+        helper.close();
     }
 
     private void listToast(int img, String string) {
@@ -1709,6 +1752,18 @@ public class MainActivity extends AppCompatActivity implements PlayerView, ListV
     }
 
     // ---------------------------------
+
+    //BroadcastReceiver，時間到要執行的事
+    private BroadcastReceiver intelligent_play = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getStringExtra("intelligent_play").equals("play")) {
+                playerPresenter.play();
+                updateBtnPlayImage();
+                updatePanelPlayImage();
+            }
+        }
+    };
 
     private BroadcastReceiver vcCommand = new BroadcastReceiver() {
         @Override

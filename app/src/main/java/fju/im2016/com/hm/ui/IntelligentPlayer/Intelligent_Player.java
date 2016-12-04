@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import java.util.Calendar;
 
 import fju.im2016.com.hm.R;
 import fju.im2016.com.hm.dbhelper.DBHelper;
+import fju.im2016.com.hm.ui.main.MainActivity;
 
 /**
  * Created by User on 2016/11/20.
@@ -41,6 +43,9 @@ public class Intelligent_Player extends Activity {
     private Calendar calendar;
     private SQLiteDatabase db;
     private DBHelper helper;
+
+    public static final String VC_BR = "fju_im2016_com_hm_ui_intelligent_play";
+    private Intent vcBroadcast = new Intent(VC_BR);
 
 
     @Override
@@ -254,16 +259,6 @@ public class Intelligent_Player extends Activity {
         }
     };
 
-    //BroadcastReceiver，時間到要執行的事
-    public static class AlarmReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            //....do something
-
-            Toast.makeText(context, "正在執行鬧鐘", Toast.LENGTH_LONG).show();
-        }
-    }
 
     //設置智慧播放
     public void SetIntelligentPlayer(){
@@ -291,10 +286,12 @@ public class Intelligent_Player extends Activity {
             intent_number++;
 
         }
-        Intent intent = new Intent();
+        Intent intent = new Intent(VC_BR);
         //這裡的 this 是指當前的 Activity
         //AlarmReceiver.class 則是負責接收的 BroadcastReceiver
         intent.setClass(this, AlarmReceiver.class);
+
+        intent.putExtra("msg","play");
         PendingIntent pending;
         AlarmManager alarm;
 

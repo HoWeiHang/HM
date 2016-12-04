@@ -54,7 +54,7 @@ public class AlbumFragment extends Fragment implements GridView.OnItemClickListe
     private void initialGridView() {
         this.gridView = (GridView) view.findViewById(R.id.gridview);
 
-        this.gridViewAdapter = new GridViewAdapter(this.getContext(), this.albums);
+        this.gridViewAdapter = new GridViewAdapter(this.getContext(), this.albums, true);
         this.gridView.setAdapter(gridViewAdapter);
 
         this.gridView.setNumColumns(2);

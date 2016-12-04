@@ -16,10 +16,12 @@ import fju.im2016.com.hm.R;
 public class GridViewAdapter extends BaseAdapter {
     private Context context;
     private List<String> artists;
+    private boolean albumOrArtist;
 
-    public GridViewAdapter(Context context, List<String> artists) {
+    public GridViewAdapter(Context context, List<String> artists, boolean albumOrArtist) {
         this.context = context;
         this.artists = artists;
+        this.albumOrArtist = albumOrArtist;
     }
 
     @Override
@@ -55,7 +57,11 @@ public class GridViewAdapter extends BaseAdapter {
 
         final String artist = this.artists.get(position);
         holder.gridview_adapter_artist_name.setText(artist);
-        holder.gridview_adapter_artist_img.setImageResource(R.drawable.singer);
+        if (this.albumOrArtist == true) {
+            holder.gridview_adapter_artist_img.setImageResource(R.drawable.album);
+        } else {
+            holder.gridview_adapter_artist_img.setImageResource(R.drawable.singer);
+        }
 
 
         return convertView;

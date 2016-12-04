@@ -51,7 +51,14 @@ public class DBHelper extends SQLiteOpenHelper{
     private final static String SAT_B = "sat_b";
     private final static String REPEAT_B = "repeat_b";
 
+    private final static String LATELY_PLAY_TABLE = "lately_play";
+    private final static String LATELY_ID = "_id";
 
+    private String sqllatelyplay =
+            "CREATE TABLE IF NOT EXISTS "+LATELY_PLAY_TABLE+"("+
+                    LATELY_ID+" INTEGER PRIMARY KEY AUTOINCREMENT,"+
+                    S_ID+" INTEGER"+
+                    ")";
 
 
     private String sqlsong =
@@ -122,6 +129,7 @@ public class DBHelper extends SQLiteOpenHelper{
         db.execSQL(sqlyoutube);
         db.execSQL(sqlip);
         db.execSQL(sql_intelligent);
+        db.execSQL(sqllatelyplay);
 
         db.execSQL("insert into list values (1,'紅色清單')");
         db.execSQL("insert into list values (2,'橙色清單')");
@@ -159,7 +167,12 @@ public class DBHelper extends SQLiteOpenHelper{
         values.put("s_id", song_id);
         values.put("l_id", list_id);
         database.insert("song_of_list", null, values);
+    }
 
+    public void addLatelyPlay(int song_id){
+        ContentValues values = new ContentValues();
+        values.put("s_id", song_id);
+        database.insert("lately_play", null, values);
     }
 
     public void delete(int id){
@@ -193,10 +206,15 @@ public class DBHelper extends SQLiteOpenHelper{
         database.update("ipset", values, "_id" + "=" + Integer.toString(2), null);
     }
 
+    public void updateLatelyPlay(int id,int song_id){
+        ContentValues values = new ContentValues();
+        values.put("s_id", song_id);
+        database.update("lately_play", values, "_id" + "=" + id, null);
+    }
+
     public Cursor select_ip(){
         Cursor cursor_ip = database.rawQuery("select * from ipset", null);
         return cursor_ip;
-
     }
 
     public Cursor select_youtube_song(){
@@ -213,6 +231,16 @@ public class DBHelper extends SQLiteOpenHelper{
 
     public void delete_youtube(int id){
         database.delete("youtube", "_id" + "=" + Integer.toString(id), null);
+    }
+
+    public Cursor select_lately_play(){
+        Cursor cursor_lately_play = database.rawQuery("select * from lately_play ", null);
+        return cursor_lately_play;
+    }
+
+    public Cursor select_lately_play(int LATELY_ID){
+        Cursor cursor_lately_play = database.rawQuery("select * from lately_play where _id=" + LATELY_ID, null);
+        return cursor_lately_play;
     }
 
     public Cursor select_intelligent_time(String LIST_ID){

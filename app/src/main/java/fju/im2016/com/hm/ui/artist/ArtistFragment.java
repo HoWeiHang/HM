@@ -54,7 +54,7 @@ public class ArtistFragment extends Fragment implements GridView.OnItemClickList
     private void initialGridView() {
         this.gridView = (GridView) view.findViewById(R.id.gridview);
 
-        this.gridViewAdapter = new GridViewAdapter(this.getContext(), this.artists);
+        this.gridViewAdapter = new GridViewAdapter(this.getContext(), this.artists, false);
         this.gridView.setAdapter(gridViewAdapter);
 
         this.gridView.setNumColumns(2);

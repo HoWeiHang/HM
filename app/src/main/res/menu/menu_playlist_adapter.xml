@@ -5,5 +5,5 @@
         android:title="刪除"/>
     <item
         android:id="@+id/playlist_adapter_menu_regulartime"
-        android:title="定時播放"/>
+        android:title="智慧播放"/>
 </menu>

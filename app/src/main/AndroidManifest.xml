@@ -78,9 +78,13 @@
 
         </activity>
 
-        <receiver android:name=".ui.IntelligentPlayer.Intelligent_Player$AlarmReceiver">
+        <receiver android:name=".ui.IntelligentPlayer.AlarmReceiver">
 
         </receiver>
+        <!--<receiver android:name=".ui.IntelligentPlayer.Intelligent_Player$AlarmReceiver">
+
+        </receiver>-->
+
     </application>
 
 </manifest>
